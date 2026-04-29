@@ -1,0 +1,1012 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Distributor Management — Dashboard</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --teal:#009ca7; --teal-700:#007a83; --teal-50:#e6f5f6; --teal-100:#cfecee;
+    --coral:#e94f43; --coral-700:#c83a30; --coral-50:#fdecea;
+    --ink:#0f1e20; --ink-2:#3a4a4d; --muted:#6b7a7d;
+    --line:#e6ebec; --bg:#f5f8f9; --card:#ffffff;
+    --ok:#1f9d6a;
+    --shadow-sm: 0 1px 2px rgba(15,30,32,.05), 0 1px 1px rgba(15,30,32,.04);
+    --shadow-md: 0 6px 18px -8px rgba(0,156,167,.18), 0 2px 6px rgba(15,30,32,.06);
+    --shadow-lg: 0 18px 40px -16px rgba(15,30,32,.18);
+    --radius: 14px;
+  }
+  *{box-sizing:border-box}
+  html,body{margin:0;padding:0}
+  body{font-family:'Plus Jakarta Sans',system-ui,sans-serif;background:var(--bg);color:var(--ink);-webkit-font-smoothing:antialiased;font-size:14.5px;line-height:1.5}
+  button{font-family:inherit;cursor:pointer;border:none;background:none}
+  input,select,textarea{font-family:inherit}
+
+  .app{display:grid;grid-template-columns:260px 1fr;min-height:100vh}
+  .sidebar{background:linear-gradient(180deg,#06343a 0%,#042428 100%);color:#cfe7ea;padding:22px 16px;position:sticky;top:0;height:100vh;display:flex;flex-direction:column;z-index:50}
+  .brand{display:flex;align-items:center;gap:10px;padding:6px 8px 22px}
+  .brand-mark{width:36px;height:36px;border-radius:10px;background:linear-gradient(135deg,var(--teal),var(--coral));display:grid;place-items:center;color:white;font-weight:800;font-size:16px;box-shadow:0 6px 16px -6px rgba(233,79,67,.5)}
+  .brand-name{font-weight:800;color:white}
+  .brand-sub{font-size:11px;color:#7fb6bc;letter-spacing:.6px;text-transform:uppercase}
+  .nav-label{font-size:10.5px;letter-spacing:1.4px;text-transform:uppercase;color:#5d8c92;padding:14px 10px 8px}
+  .nav-item{display:flex;align-items:center;gap:12px;padding:11px 12px;border-radius:10px;color:#b9d6da;font-weight:500;font-size:14px;cursor:pointer;transition:all .15s ease;margin-bottom:2px}
+  .nav-item svg{flex-shrink:0}
+  .nav-item:hover{background:rgba(255,255,255,.04);color:white}
+  .nav-item.active{background:linear-gradient(90deg,rgba(0,156,167,.25),rgba(0,156,167,.05));color:white;box-shadow:inset 3px 0 0 var(--teal)}
+  .nav-foot{margin-top:auto;padding:14px 10px;border-top:1px solid rgba(255,255,255,.06);display:flex;gap:10px;align-items:center}
+  .avatar{width:34px;height:34px;border-radius:50%;background:linear-gradient(135deg,var(--coral),#f6a37b);display:grid;place-items:center;color:white;font-weight:700;font-size:13px}
+  .nav-foot-meta div:first-child{color:white;font-weight:600;font-size:13px}
+  .nav-foot-meta div:last-child{color:#7fb6bc;font-size:11px}
+
+  .main{display:flex;flex-direction:column;min-width:0}
+  .topbar{background:white;border-bottom:1px solid var(--line);padding:14px 28px;display:flex;align-items:center;gap:16px;position:sticky;top:0;z-index:20}
+  .menu-btn{display:none;width:40px;height:40px;border-radius:10px;background:var(--bg);align-items:center;justify-content:center}
+  .crumb{display:flex;align-items:center;gap:8px;color:var(--muted);font-size:13px}
+  .crumb b{color:var(--ink);font-weight:600}
+  .top-actions{margin-left:auto;display:flex;gap:10px;align-items:center}
+  .icon-btn{width:38px;height:38px;border-radius:10px;background:var(--bg);display:grid;place-items:center;color:var(--ink-2);transition:.15s;position:relative}
+  .icon-btn:hover{background:var(--teal-50);color:var(--teal)}
+  .icon-btn .dot{position:absolute;top:9px;right:10px;width:7px;height:7px;border-radius:50%;background:var(--coral);border:2px solid white}
+  .reset-link{font-size:11.5px;color:var(--muted);text-decoration:underline;cursor:pointer}
+  .reset-link:hover{color:var(--coral)}
+
+  .content{padding:28px;max-width:1500px;width:100%}
+  .page-head{display:flex;align-items:flex-end;justify-content:space-between;flex-wrap:wrap;gap:16px;margin-bottom:22px}
+  .page-title{font-size:24px;font-weight:800;letter-spacing:-.4px;margin:0}
+  .page-sub{color:var(--muted);font-size:13.5px;margin-top:6px}
+
+  .stat-row{display:grid;grid-template-columns:repeat(4,1fr);gap:14px;margin-bottom:24px}
+  .stat{background:var(--card);border:1px solid var(--line);border-radius:var(--radius);padding:16px 18px;display:flex;align-items:center;gap:14px;box-shadow:var(--shadow-sm)}
+  .stat-ic{width:42px;height:42px;border-radius:12px;display:grid;place-items:center;color:white;flex-shrink:0}
+  .stat-ic.t1{background:linear-gradient(135deg,var(--teal),var(--teal-700))}
+  .stat-ic.t2{background:linear-gradient(135deg,var(--coral),var(--coral-700))}
+  .stat-ic.t3{background:linear-gradient(135deg,#5b6cff,#3a48c4)}
+  .stat-ic.t4{background:linear-gradient(135deg,#1f9d6a,#0d6a47)}
+  .stat-num{font-size:20px;font-weight:800;letter-spacing:-.3px}
+  .stat-lab{font-size:12px;color:var(--muted);text-transform:uppercase;letter-spacing:.6px}
+
+  .card{background:var(--card);border:1px solid var(--line);border-radius:var(--radius);box-shadow:var(--shadow-sm);overflow:hidden}
+  .card-head{padding:18px 22px;border-bottom:1px solid var(--line);display:flex;align-items:center;gap:14px;justify-content:space-between;flex-wrap:wrap}
+  .card-title{font-weight:700;font-size:16px;display:flex;align-items:center;gap:10px}
+  .card-title .pill{font-size:10.5px;background:var(--teal-50);color:var(--teal-700);padding:3px 9px;border-radius:999px;font-weight:700;letter-spacing:.4px;text-transform:uppercase}
+  .card-body{padding:22px}
+
+  .field{display:flex;flex-direction:column;gap:6px;min-width:0}
+  .field label{font-size:12px;font-weight:600;color:var(--ink-2)}
+  .field .req{color:var(--coral)}
+  .input,.select,.textarea{width:100%;padding:11px 14px;border-radius:10px;border:1.5px solid var(--line);background:white;font-size:14px;color:var(--ink);transition:.15s;outline:none}
+  .input:focus,.select:focus,.textarea:focus{border-color:var(--teal);box-shadow:0 0 0 4px rgba(0,156,167,.12)}
+  .select{appearance:none;background-image:url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 24 24' fill='none' stroke='%236b7a7d' stroke-width='2.5' stroke-linecap='round' stroke-linejoin='round'><polyline points='6 9 12 15 18 9'/></svg>");background-repeat:no-repeat;background-position:right 14px center;padding-right:36px}
+  .form-row{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+
+  .btn{display:inline-flex;align-items:center;gap:8px;padding:10px 18px;border-radius:10px;font-weight:600;font-size:13.5px;transition:.15s;border:1.5px solid transparent}
+  .btn-primary{background:var(--teal);color:white}
+  .btn-primary:hover:not(:disabled){background:var(--teal-700);transform:translateY(-1px);box-shadow:var(--shadow-md)}
+  .btn-secondary{background:var(--coral);color:white}
+  .btn-secondary:hover:not(:disabled){background:var(--coral-700);transform:translateY(-1px)}
+  .btn-ghost{background:white;color:var(--ink-2);border-color:var(--line)}
+  .btn-ghost:hover:not(:disabled){border-color:var(--teal);color:var(--teal)}
+  .btn:disabled{opacity:.5;cursor:not-allowed}
+  .btn-sm{padding:7px 12px;font-size:12.5px}
+
+  .banner{display:flex;align-items:center;gap:12px;padding:14px 16px;border-radius:12px;background:linear-gradient(90deg,var(--teal-50),#f5fbfb);border:1px solid var(--teal-100);color:var(--teal-700);margin-bottom:18px;font-weight:500;font-size:13.5px}
+  .banner.info{background:var(--coral-50);border-color:#f7c9c4;color:var(--coral-700)}
+  .banner svg{flex-shrink:0}
+
+  .doc-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:16px}
+  .doc-card{background:white;border:1.5px solid var(--line);border-radius:var(--radius);overflow:hidden;transition:.2s;display:flex;flex-direction:column;position:relative}
+  .doc-card:hover{border-color:var(--teal);box-shadow:var(--shadow-md);transform:translateY(-2px)}
+  .doc-card.uploaded{border-color:var(--teal-100);background:linear-gradient(180deg,#f5fbfb,white)}
+  .doc-head{padding:11px 14px;display:flex;align-items:center;justify-content:space-between;border-bottom:1px solid var(--line);background:#fafcfc}
+  .doc-name{font-size:11.5px;font-weight:700;letter-spacing:.6px;text-transform:uppercase;color:var(--ink-2)}
+  .doc-edit{width:24px;height:24px;border-radius:6px;display:grid;place-items:center;color:var(--teal);background:var(--teal-50)}
+  .doc-edit:hover{background:var(--teal);color:white}
+  .doc-preview{aspect-ratio:1;background:#fafcfc;display:grid;place-items:center;position:relative;overflow:hidden;cursor:pointer}
+  .doc-preview img{width:100%;height:100%;object-fit:cover}
+  .doc-foot{padding:10px 14px;border-top:1px solid var(--line);display:flex;align-items:center;gap:8px;font-size:12px;color:var(--muted);min-height:38px}
+  .doc-foot input{width:100%;padding:6px 8px;border:1px solid var(--line);border-radius:6px;font-size:12px;background:white;outline:none}
+  .doc-foot input:focus{border-color:var(--teal)}
+  .doc-foot input:disabled{background:#fafcfc;color:var(--ink-2)}
+  .doc-status{position:absolute;top:10px;right:10px;font-size:10px;font-weight:700;letter-spacing:.5px;text-transform:uppercase;padding:4px 8px;border-radius:999px;background:var(--ok);color:white;z-index:2}
+  .doc-status.pending{background:var(--coral)}
+  .doc-actions{position:absolute;top:8px;left:8px;z-index:2;display:flex;gap:4px;opacity:0;transition:.15s}
+  .doc-card:hover .doc-actions{opacity:1}
+  .doc-actions button{width:26px;height:26px;border-radius:6px;background:white;box-shadow:0 2px 6px rgba(0,0,0,.15);display:grid;place-items:center;color:var(--ink-2)}
+  .doc-actions button:hover{background:var(--coral);color:white}
+
+  .dropzone{border:2px dashed #c5d2d4;border-radius:12px;padding:20px 12px;text-align:center;cursor:pointer;transition:.15s;background:#fafcfc;color:var(--muted);height:100%;display:flex;flex-direction:column;justify-content:center;align-items:center}
+  .dropzone:hover,.dropzone.drag{border-color:var(--teal);background:var(--teal-50);color:var(--teal-700)}
+  .dropzone svg{margin-bottom:8px}
+  .dropzone-label{font-size:12px;font-weight:600;display:block}
+  .dropzone-hint{font-size:10.5px;margin-top:3px;opacity:.8}
+
+  .agreement-box{display:flex;align-items:center;gap:16px;flex-wrap:wrap;background:#fafcfc;padding:16px;border-radius:12px;border:1px solid var(--line)}
+  .agreement-box.uploaded{background:linear-gradient(135deg,#f5fbfb,white);border-color:var(--teal-100)}
+
+  .cheque-table{background:white;border-radius:var(--radius);overflow:hidden;border:1px solid var(--line)}
+  .cheque-row{display:grid;grid-template-columns:48px 160px 1fr 1.6fr 130px 130px;gap:14px;padding:14px 18px;align-items:center;border-bottom:1px solid var(--line);transition:background .15s}
+  .cheque-row:last-child{border-bottom:none}
+  .cheque-row.head{background:#fafcfc;font-size:11px;font-weight:700;letter-spacing:.6px;text-transform:uppercase;color:var(--muted);padding:12px 18px}
+  .cheque-row:not(.head):hover{background:#fafcfc}
+  .cheque-row.locked{background:linear-gradient(90deg,#fafcfc,#f5fbfb)}
+
+  .check{width:20px;height:20px;border-radius:6px;border:2px solid #c5d2d4;display:grid;place-items:center;cursor:pointer;transition:.15s;background:white;flex-shrink:0}
+  .check.checked{background:var(--teal);border-color:var(--teal)}
+  .check.checked svg{color:white}
+  .check.disabled{opacity:.55;cursor:not-allowed;background:#f0f4f5}
+
+  .cheque-thumb{width:100%;height:54px;border-radius:8px;border:1px solid var(--line);background:linear-gradient(180deg,white 0%,white 60%,#f0e8d8 60%,#f0e8d8 100%);position:relative;overflow:hidden;cursor:pointer}
+  .cheque-thumb img{width:100%;height:100%;object-fit:cover}
+  .cheque-thumb.empty::before{content:"";position:absolute;top:8px;left:8px;right:30%;height:6px;background:repeating-linear-gradient(90deg,#d8e2e3 0px,#d8e2e3 6px,transparent 6px,transparent 9px);border-radius:2px}
+  .cheque-thumb.empty::after{content:"";position:absolute;bottom:8px;left:8px;right:8px;height:8px;background:repeating-linear-gradient(90deg,#9aa7a9 0px,#9aa7a9 12px,transparent 12px,transparent 16px);opacity:.4;border-radius:1px}
+  .cheque-no{font-family:'JetBrains Mono',monospace;font-size:13.5px;font-weight:600;color:var(--ink)}
+
+  .row-input{width:100%;padding:9px 11px;border-radius:8px;border:1.5px solid var(--line);font-size:13px;background:white;outline:none;transition:.15s}
+  .row-input:focus{border-color:var(--teal);box-shadow:0 0 0 3px rgba(0,156,167,.1)}
+  .row-input:disabled{background:#fafcfc;color:var(--ink-2);border-style:dashed}
+  .row-actions{display:flex;gap:6px;justify-content:flex-end}
+
+  .badge{display:inline-flex;align-items:center;gap:5px;font-size:10.5px;font-weight:700;letter-spacing:.4px;text-transform:uppercase;padding:4px 9px;border-radius:999px}
+  .badge.saved{background:var(--teal-50);color:var(--teal-700)}
+  .badge.open{background:var(--coral-50);color:var(--coral-700)}
+
+  .page{display:none;animation:fadeIn .25s ease}
+  .page.active{display:block}
+  @keyframes fadeIn{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:none}}
+
+  .empty{text-align:center;padding:60px 20px;color:var(--muted)}
+  .empty svg{margin-bottom:12px;opacity:.5}
+  .empty h3{margin:0 0 6px;color:var(--ink);font-size:16px}
+  .empty p{margin:0;font-size:13px}
+
+  .scrim{display:none;position:fixed;inset:0;background:rgba(15,30,32,.5);z-index:40;backdrop-filter:blur(2px)}
+
+  .toast{position:fixed;bottom:24px;right:24px;z-index:200;background:var(--ink);color:white;padding:12px 18px;border-radius:10px;font-size:13.5px;font-weight:500;display:flex;align-items:center;gap:10px;box-shadow:var(--shadow-lg);opacity:0;transform:translateY(12px);transition:.25s;pointer-events:none;max-width:90vw}
+  .toast.show{opacity:1;transform:none}
+  .toast.success{background:var(--ok)}
+  .toast.error{background:var(--coral)}
+
+  .modal{display:none;position:fixed;inset:0;background:rgba(15,30,32,.7);z-index:300;align-items:center;justify-content:center;padding:20px;backdrop-filter:blur(4px)}
+  .modal.open{display:flex;animation:fadeIn .2s ease}
+  .modal-body{background:white;border-radius:16px;max-width:800px;width:100%;max-height:90vh;display:flex;flex-direction:column;overflow:hidden;box-shadow:var(--shadow-lg)}
+  .modal-head{padding:16px 20px;border-bottom:1px solid var(--line);display:flex;align-items:center;justify-content:space-between}
+  .modal-title{font-weight:700;font-size:15px}
+  .modal-content{padding:20px;overflow:auto;display:grid;place-items:center;background:#fafcfc;flex:1}
+  .modal-content img{max-width:100%;max-height:70vh;border-radius:8px;box-shadow:var(--shadow-md)}
+  .modal-content .pdf-preview{width:200px;height:240px;border:3px solid var(--coral);border-radius:12px;display:grid;place-items:center;font-weight:800;color:var(--coral);font-size:24px;background:white}
+  .modal-close{width:32px;height:32px;border-radius:8px;background:var(--bg);display:grid;place-items:center;color:var(--ink-2)}
+  .modal-close:hover{background:var(--coral);color:white}
+
+  @media (max-width:1100px){.doc-grid{grid-template-columns:repeat(3,1fr)}.stat-row{grid-template-columns:repeat(2,1fr)}}
+  @media (max-width:860px){
+    .app{grid-template-columns:1fr}
+    .menu-btn{display:flex}
+    .sidebar{position:fixed;left:-280px;top:0;width:260px;transition:left .25s ease}
+    .sidebar.open{left:0;box-shadow:0 20px 60px rgba(0,0,0,.3)}
+    .scrim.open{display:block}
+    .content{padding:18px}
+    .topbar{padding:12px 18px}
+    .doc-grid{grid-template-columns:repeat(2,1fr)}
+    .form-row{grid-template-columns:1fr}
+    .cheque-row{grid-template-columns:1fr;gap:8px;padding:14px}
+    .cheque-row.head{display:none}
+    .cheque-row > *{width:100%}
+    .cheque-thumb{height:80px}
+    .row-actions{justify-content:flex-start;flex-wrap:wrap}
+    .mob-label{font-size:10.5px;font-weight:700;letter-spacing:.5px;text-transform:uppercase;color:var(--muted);margin-bottom:-4px;display:block}
+  }
+  @media (min-width:861px){.mob-label{display:none}}
+  @media (max-width:480px){
+    .doc-grid{grid-template-columns:1fr}
+    .stat-row{grid-template-columns:1fr 1fr}
+    .page-title{font-size:20px}
+    .stat{padding:14px}
+    .stat-num{font-size:17px}
+  }
+</style>
+</head>
+<body>
+
+<div class="app">
+  <aside class="sidebar" id="sidebar">
+    <div class="brand">
+      <div class="brand-mark">N</div>
+      <div>
+        <div class="brand-name">Niranjan</div>
+        <div class="brand-sub">Krushi Sahkari</div>
+      </div>
+    </div>
+
+    <div class="nav-label">Workspace</div>
+    <div class="nav-item active" data-page="agreements">
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="9" y1="13" x2="15" y2="13"/><line x1="9" y1="17" x2="15" y2="17"/></svg>
+      Distributor Agreements
+    </div>
+    <div class="nav-item" data-page="cheques">
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="6" width="20" height="12" rx="2"/><path d="M2 10h20"/><path d="M6 14h4"/></svg>
+      Cheque Inventory
+    </div>
+
+    <div class="nav-label">Other</div>
+    <div class="nav-item">
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
+      Distributors
+    </div>
+    <div class="nav-item">
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 1 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 1 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 1 1-2.83-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 1 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 1 1 2.83-2.83l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 1 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 1 1 2.83 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 1 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg>
+      Settings
+    </div>
+
+    <div class="nav-foot">
+      <div class="avatar">RP</div>
+      <div class="nav-foot-meta">
+        <div>Rohit P.</div>
+        <div>Admin</div>
+      </div>
+    </div>
+  </aside>
+
+  <div class="scrim" id="scrim"></div>
+
+  <main class="main">
+    <header class="topbar">
+      <button class="menu-btn icon-btn" id="menuBtn" aria-label="Menu">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="18" x2="21" y2="18"/></svg>
+      </button>
+      <div class="crumb">
+        <span>Dashboard</span>
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><polyline points="9 18 15 12 9 6"/></svg>
+        <b id="crumbCurrent">Distributor Agreements</b>
+      </div>
+      <div class="top-actions">
+        <span class="reset-link" id="resetBtn" title="Clear all prototype data">Reset prototype</span>
+        <button class="icon-btn" aria-label="Notifications">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 0 1-3.46 0"/></svg>
+          <span class="dot"></span>
+        </button>
+      </div>
+    </header>
+
+    <div class="content">
+
+      <section class="page active" id="page-agreements">
+        <div class="page-head">
+          <div>
+            <h1 class="page-title">Old Distributor Agreement Upload</h1>
+            <div class="page-sub">Upload &amp; verify KYC documents along with the signed distributor agreement.</div>
+          </div>
+        </div>
+
+        <div class="stat-row">
+          <div class="stat"><div class="stat-ic t1"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg></div><div><div class="stat-num" id="statTotal">0</div><div class="stat-lab">Distributors</div></div></div>
+          <div class="stat"><div class="stat-ic t4"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg></div><div><div class="stat-num" id="statDone">0</div><div class="stat-lab">Completed KYC</div></div></div>
+          <div class="stat"><div class="stat-ic t2"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg></div><div><div class="stat-num" id="statPending">0</div><div class="stat-lab">Pending</div></div></div>
+          <div class="stat"><div class="stat-ic t3"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg></div><div><div class="stat-num" id="statPct">0%</div><div class="stat-lab">Completion</div></div></div>
+        </div>
+
+        <div class="card" style="margin-bottom:18px">
+          <div class="card-head"><div class="card-title">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#009ca7" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="12" y1="16" x2="12" y2="12"/><line x1="12" y1="8" x2="12.01" y2="8"/></svg>
+            Select Distributor <span class="pill">Step 1</span>
+          </div></div>
+          <div class="card-body">
+            <div class="form-row">
+              <div class="field">
+                <label>Distributor <span class="req">*</span></label>
+                <select class="select" id="distSelect"></select>
+              </div>
+              <div class="field">
+                <label>Region</label>
+                <select class="select">
+                  <option>All Regions</option><option>Western Maharashtra</option><option>Vidarbha</option><option>Marathwada</option><option>Konkan</option>
+                </select>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="card" id="agreementEmpty">
+          <div class="empty">
+            <svg width="56" height="56" viewBox="0 0 24 24" fill="none" stroke="#009ca7" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="12" y1="18" x2="12" y2="12"/><line x1="9" y1="15" x2="15" y2="15"/></svg>
+            <h3>Select a distributor to begin</h3>
+            <p>Choose a distributor from the dropdown above to view or upload their KYC documents.</p>
+          </div>
+        </div>
+
+        <div id="agreementWorkspace" style="display:none">
+          <div class="banner" id="agreementBanner"></div>
+
+          <div class="card">
+            <div class="card-head"><div class="card-title">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#009ca7" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>
+              KYC Documents — Phase 1 <span class="pill" id="phase1Pill">0 of 9</span>
+            </div></div>
+            <div class="card-body"><div class="doc-grid" id="docGridPhase1"></div></div>
+          </div>
+
+          <div class="card" style="margin-top:18px">
+            <div class="card-head"><div class="card-title">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#009ca7" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M9 12l2 2 4-4"/></svg>
+              Documents — Phase 2 <span class="pill" id="phase2Pill">0 of 8</span>
+            </div></div>
+            <div class="card-body"><div class="doc-grid" id="docGridPhase2"></div></div>
+          </div>
+
+          <div class="card" style="margin-top:18px">
+            <div class="card-head"><div class="card-title">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#e94f43" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 11l3 3L22 4"/><path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"/></svg>
+              Distributor Agreement Document <span class="pill" id="agreementPill" style="background:var(--coral-50);color:var(--coral-700)">Not uploaded</span>
+            </div></div>
+            <div class="card-body"><div id="agreementSlot"></div></div>
+          </div>
+
+          <div style="display:flex;gap:10px;justify-content:flex-end;margin-top:18px">
+            <button class="btn btn-ghost" id="cancelBtn">Cancel</button>
+            <button class="btn btn-primary" id="submitBtn">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+              Submit for verification
+            </button>
+          </div>
+        </div>
+      </section>
+
+      <section class="page" id="page-cheques">
+        <div class="page-head">
+          <div>
+            <h1 class="page-title">Cheque Inventory</h1>
+            <div class="page-sub">Manage cheques received from distributors. Add remarks once and lock the entry.</div>
+          </div>
+        </div>
+
+        <div class="stat-row">
+          <div class="stat"><div class="stat-ic t1"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="6" width="20" height="12" rx="2"/><path d="M2 10h20"/></svg></div><div><div class="stat-num" id="cqTotal">0</div><div class="stat-lab">Total Cheques</div></div></div>
+          <div class="stat"><div class="stat-ic t4"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg></div><div><div class="stat-num" id="cqSaved">0</div><div class="stat-lab">Saved</div></div></div>
+          <div class="stat"><div class="stat-ic t2"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg></div><div><div class="stat-num" id="cqOpen">0</div><div class="stat-lab">Open</div></div></div>
+          <div class="stat"><div class="stat-ic t3"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/></svg></div><div><div class="stat-num" id="cqDist">0</div><div class="stat-lab">Distributors</div></div></div>
+        </div>
+
+        <div class="card" style="margin-bottom:18px">
+          <div class="card-head"><div class="card-title">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#009ca7" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+            Select Distributor
+          </div></div>
+          <div class="card-body">
+            <div class="form-row">
+              <div class="field">
+                <label>Distributor <span class="req">*</span></label>
+                <select class="select" id="chequeDistSelect"></select>
+              </div>
+              <div class="field">
+                <label>Filter</label>
+                <select class="select" id="chequeFilter">
+                  <option value="all">All cheques</option>
+                  <option value="open">Open (editable)</option>
+                  <option value="saved">Saved (locked)</option>
+                </select>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="card" id="chequeEmpty">
+          <div class="empty">
+            <svg width="56" height="56" viewBox="0 0 24 24" fill="none" stroke="#009ca7" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="6" width="20" height="12" rx="2"/><path d="M2 10h20"/><path d="M6 14h4"/></svg>
+            <h3>Select a distributor to view cheques</h3>
+            <p>Cheques associated with the chosen distributor will appear here.</p>
+          </div>
+        </div>
+
+        <div id="chequeList" style="display:none">
+          <div class="banner" id="chequeBanner"></div>
+
+          <div class="card">
+            <div class="card-head">
+              <div class="card-title">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#009ca7" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="6" width="20" height="12" rx="2"/><path d="M2 10h20"/></svg>
+                Cheques <span class="pill" id="chequeCountPill">0 cheques</span>
+              </div>
+              <button class="btn btn-primary btn-sm" id="bulkSaveBtn">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z"/><polyline points="17 21 17 13 7 13 7 21"/></svg>
+                Save selected
+              </button>
+            </div>
+
+            <div class="cheque-table" style="border-radius:0;border:none">
+              <div class="cheque-row head">
+                <div></div>
+                <div>Cheque No.</div>
+                <div>Image</div>
+                <div>Remark</div>
+                <div>Status</div>
+                <div style="text-align:right">Action</div>
+              </div>
+              <div id="chequeRows"></div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+    </div>
+  </main>
+</div>
+
+<input type="file" id="fileInput" style="display:none">
+<div class="toast" id="toast"></div>
+
+<div class="modal" id="modal">
+  <div class="modal-body">
+    <div class="modal-head">
+      <div class="modal-title" id="modalTitle">Preview</div>
+      <button class="modal-close" id="modalClose">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+      </button>
+    </div>
+    <div class="modal-content" id="modalContent"></div>
+  </div>
+</div>
+
+<script>
+/* =================== STATE & PERSISTENCE =================== */
+const STORAGE_KEY = 'niranjan_dashboard_v2';
+
+const DEFAULT_DISTRIBUTORS = [
+  { id: 'd1', name: 'Patil Hanamant Bhagwan', region: 'Kale, Satara' },
+  { id: 'd2', name: 'Vikrant Niranjan Krushi Udyog', region: 'Sangli' },
+  { id: 'd3', name: 'Sharad Agro Centre', region: 'Pune' },
+  { id: 'd4', name: 'Mauli Krushi Seva Kendra', region: 'Kolhapur' },
+  { id: 'd5', name: 'Adarsh Pedhi Pvt. Ltd.', region: 'Karad' },
+];
+
+const PHASE1_DOCS = [
+  { key:'pan',        name:'PAN Card',           hasNumber:true,  numLabel:'PAN Number' },
+  { key:'gst',        name:'GST Licence',        hasNumber:true,  numLabel:'GSTIN' },
+  { key:'aadhar_f',   name:'Aadhar Card',        hasNumber:true,  numLabel:'Aadhar Number' },
+  { key:'aadhar_b',   name:'Aadhar Card Back',   hasNumber:true,  numLabel:'Aadhar Number' },
+  { key:'fertilizer', name:'Fertilizer Licence', hasNumber:true,  numLabel:'Licence Number' },
+  { key:'shop',       name:'Shop Image',         hasNumber:false },
+  { key:'counter',    name:'Counter Image',      hasNumber:false },
+  { key:'bank_stmt',  name:'Bank Statement',     hasNumber:false },
+  { key:'pesticide',  name:'Pesticide License',  hasNumber:true,  numLabel:'Licence Number' },
+];
+const PHASE2_DOCS = [
+  { key:'letterhead',  name:'Letter Head',                 hasNumber:false },
+  { key:'bank_sign',   name:'Bank Sign Verification',      hasNumber:false },
+  { key:'sd',          name:'Self Declaration (SD)',       hasNumber:false },
+  { key:'partnership', name:'Partnership',                 hasNumber:false },
+  { key:'rbm_photo',   name:'RBM Photo with Shop Counter', hasNumber:false },
+  { key:'cheque_1',    name:'Blank Cheque 1',              hasNumber:false },
+  { key:'cheque_2',    name:'Blank Cheque 2',              hasNumber:false },
+  { key:'cheque_3',    name:'Blank Cheque 3',              hasNumber:false },
+];
+const ALL_DOCS = [...PHASE1_DOCS, ...PHASE2_DOCS];
+
+function defaultState() {
+  const docs = {}, cheques = {};
+  DEFAULT_DISTRIBUTORS.forEach(d => {
+    docs[d.id] = { phase1:{}, phase2:{}, agreement:null };
+    cheques[d.id] = [];
+  });
+
+  // Seed d1: fully uploaded
+  ALL_DOCS.forEach(doc => {
+    const phase = PHASE1_DOCS.includes(doc) ? 'phase1' : 'phase2';
+    docs.d1[phase][doc.key] = {
+      name: doc.key + '_signed.jpg', type:'image/jpeg', size: 234567, dataUrl:null,
+      number: doc.key==='pan'?'BUFPP0072D':doc.key==='gst'?'27BUFPP0072D1ZV':
+              (doc.key==='aadhar_f'||doc.key==='aadhar_b')?'3099 0845 9124':
+              doc.key==='fertilizer'?'FRT022023084':
+              doc.key==='pesticide'?'LCID0220230840':'',
+      uploadedAt:'2026-03-12T10:24:00Z',
+    };
+  });
+  docs.d1.agreement = {
+    name:'Distributor_Agreement_Signed.pdf', type:'application/pdf',
+    size:2451200, dataUrl:null, uploadedAt:'2026-03-12T10:30:00Z',
+  };
+
+  // Seed d2: partial
+  ['pan','gst','aadhar_f'].forEach(k => {
+    docs.d2.phase1[k] = {
+      name:k+'.jpg', type:'image/jpeg', size:120000, dataUrl:null,
+      number: k==='pan'?'AAACV1234X':k==='gst'?'27AAACV1234X1ZP':'4521 7890 1234',
+      uploadedAt:'2026-04-01T09:00:00Z'
+    };
+  });
+
+  // Seed cheques
+  cheques.d1 = [
+    { id:'cq1', no:'441831001', remark:'Q1 advance — verified by RM', saved:true,  selected:true,  imageUrl:null },
+    { id:'cq2', no:'441831002', remark:'Held against pesticide order', saved:true,  selected:true,  imageUrl:null },
+    { id:'cq3', no:'441831003', remark:'PDC for April delivery',       saved:true,  selected:false, imageUrl:null },
+  ];
+  cheques.d3 = [
+    { id:'cq4', no:'770045123', remark:'', saved:false, selected:false, imageUrl:null },
+    { id:'cq5', no:'770045124', remark:'', saved:false, selected:false, imageUrl:null },
+    { id:'cq6', no:'770045125', remark:'', saved:false, selected:false, imageUrl:null },
+    { id:'cq7', no:'770045126', remark:'', saved:false, selected:false, imageUrl:null },
+  ];
+  cheques.d4 = [
+    { id:'cq8', no:'891204550', remark:'', saved:false, selected:false, imageUrl:null },
+    { id:'cq9', no:'891204551', remark:'', saved:false, selected:false, imageUrl:null },
+  ];
+
+  return { distributors: DEFAULT_DISTRIBUTORS, docs, cheques };
+}
+
+function loadState() {
+  try {
+    const raw = localStorage.getItem(STORAGE_KEY);
+    if (!raw) return defaultState();
+    const p = JSON.parse(raw);
+    DEFAULT_DISTRIBUTORS.forEach(d => {
+      if (!p.docs[d.id]) p.docs[d.id] = { phase1:{}, phase2:{}, agreement:null };
+      if (!p.cheques[d.id]) p.cheques[d.id] = [];
+    });
+    return p;
+  } catch(e) { return defaultState(); }
+}
+
+function saveState() {
+  try { localStorage.setItem(STORAGE_KEY, JSON.stringify(state)); }
+  catch(e) { toast('Storage full — clear browser data', 'error'); }
+}
+
+let state = loadState();
+
+/* =================== UTILITIES =================== */
+const $ = (s, r=document) => r.querySelector(s);
+const $$ = (s, r=document) => [...r.querySelectorAll(s)];
+
+function toast(msg, type='') {
+  const el = $('#toast');
+  el.className = 'toast ' + type;
+  el.textContent = msg;
+  requestAnimationFrame(() => el.classList.add('show'));
+  setTimeout(() => el.classList.remove('show'), 2400);
+}
+function fmtSize(b){ if(!b)return''; if(b<1024)return b+' B'; if(b<1048576)return (b/1024).toFixed(1)+' KB'; return (b/1048576).toFixed(2)+' MB'; }
+function fmtDate(iso){ if(!iso)return''; return new Date(iso).toLocaleDateString('en-IN',{day:'2-digit',month:'short',year:'numeric'}); }
+function readFileAsDataUrl(file){ return new Promise((res,rej)=>{ const r=new FileReader(); r.onload=()=>res(r.result); r.onerror=rej; r.readAsDataURL(file); }); }
+function escapeAttr(s){ return (s||'').replace(/&/g,'&amp;').replace(/"/g,'&quot;').replace(/</g,'&lt;'); }
+
+const PLACEHOLDER = {
+  doc: 'data:image/svg+xml;utf8,' + encodeURIComponent(`<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 200"><rect width="200" height="200" fill="#fafcfc"/><rect x="36" y="40" width="128" height="120" rx="4" fill="white" stroke="#d8e2e3" stroke-width="1.5"/><rect x="48" y="56" width="60" height="6" fill="#009ca7" opacity=".6"/><rect x="48" y="72" width="104" height="3" fill="#cdd6d8"/><rect x="48" y="82" width="88" height="3" fill="#cdd6d8"/><rect x="48" y="92" width="96" height="3" fill="#cdd6d8"/><rect x="48" y="116" width="48" height="32" fill="#eef4f5" stroke="#cdd6d8"/><rect x="104" y="116" width="48" height="3" fill="#cdd6d8"/><rect x="104" y="124" width="40" height="3" fill="#cdd6d8"/><rect x="104" y="132" width="44" height="3" fill="#cdd6d8"/><rect x="104" y="140" width="36" height="3" fill="#cdd6d8"/></svg>`),
+  cheque: 'data:image/svg+xml;utf8,' + encodeURIComponent(`<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 200"><rect width="200" height="200" fill="#fafcfc"/><rect x="20" y="50" width="160" height="100" rx="4" fill="white" stroke="#e3d9c5" stroke-width="1.5"/><rect x="20" y="130" width="160" height="20" fill="#f6e9d4"/><rect x="32" y="62" width="50" height="6" fill="#009ca7" opacity=".7"/><rect x="32" y="76" width="80" height="3" fill="#cdd6d8"/><rect x="32" y="86" width="60" height="3" fill="#e94f43" opacity=".5"/><rect x="32" y="100" width="100" height="3" fill="#cdd6d8"/><rect x="32" y="138" width="136" height="6" fill="#3a4a4d" opacity=".55"/></svg>`),
+  pdf: 'data:image/svg+xml;utf8,' + encodeURIComponent(`<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 200"><rect width="200" height="200" fill="#fafcfc"/><rect x="68" y="50" width="64" height="80" rx="6" fill="white" stroke="#e94f43" stroke-width="2.5"/><text x="100" y="98" text-anchor="middle" font-family="sans-serif" font-weight="800" font-size="16" fill="#e94f43">PDF</text></svg>`),
+};
+function thumbFor(doc, file){
+  if (file && file.dataUrl) return file.dataUrl;
+  if (file && file.type === 'application/pdf') return PLACEHOLDER.pdf;
+  if (doc && doc.key && doc.key.startsWith('cheque_')) return PLACEHOLDER.cheque;
+  return PLACEHOLDER.doc;
+}
+
+/* =================== NAV =================== */
+$$('.nav-item[data-page]').forEach(item => {
+  item.addEventListener('click', () => {
+    $$('.nav-item').forEach(n => n.classList.remove('active'));
+    item.classList.add('active');
+    $$('.page').forEach(p => p.classList.remove('active'));
+    $('#page-' + item.dataset.page).classList.add('active');
+    $('#crumbCurrent').textContent = item.textContent.trim();
+    $('#sidebar').classList.remove('open');
+    $('#scrim').classList.remove('open');
+    if (item.dataset.page === 'cheques') updateChequeStats();
+  });
+});
+$('#menuBtn').addEventListener('click', () => {
+  $('#sidebar').classList.toggle('open');
+  $('#scrim').classList.toggle('open');
+});
+$('#scrim').addEventListener('click', () => {
+  $('#sidebar').classList.remove('open');
+  $('#scrim').classList.remove('open');
+});
+
+/* =================== MODAL =================== */
+function openModal(title, html) {
+  $('#modalTitle').textContent = title;
+  $('#modalContent').innerHTML = html;
+  $('#modal').classList.add('open');
+}
+$('#modalClose').addEventListener('click', () => $('#modal').classList.remove('open'));
+$('#modal').addEventListener('click', e => { if (e.target.id === 'modal') $('#modal').classList.remove('open'); });
+
+function previewFile(file, fallbackThumb, title) {
+  if (file && file.type === 'application/pdf' && file.dataUrl) {
+    openModal(title, `<iframe src="${file.dataUrl}" style="width:100%;height:70vh;border:none;border-radius:8px"></iframe>`);
+  } else if (file && file.type === 'application/pdf') {
+    openModal(title, `<div class="pdf-preview">PDF</div><div style="margin-top:16px;color:#6b7a7d;font-size:13px;text-align:center"><strong>${escapeAttr(file.name)}</strong><br>${fmtSize(file.size)} · ${fmtDate(file.uploadedAt)}</div>`);
+  } else if (file && file.dataUrl) {
+    openModal(title, `<img src="${file.dataUrl}" alt=""><div style="margin-top:14px;color:#6b7a7d;font-size:13px;text-align:center">${escapeAttr(file.name)} · ${fmtSize(file.size)}</div>`);
+  } else {
+    openModal(title, `<img src="${fallbackThumb}" alt=""><div style="margin-top:14px;color:#6b7a7d;font-size:13px;text-align:center">${file?escapeAttr(file.name):'Sample'} · pre-loaded sample</div>`);
+  }
+}
+
+/* =================== FILE PICKER =================== */
+const fileInput = $('#fileInput');
+let pendingCb = null;
+fileInput.addEventListener('change', async e => {
+  const file = e.target.files[0];
+  if (!file || !pendingCb) return;
+  if (file.size > 8 * 1024 * 1024) { toast('File too large (max 8 MB)', 'error'); fileInput.value=''; return; }
+  try {
+    const dataUrl = await readFileAsDataUrl(file);
+    pendingCb({ name:file.name, type:file.type, size:file.size, dataUrl, uploadedAt:new Date().toISOString() });
+  } catch(err) { toast('Could not read file', 'error'); }
+  fileInput.value = '';
+  pendingCb = null;
+});
+function pickFile(accept, cb) {
+  fileInput.accept = accept || 'image/*,.pdf';
+  pendingCb = cb;
+  fileInput.click();
+}
+
+/* =================== AGREEMENT FLOW =================== */
+function populateDistributors() {
+  const opts = ['<option value="">— Choose a distributor —</option>']
+    .concat(state.distributors.map(d => `<option value="${d.id}">${d.name} — ${d.region}</option>`));
+  $('#distSelect').innerHTML = opts.join('');
+  $('#chequeDistSelect').innerHTML = opts.join('');
+}
+
+function isComplete(distId) {
+  const d = state.docs[distId]; if (!d) return false;
+  return PHASE1_DOCS.every(x=>d.phase1[x.key]) && PHASE2_DOCS.every(x=>d.phase2[x.key]) && !!d.agreement;
+}
+function uploadCount(distId) {
+  const d = state.docs[distId]; if (!d) return {p1:0,p2:0,agreement:false};
+  return { p1: PHASE1_DOCS.filter(x=>d.phase1[x.key]).length, p2: PHASE2_DOCS.filter(x=>d.phase2[x.key]).length, agreement: !!d.agreement };
+}
+function updateAgreementStats() {
+  const total = state.distributors.length;
+  const done = state.distributors.filter(d => isComplete(d.id)).length;
+  $('#statTotal').textContent = total;
+  $('#statDone').textContent = done;
+  $('#statPending').textContent = total - done;
+  $('#statPct').textContent = total ? Math.round(done/total*100) + '%' : '0%';
+}
+
+function buildDocCard(doc, phase, distId) {
+  const file = state.docs[distId][phase][doc.key];
+  const uploaded = !!file;
+  const fallback = doc.key.startsWith('cheque_') ? PLACEHOLDER.cheque : PLACEHOLDER.doc;
+
+  return `
+    <div class="doc-card ${uploaded?'uploaded':''}" data-doc="${doc.key}" data-phase="${phase}">
+      <div class="doc-status ${uploaded?'':'pending'}">${uploaded?'Uploaded':'Pending'}</div>
+      ${uploaded ? `<div class="doc-actions"><button data-act="remove" title="Remove"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><path d="M3 6h18"/><path d="M8 6V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/><path d="M19 6l-1 14a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2L5 6"/></svg></button></div>` : ''}
+      <div class="doc-head">
+        <div class="doc-name">${doc.name}</div>
+        <button class="doc-edit" data-act="edit" title="${uploaded?'Replace':'Upload'}">
+          <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M12 20h9"/><path d="M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z"/></svg>
+        </button>
+      </div>
+      ${uploaded ? `
+        <div class="doc-preview" data-act="preview"><img src="${thumbFor(doc, file)}" alt=""></div>
+        ${doc.hasNumber
+          ? `<div class="doc-foot"><input type="text" data-act="number" placeholder="${doc.numLabel||'Number'}" value="${escapeAttr(file.number||'')}"></div>`
+          : `<div class="doc-foot" style="color:var(--ok);font-weight:600"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg> ${escapeAttr((file.name||'verified').substring(0,22))}</div>`}
+      ` : `
+        <div class="doc-preview" data-act="upload">
+          <div class="dropzone" style="border:none;border-radius:0">
+            <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="#009ca7" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg>
+            <span class="dropzone-label">Click to upload</span>
+            <span class="dropzone-hint">JPG/PNG/PDF · &lt; 8 MB</span>
+          </div>
+        </div>
+        ${doc.hasNumber
+          ? `<div class="doc-foot"><input type="text" data-act="number" placeholder="${doc.numLabel||'Number'}" disabled></div>`
+          : `<div class="doc-foot">Awaiting upload</div>`}
+      `}
+    </div>
+  `;
+}
+
+function renderAgreement(distId) {
+  if (!distId) {
+    $('#agreementEmpty').style.display = 'block';
+    $('#agreementWorkspace').style.display = 'none';
+    return;
+  }
+  $('#agreementEmpty').style.display = 'none';
+  $('#agreementWorkspace').style.display = 'block';
+
+  const counts = uploadCount(distId);
+  const complete = isComplete(distId);
+
+  const banner = $('#agreementBanner');
+  if (complete) {
+    banner.className = 'banner';
+    banner.innerHTML = `<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg><div><strong>All documents already uploaded</strong> — Preview, replace, or remove any document below.</div>`;
+  } else {
+    banner.className = 'banner info';
+    const remaining = (PHASE1_DOCS.length-counts.p1) + (PHASE2_DOCS.length-counts.p2) + (counts.agreement?0:1);
+    banner.innerHTML = `<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg><div><strong>${remaining} document${remaining===1?'':'s'} pending</strong> — Click any tile below to upload.</div>`;
+  }
+
+  $('#docGridPhase1').innerHTML = PHASE1_DOCS.map(d => buildDocCard(d,'phase1',distId)).join('');
+  $('#docGridPhase2').innerHTML = PHASE2_DOCS.map(d => buildDocCard(d,'phase2',distId)).join('');
+  $('#phase1Pill').textContent = `${counts.p1} of ${PHASE1_DOCS.length}`;
+  $('#phase2Pill').textContent = `${counts.p2} of ${PHASE2_DOCS.length}`;
+
+  const slot = $('#agreementSlot');
+  const ag = state.docs[distId].agreement;
+  if (ag) {
+    $('#agreementPill').textContent = 'Signed';
+    $('#agreementPill').style.background = 'var(--teal-50)';
+    $('#agreementPill').style.color = 'var(--teal-700)';
+    slot.innerHTML = `
+      <div class="agreement-box uploaded">
+        <div style="width:64px;height:74px;border:2.5px solid var(--coral);border-radius:8px;display:grid;place-items:center;font-weight:800;color:var(--coral);background:white;font-size:13px">PDF</div>
+        <div style="flex:1;min-width:200px">
+          <div style="font-weight:700;font-size:14px">${escapeAttr(ag.name)}</div>
+          <div style="font-size:12px;color:var(--muted);margin-top:2px">Uploaded ${fmtDate(ag.uploadedAt)} · ${fmtSize(ag.size)}</div>
+        </div>
+        <div style="display:flex;gap:8px;flex-wrap:wrap">
+          <button class="btn btn-ghost btn-sm" data-ag-act="preview"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>Preview</button>
+          <button class="btn btn-ghost btn-sm" data-ag-act="replace"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><polyline points="23 4 23 10 17 10"/><path d="M20.49 15a9 9 0 1 1-2.12-9.36L23 10"/></svg>Replace</button>
+          <button class="btn btn-secondary btn-sm" data-ag-act="remove"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><path d="M3 6h18"/><path d="M19 6l-1 14a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2L5 6"/></svg>Remove</button>
+        </div>
+      </div>`;
+  } else {
+    $('#agreementPill').textContent = 'Not uploaded';
+    $('#agreementPill').style.background = 'var(--coral-50)';
+    $('#agreementPill').style.color = 'var(--coral-700)';
+    slot.innerHTML = `
+      <div class="dropzone" data-ag-act="upload" style="padding:36px 20px">
+        <svg width="36" height="36" viewBox="0 0 24 24" fill="none" stroke="#009ca7" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg>
+        <span class="dropzone-label" style="font-size:14px">Click to upload signed agreement (PDF)</span>
+        <span class="dropzone-hint" style="font-size:12px">PDF only · Max 10 MB</span>
+      </div>`;
+  }
+
+  $('#submitBtn').disabled = !complete;
+  updateAgreementStats();
+}
+
+$('#distSelect').addEventListener('change', e => {
+  renderAgreement(e.target.value);
+  if (e.target.value) setTimeout(() => $('#agreementWorkspace').scrollIntoView({behavior:'smooth',block:'start'}), 50);
+});
+
+$('#agreementWorkspace').addEventListener('click', e => {
+  const card = e.target.closest('.doc-card');
+  if (!card) return;
+  const act = e.target.closest('[data-act]')?.dataset.act;
+  const distId = $('#distSelect').value;
+  if (!distId) return;
+  const docKey = card.dataset.doc, phase = card.dataset.phase;
+  const docMeta = ALL_DOCS.find(d => d.key === docKey);
+
+  if (act === 'edit' || act === 'upload') {
+    pickFile('image/*,.pdf', file => {
+      state.docs[distId][phase][docKey] = file;
+      saveState();
+      renderAgreement(distId);
+      toast(`${docMeta.name} uploaded`, 'success');
+    });
+  } else if (act === 'preview') {
+    const file = state.docs[distId][phase][docKey];
+    previewFile(file, thumbFor(docMeta, file), docMeta.name);
+  } else if (act === 'remove') {
+    e.stopPropagation();
+    if (confirm(`Remove ${docMeta.name}?`)) {
+      delete state.docs[distId][phase][docKey];
+      saveState();
+      renderAgreement(distId);
+      toast(`${docMeta.name} removed`);
+    }
+  }
+});
+
+$('#agreementWorkspace').addEventListener('input', e => {
+  if (e.target.dataset.act !== 'number') return;
+  const card = e.target.closest('.doc-card');
+  const distId = $('#distSelect').value;
+  if (!distId) return;
+  const file = state.docs[distId][card.dataset.phase][card.dataset.doc];
+  if (file) { file.number = e.target.value; saveState(); }
+});
+
+$('#agreementSlot').addEventListener('click', e => {
+  const act = e.target.closest('[data-ag-act]')?.dataset.agAct;
+  const distId = $('#distSelect').value;
+  if (!distId || !act) return;
+  const ag = state.docs[distId].agreement;
+  if (act === 'upload' || act === 'replace') {
+    pickFile('.pdf,application/pdf', file => {
+      state.docs[distId].agreement = file;
+      saveState();
+      renderAgreement(distId);
+      toast('Agreement uploaded', 'success');
+    });
+  } else if (act === 'preview') {
+    previewFile(ag, PLACEHOLDER.pdf, ag?.name || 'Agreement');
+  } else if (act === 'remove') {
+    if (confirm('Remove agreement document?')) {
+      state.docs[distId].agreement = null;
+      saveState();
+      renderAgreement(distId);
+      toast('Agreement removed');
+    }
+  }
+});
+
+$('#submitBtn').addEventListener('click', () => toast('Submitted for verification', 'success'));
+$('#cancelBtn').addEventListener('click', () => { $('#distSelect').value=''; renderAgreement(''); });
+
+/* =================== CHEQUE FLOW =================== */
+function updateChequeStats() {
+  let total=0, saved=0, distCount=0;
+  Object.entries(state.cheques).forEach(([id, list]) => {
+    if (list.length) distCount++;
+    total += list.length;
+    saved += list.filter(c => c.saved).length;
+  });
+  $('#cqTotal').textContent = total;
+  $('#cqSaved').textContent = saved;
+  $('#cqOpen').textContent = total - saved;
+  $('#cqDist').textContent = distCount;
+}
+
+function renderCheques(distId) {
+  if (!distId) {
+    $('#chequeEmpty').style.display = 'block';
+    $('#chequeList').style.display = 'none';
+    return;
+  }
+  $('#chequeEmpty').style.display = 'none';
+  $('#chequeList').style.display = 'block';
+
+  let cheques = state.cheques[distId] || [];
+  const filter = $('#chequeFilter').value;
+  if (filter === 'open') cheques = cheques.filter(c => !c.saved);
+  if (filter === 'saved') cheques = cheques.filter(c => c.saved);
+
+  const allSaved = cheques.length>0 && cheques.every(c => c.saved);
+  $('#chequeCountPill').textContent = `${cheques.length} cheque${cheques.length===1?'':'s'}`;
+
+  const banner = $('#chequeBanner');
+  if (cheques.length === 0) {
+    banner.className = 'banner';
+    banner.innerHTML = `<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/></svg><div>No cheques on file for this distributor.</div>`;
+    $('#bulkSaveBtn').disabled = true;
+  } else if (allSaved) {
+    banner.className = 'banner';
+    banner.innerHTML = `<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg><div><strong>All cheques are saved.</strong> Remarks and selections are locked for this distributor.</div>`;
+    $('#bulkSaveBtn').disabled = true;
+  } else {
+    banner.className = 'banner info';
+    banner.innerHTML = `<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/></svg><div>Add a remark and click <strong>Save</strong> to lock the cheque entry. Saved cheques cannot be edited.</div>`;
+    $('#bulkSaveBtn').disabled = false;
+  }
+
+  $('#chequeRows').innerHTML = cheques.map(c => {
+    const locked = c.saved;
+    const checkIcon = c.selected ? '<svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>' : '';
+    const badge = c.saved
+      ? '<span class="badge saved"><svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg> Saved</span>'
+      : '<span class="badge open">Open</span>';
+    return `
+      <div class="cheque-row ${locked?'locked':''}" data-id="${c.id}">
+        <div><span class="mob-label">Select</span><div class="check ${c.selected?'checked':''} ${locked?'disabled':''}" data-act="toggle">${checkIcon}</div></div>
+        <div><span class="mob-label">Cheque No.</span><div class="cheque-no">${c.no}</div></div>
+        <div><span class="mob-label">Image</span><div class="cheque-thumb ${c.imageUrl?'':'empty'}" data-act="image">${c.imageUrl?`<img src="${c.imageUrl}" alt="">`:''}</div></div>
+        <div><span class="mob-label">Remark</span><input type="text" class="row-input" data-act="remark" placeholder="Add a remark..." value="${escapeAttr(c.remark||'')}" ${locked?'disabled':''}></div>
+        <div><span class="mob-label">Status</span>${badge}</div>
+        <div class="row-actions">
+          <button class="btn btn-ghost btn-sm" data-act="view" title="Preview"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg></button>
+          <button class="btn btn-secondary btn-sm" data-act="save" ${locked?'disabled':''}><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z"/><polyline points="17 21 17 13 7 13 7 21"/></svg>Save</button>
+        </div>
+      </div>`;
+  }).join('') || `<div class="empty"><p>No cheques match the current filter.</p></div>`;
+
+  updateChequeStats();
+}
+
+$('#chequeDistSelect').addEventListener('change', e => renderCheques(e.target.value));
+$('#chequeFilter').addEventListener('change', () => renderCheques($('#chequeDistSelect').value));
+
+$('#chequeRows').addEventListener('click', e => {
+  const row = e.target.closest('.cheque-row');
+  if (!row) return;
+  const distId = $('#chequeDistSelect').value;
+  const cheque = state.cheques[distId].find(c => c.id === row.dataset.id);
+  if (!cheque) return;
+  const act = e.target.closest('[data-act]')?.dataset.act;
+
+  if (act === 'toggle' && !cheque.saved) {
+    cheque.selected = !cheque.selected;
+    saveState();
+    renderCheques(distId);
+  } else if (act === 'save' && !cheque.saved) {
+    if (!cheque.remark || !cheque.remark.trim()) {
+      const input = row.querySelector('input[data-act="remark"]');
+      input.focus();
+      input.style.borderColor = 'var(--coral)';
+      input.style.boxShadow = '0 0 0 3px rgba(233,79,67,.15)';
+      setTimeout(() => { input.style.borderColor=''; input.style.boxShadow=''; }, 1800);
+      toast('Please add a remark before saving', 'error');
+      return;
+    }
+    cheque.saved = true;
+    saveState();
+    renderCheques(distId);
+    toast(`Cheque ${cheque.no} saved`, 'success');
+  } else if (act === 'view' || act === 'image') {
+    if (cheque.imageUrl) {
+      openModal(`Cheque ${cheque.no}`, `<img src="${cheque.imageUrl}" alt="">`);
+    } else if (!cheque.saved) {
+      pickFile('image/*', file => {
+        cheque.imageUrl = file.dataUrl;
+        saveState();
+        renderCheques(distId);
+        toast('Cheque image attached', 'success');
+      });
+    } else {
+      openModal(`Cheque ${cheque.no}`, `<img src="${PLACEHOLDER.cheque}" alt=""><div style="margin-top:14px;color:#6b7a7d;font-size:13px;text-align:center">Sample placeholder · No image attached</div>`);
+    }
+  }
+});
+
+$('#chequeRows').addEventListener('input', e => {
+  if (e.target.dataset.act !== 'remark') return;
+  const row = e.target.closest('.cheque-row');
+  const distId = $('#chequeDistSelect').value;
+  const cheque = state.cheques[distId].find(c => c.id === row.dataset.id);
+  if (cheque && !cheque.saved) {
+    cheque.remark = e.target.value;
+    saveState();
+  }
+});
+
+$('#bulkSaveBtn').addEventListener('click', () => {
+  const distId = $('#chequeDistSelect').value;
+  if (!distId) return;
+  const list = state.cheques[distId] || [];
+  let saved=0, skipped=0;
+  list.forEach(c => {
+    if (!c.saved && c.selected) {
+      if (c.remark && c.remark.trim()) { c.saved = true; saved++; }
+      else skipped++;
+    }
+  });
+  if (saved) {
+    saveState();
+    renderCheques(distId);
+    toast(`${saved} cheque${saved===1?'':'s'} saved${skipped?` · ${skipped} skipped (no remark)`:''}`, 'success');
+  } else {
+    toast(skipped ? 'Selected cheques need remarks' : 'Select cheques to save', 'error');
+  }
+});
+
+/* =================== RESET =================== */
+$('#resetBtn').addEventListener('click', () => {
+  if (confirm('Reset all prototype data to defaults? This will clear your uploads, remarks, and saved cheques.')) {
+    localStorage.removeItem(STORAGE_KEY);
+    state = defaultState();
+    saveState();
+    populateDistributors();
+    $('#distSelect').value = '';
+    $('#chequeDistSelect').value = '';
+    renderAgreement('');
+    renderCheques('');
+    updateAgreementStats();
+    updateChequeStats();
+    toast('Prototype reset to defaults', 'success');
+  }
+});
+
+/* =================== INIT =================== */
+populateDistributors();
+updateAgreementStats();
+updateChequeStats();
+</script>
+</body>
+</html>

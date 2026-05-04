@@ -81,80 +81,6 @@
   .status-icons { display: flex; gap: 4px; align-items: center; font-size: 12px; }
 
   /* ======================== SCREEN 1: SPLASH ======================== */
-  #screen-splash {
-    background: #009688;
-    justify-content: center;
-    align-items: center;
-    position: relative;
-  }
-  .splash-logo-card {
-    background: #fff;
-    border-radius: 20px;
-    padding: 28px 40px;
-    text-align: center;
-    box-shadow: 0 4px 20px rgba(0,0,0,0.15);
-    margin-bottom: 28px;
-  }
-  .splash-logo-card img {
-    display: block;
-    width: auto;
-    height: auto;
-    max-width: 100%;
-    max-height: 100%;
-    margin: 0 auto;
-  }
-  .splash-tagline {
-    color: #fff;
-    font-size: 18px;
-    font-weight: 700;
-    text-align: center;
-    padding: 0 30px;
-    line-height: 1.3;
-  }
-  .splash-progress {
-    position: absolute;
-    bottom: 220px;
-    display: flex;
-    gap: 6px;
-  }
-  .splash-progress span {
-    width: 24px; height: 3px;
-    background: rgba(255,255,255,0.5);
-    border-radius: 2px;
-  }
-  .splash-progress span.active { background: #fff; width: 36px; }
-  .splash-bottom {
-    position: absolute;
-    bottom: 0;
-    width: 100%;
-  }
-  .splash-wave {
-    width: 100%;
-    height: 120px;
-    background: #f0f0f0;
-    border-radius: 50% 50% 0 0 / 30px 30px 0 0;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    padding-top: 16px;
-  }
-  .biologicals-logo {
-    text-align: center;
-  }
-  .biologicals-logo .bio-text {
-    font-size: 22px;
-    font-weight: 700;
-    color: #212121;
-  }
-  .biologicals-logo .bio-sub {
-    font-size: 11px;
-    color: #666;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    gap: 4px;
-  }
-
   /* ======================== SCREEN 2: LANGUAGE ======================== */
   #screen-language { background: #F5F5F5; }
   .lang-header {
@@ -1270,7 +1196,6 @@
   .guide-help-btn.visible { opacity: 1; pointer-events: auto; }
   .guide-help-btn:active { transform: scale(0.92); }
   /* Hide help button on splash/language/privacy/login/otp screens */
-  #screen-splash .guide-help-btn,
   #screen-language .guide-help-btn,
   #screen-privacy .guide-help-btn,
   #screen-login .guide-help-btn,
@@ -1980,6 +1905,141 @@
     margin-top: 3px;
   }
 
+  /* ======================== RESPONSIVE: FARMER VISIT SCREENS ======================== */
+
+  /* On desktop/tablet — farmer visit screen fills the phone wrapper naturally,
+     but inner content max-width constrains for readability */
+  #screen-farmer-visit .fvd-scroll,
+  #screen-prev-visits .pvs-scroll {
+    max-width: 100%;
+  }
+
+  /* Date + Area row: stack on very narrow viewports */
+  @media (max-width: 360px) {
+    .fvd-date-area-row {
+      grid-template-columns: 1fr;
+    }
+    .fvd-farmer-name { font-size: 15px; }
+    .fvd-chips { gap: 6px; }
+    .fvd-chip { font-size: 12px; padding: 6px 11px; }
+    .fvd-yn-btn { font-size: 13px; padding: 10px; }
+    .fvd-save-btn { font-size: 14px; padding: 14px; }
+    .pvs-crop-info { flex-direction: column; gap: 8px; }
+  }
+
+  /* Tablet (481–1023px): wider content area inside the phone mock */
+  @media (min-width: 481px) and (max-width: 1023px) {
+    #screen-farmer-visit .fvd-section,
+    #screen-prev-visits .pvs-card {
+      border-radius: 18px;
+    }
+    .fvd-farmer-banner { padding: 20px 24px; }
+    .fvd-farmer-name { font-size: 20px; }
+    .fvd-scroll { padding: 16px; }
+    .pvs-scroll { padding: 18px; }
+  }
+
+  /* Desktop (≥1024px): inside the fixed 390px phone mock — no change needed
+     but ensure no overflow clipping on dropdowns */
+  @media (min-width: 1024px) {
+    .fvd-select-dropdown { z-index: 300; }
+    .fy-visits-overlay,
+    .last-visit-popup,
+    .farmer-search-overlay { border-radius: 40px; overflow: hidden; }
+  }
+
+  /* Farmer visit save bar — always above bottom sheet on all sizes */
+  .fvd-save-bar {
+    position: sticky;
+    bottom: 0;
+    left: 0;
+    right: 0;
+  }
+
+  /* GI section responsive chip wrap */
+  #giProductChips .fvd-chip,
+  #productChips .fvd-chip {
+    flex: 0 0 auto;
+    max-width: calc(50% - 4px);
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+
+  /* Previous visits timeline — fluid width */
+  .pvs-timeline::before { left: 14px; }
+  .pvs-item { padding-left: 40px; }
+
+  /* FY visits sheet — max height responsive */
+  .fy-visits-sheet { max-height: min(75%, 500px); }
+  .farmer-search-sheet { max-height: min(88%, 700px); }
+
+  /* === FARMER VISIT SCREEN — RESPONSIVE === */
+
+  /* Fluid base for all fvd elements */
+  .fvd-scroll { padding: 12px; padding-bottom: 88px; }
+  .fvd-section-body { padding: 12px 14px; }
+
+  /* Date + Area row: stack on very narrow screens */
+  @media (max-width: 360px) {
+    .fvd-date-area-row { grid-template-columns: 1fr; }
+    .fvd-farmer-name { font-size: 16px; }
+    .fvd-section-title { font-size: 14px; }
+    .fvd-chip { font-size: 12px; padding: 6px 11px; }
+    .fvd-yn-btn { font-size: 14px; padding: 10px; }
+    .fvd-save-btn { font-size: 15px; padding: 14px; }
+    .gi-section-header { flex-wrap: wrap; gap: 8px; }
+    .gi-fy-btn { font-size: 11px; padding: 5px 10px; }
+    .fvd-prev-btn { font-size: 11px; padding: 5px 9px; }
+    .pvs-crop-info { flex-wrap: wrap; gap: 10px; }
+    .fss-district-row { grid-template-columns: 1fr; }
+    .fvd-header { padding: 8px 12px 10px; }
+    .fvd-farmer-banner { padding: 14px 16px; }
+  }
+
+  /* Comfortable sizing for standard mobile (361–480px) */
+  @media (min-width: 361px) and (max-width: 480px) {
+    .fvd-scroll { padding: 12px 14px; padding-bottom: 88px; }
+    .fvd-section { margin-bottom: 10px; }
+  }
+
+  /* Tablet — farmer visit screen stays phone-width, centered */
+  @media (min-width: 481px) {
+    .fvd-date-area-row { grid-template-columns: 1fr 1fr; }
+    .fvd-chips { gap: 8px; }
+  }
+
+  /* Touch target minimum sizes */
+  .fvd-select-box,
+  .fvd-yn-btn,
+  .fvd-chip,
+  .fss-farmer-card,
+  .fvc-crop-row {
+    min-height: 44px;
+  }
+
+  /* Prevent horizontal overflow in chips */
+  .fvd-chips { flex-wrap: wrap; overflow: hidden; }
+
+  /* Farmer banner fluid text */
+  .fvd-farmer-name { font-size: clamp(15px, 4.5vw, 18px); }
+  .fvd-farmer-phone { font-size: clamp(12px, 3.5vw, 14px); }
+
+  /* Previous visits timeline — fluid */
+  .pvs-card-top { flex-wrap: wrap; gap: 6px; }
+  .pvs-intent-badge { font-size: clamp(10px, 2.8vw, 12px); }
+  .pvs-card-date { font-size: clamp(13px, 3.5vw, 14px); }
+
+  /* Today's activities bar — full width fluid */
+  .today-acts-toggle { padding: 13px 16px; font-size: clamp(13px, 4vw, 15px); }
+  .ta-name { font-size: clamp(13px, 3.8vw, 14px); }
+  .ta-time { font-size: clamp(11px, 3vw, 12px); }
+
+  /* Farmer search sheet fluid */
+  .fss-title { font-size: clamp(14px, 4.5vw, 16px); }
+  .fss-farmer-num { font-size: clamp(13px, 3.8vw, 14px); }
+  .fss-farmer-detail { font-size: clamp(12px, 3.2vw, 13px); }
+
 </style>
 </head>
 <body>
@@ -2053,79 +2113,6 @@
   <button class="guide-help-btn" id="guideHelpBtn" onclick="startGuideForCurrentScreen()" title="Screen guide">?</button>
 
   <!-- ==================== SCREEN 1: SPLASH ==================== -->
-  <div class="screen active" id="screen-splash">
-    <div style="flex:1; display:flex; flex-direction:column; justify-content:center; align-items:center; padding:40px 24px;">
-      <div class="splash-logo-card">
-        <img src="/logo.png" alt="Grow Indigo Logo">
-      </div>
-      <div class="splash-tagline">We Accelerate Ag Transformation for a Healthy Planet</div>
-    </div>
-    <div style="display:flex; justify-content:center; margin-bottom:20px;">
-      <div class="splash-progress">
-        <span class="active"></span><span></span>
-      </div>
-    </div>
-    <div class="splash-wave">
-      <div class="biologicals-logo">
-        <div class="bio-text">🌱 biologicals<sup style="font-size:10px">TM</sup></div>
-        <div class="bio-sub">by growindigo</div>
-      </div>
-    </div>
-    <div style="position:absolute; bottom:0; right:0; left:0; height:100%; pointer-events:none;"></div>
-  </div>
-
-  <!-- ==================== SCREEN 2: LANGUAGE ==================== -->
-  <div class="screen" id="screen-language">
-    <div class="status-bar"><span class="time">10:35</span><span class="status-icons">📶 100%</span></div>
-    <div class="lang-header">
-      <h1>Choose your preferred language</h1>
-      <p>You can change this later from profile settings</p>
-    </div>
-    <div class="lang-grid">
-      <div class="lang-card en selected" onclick="selectLang(this)">
-        <div class="check">✓</div>
-        <div><div class="lang-name">English</div><div class="lang-english">English</div></div>
-        <div class="lang-illustration">🗽</div>
-      </div>
-      <div class="lang-card hi" onclick="selectLang(this)">
-        <div class="check"></div>
-        <div><div class="lang-name">हिंदी</div><div class="lang-english">Hindi</div></div>
-        <div class="lang-illustration">🏛️</div>
-      </div>
-      <div class="lang-card gu" onclick="selectLang(this)">
-        <div class="check"></div>
-        <div><div class="lang-name">ગુજરાતી</div><div class="lang-english">Gujarati</div></div>
-        <div class="lang-illustration">👳</div>
-      </div>
-      <div class="lang-card mr" onclick="selectLang(this)">
-        <div class="check"></div>
-        <div><div class="lang-name">मराठी</div><div class="lang-english">Marathi</div></div>
-        <div class="lang-illustration">🏯</div>
-      </div>
-      <div class="lang-card pa" onclick="selectLang(this)">
-        <div class="check"></div>
-        <div><div class="lang-name">ਪੰਜਾਬੀ</div><div class="lang-english">Punjabi</div></div>
-        <div class="lang-illustration">🕌</div>
-      </div>
-      <div class="lang-card te" onclick="selectLang(this)">
-        <div class="check"></div>
-        <div><div class="lang-name">తెలుగు</div><div class="lang-english">Telugu</div></div>
-        <div class="lang-illustration">🛕</div>
-      </div>
-      <div class="lang-card bn" onclick="selectLang(this)">
-        <div class="check"></div>
-        <div><div class="lang-name">বাঙালি</div><div class="lang-english">Bangali</div></div>
-        <div class="lang-illustration">🌉</div>
-      </div>
-      <div class="lang-card kn" onclick="selectLang(this)">
-        <div class="check"></div>
-        <div><div class="lang-name">ಕನ್ನಡ</div><div class="lang-english">Kannada</div></div>
-        <div class="lang-illustration">⛩️</div>
-      </div>
-    </div>
-    <button class="lang-continue-btn" onclick="goTo('screen-privacy', 'in')">CONTINUE</button>
-  </div>
-
   <!-- ==================== SCREEN 3: PRIVACY ==================== -->
   <div class="screen" id="screen-privacy">
     <div class="status-bar"><span class="time">10:35</span><span class="status-icons">📶 100%</span></div>
@@ -2228,7 +2215,8 @@
   </div>
 
   <!-- ==================== SCREEN 6: HOME INITIAL ==================== -->
-  <div class="screen" id="screen-home-initial">
+  <!-- ==================== SCREEN: HOME ==================== -->
+  <div class="screen active" id="screen-home-initial">
     <div class="status-bar" style="background:#F5F5F5;"><span class="time">10:36</span><span class="status-icons">📍 📶 100%</span></div>
     <div class="app-header">
       <div class="app-title"><span class="field">Field</span> <span class="connect">Connect</span></div>
@@ -3672,7 +3660,7 @@ function resetDistrictChips(activeDistrict) {
 // ============================================================
 const _originalGoTo = goTo;
 // Track which screens have been seen
-const seenScreens = new Set(['screen-splash']);
+const seenScreens = new Set(['screen-home-initial']);
 
 // Patch goTo to fire guide on first visit
 function goTo(screenId, direction) {
@@ -3697,7 +3685,7 @@ function goTo(screenId, direction) {
 
   // Auto-start guide on FIRST visit to certain screens
   const autoGuideScreens = [
-    'screen-language','screen-home-initial','screen-home-active',
+    'screen-home-initial','screen-home-active',
     'screen-start-day','screen-gtv','screen-tag-village',
     'screen-reports','screen-gtv-assignment','screen-mdo-details'
   ];
@@ -3709,7 +3697,7 @@ function goTo(screenId, direction) {
 
 // Show / hide the persistent help button
 function updateHelpBtn(screenId) {
-  const noHelpScreens = ['screen-splash','screen-language','screen-privacy','screen-login','screen-otp'];
+  const noHelpScreens = ['screen-privacy','screen-login','screen-otp'];
   const btn = document.getElementById('guideHelpBtn');
   if (noHelpScreens.includes(screenId)) {
     btn.classList.remove('visible');
@@ -4180,8 +4168,8 @@ document.addEventListener('DOMContentLoaded', () => {
   const mar11 = document.getElementById('acc-mar11');
   if (mar11) mar11.querySelector('.accordion-body').style.display = 'block';
 
-  // Help button starts hidden (splash is active)
-  updateHelpBtn('screen-splash');
+  // Help button starts hidden (privacy is first screen)
+  updateHelpBtn('screen-home-initial');
 
   // Guide tooltip hidden by default
   const tooltip = document.getElementById('guideTooltip');

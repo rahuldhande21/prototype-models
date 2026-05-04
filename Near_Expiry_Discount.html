@@ -1,0 +1,605 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=yes">
+<title>Grow Indigo - Near Expiry Discounts</title>
+<style>
+:root {
+  --color-background-primary: #ffffff;
+  --color-background-secondary: #f8f9fa;
+  --color-text-primary: #1a2b3c;
+  --color-text-secondary: #6c757d;
+  --color-border-tertiary: #e9ecef;
+  --color-border-secondary: #dee2e6;
+  --border-radius-sm: 6px;
+  --border-radius-md: 8px;
+  --border-radius-lg: 12px;
+  --font-sans: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', sans-serif;
+}
+
+* { box-sizing: border-box; margin: 0; padding: 0; }
+body {
+  font-family: var(--font-sans);
+  background: #f0f2f5;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 100vh;
+  padding: 16px;
+}
+.app {
+  max-width: 420px;
+  width: 100%;
+  margin: 0 auto;
+  background: var(--color-background-primary);
+  border: 1px solid var(--color-border-tertiary);
+  border-radius: var(--border-radius-lg);
+  overflow: hidden;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+}
+.header {
+  background: #1a5c38;
+  color: #fff;
+  padding: 14px 16px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+.header-title {
+  font-size: 16px;
+  font-weight: 500;
+}
+.header-back {
+  font-size: 20px;
+  cursor: pointer;
+  width: 28px;
+  text-align: center;
+  font-weight: 600;
+}
+.screen { display: none; }
+.screen.active { display: block; }
+.field-row {
+  display: flex;
+  align-items: center;
+  padding: 10px 16px;
+  border-bottom: 1px solid var(--color-border-tertiary);
+}
+.field-label {
+  font-size: 13px;
+  color: var(--color-text-secondary);
+  width: 80px;
+  flex-shrink: 0;
+}
+.field-value {
+  font-size: 13px;
+  color: var(--color-text-primary);
+  font-weight: 500;
+}
+.radio-group {
+  padding: 10px 16px;
+  border-bottom: 1px solid var(--color-border-tertiary);
+}
+.radio-label {
+  font-size: 12px;
+  color: var(--color-text-secondary);
+  margin-bottom: 6px;
+}
+.radio-options {
+  display: flex;
+  gap: 8px;
+}
+.radio-btn {
+  flex: 1;
+  padding: 8px;
+  border: 1px solid var(--color-border-secondary);
+  border-radius: var(--border-radius-md);
+  text-align: center;
+  font-size: 13px;
+  cursor: pointer;
+  color: var(--color-text-secondary);
+  background: var(--color-background-secondary);
+  transition: all 0.15s;
+}
+.radio-btn.selected {
+  background: #1a5c38;
+  color: #fff;
+  border-color: #1a5c38;
+}
+.product-section {
+  padding: 10px 16px;
+}
+.section-label {
+  font-size: 12px;
+  color: var(--color-text-secondary);
+  margin-bottom: 8px;
+}
+.product-select {
+  width: 100%;
+  border: 1px solid var(--color-border-secondary);
+  border-radius: var(--border-radius-md);
+  padding: 8px 10px;
+  font-size: 13px;
+  background: var(--color-background-primary);
+  color: var(--color-text-primary);
+}
+.qty-price-row {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 8px;
+  margin-top: 8px;
+}
+.input-box {
+  border: 1px solid var(--color-border-secondary);
+  border-radius: var(--border-radius-md);
+  padding: 8px 10px;
+  font-size: 13px;
+  color: var(--color-text-primary);
+  background: var(--color-background-primary);
+  width: 100%;
+}
+.near-expiry-btn {
+  margin: 10px 16px;
+  width: calc(100% - 32px);
+  padding: 10px;
+  background: #e8f5e9;
+  border: 1px solid #1a5c38;
+  border-radius: var(--border-radius-md);
+  color: #1a5c38;
+  font-size: 13px;
+  font-weight: 500;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+}
+.near-expiry-btn:hover {
+  background: #c8e6c9;
+}
+.totals-section {
+  padding: 10px 16px;
+  border-top: 1px solid var(--color-border-tertiary);
+}
+.total-row {
+  display: flex;
+  justify-content: space-between;
+  padding: 4px 0;
+  font-size: 13px;
+}
+.total-row.final {
+  font-weight: 500;
+  font-size: 14px;
+  border-top: 1px solid var(--color-border-tertiary);
+  margin-top: 6px;
+  padding-top: 8px;
+}
+.submit-btn {
+  margin: 12px 16px;
+  width: calc(100% - 32px);
+  padding: 12px;
+  background: #1a5c38;
+  color: #fff;
+  border: none;
+  border-radius: var(--border-radius-md);
+  font-size: 14px;
+  font-weight: 500;
+  cursor: pointer;
+}
+.submit-btn:hover {
+  background: #154f2f;
+}
+.ne-screen-header {
+  background: #f0f7f3;
+  padding: 10px 16px;
+  border-bottom: 1px solid var(--color-border-tertiary);
+  font-size: 13px;
+  color: #1a5c38;
+  font-weight: 500;
+}
+.batch-card {
+  margin: 10px 16px;
+  background: var(--color-background-secondary);
+  border: 1px solid var(--color-border-tertiary);
+  border-radius: var(--border-radius-md);
+  overflow: hidden;
+}
+.batch-header {
+  padding: 8px 12px;
+  background: #e8f5e9;
+  font-size: 13px;
+  font-weight: 500;
+  color: #1a5c38;
+  border-bottom: 1px solid var(--color-border-tertiary);
+}
+.batch-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 8px 12px;
+  border-bottom: 1px solid var(--color-border-tertiary);
+}
+.batch-row:last-child {
+  border-bottom: none;
+}
+.batch-key {
+  font-size: 13px;
+  color: var(--color-text-secondary);
+}
+.batch-val {
+  font-size: 13px;
+  font-weight: 500;
+  color: var(--color-text-primary);
+}
+.batch-val.discount {
+  color: #c0392b;
+}
+.select-batch-btn {
+  margin: 0 16px 10px;
+  width: calc(100% - 32px);
+  padding: 9px;
+  border: 1px solid #1a5c38;
+  border-radius: var(--border-radius-md);
+  background: #fff;
+  color: #1a5c38;
+  font-size: 13px;
+  font-weight: 500;
+  cursor: pointer;
+}
+.select-batch-btn.selected {
+  background: #1a5c38;
+  color: #fff;
+}
+
+/* Success screen */
+.success-screen {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 48px 24px;
+  text-align: center;
+  min-height: 360px;
+}
+.success-circle {
+  width: 80px;
+  height: 80px;
+  border-radius: 50%;
+  background: #e8f5e9;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 20px;
+  animation: popIn 0.4s ease;
+}
+.success-check {
+  width: 40px;
+  height: 40px;
+}
+.success-title {
+  font-size: 20px;
+  font-weight: 500;
+  color: var(--color-text-primary);
+  margin-bottom: 8px;
+}
+.success-sub {
+  font-size: 13px;
+  color: var(--color-text-secondary);
+  margin-bottom: 32px;
+  line-height: 1.6;
+}
+.ok-btn {
+  padding: 12px 48px;
+  background: #1a5c38;
+  color: #fff;
+  border: none;
+  border-radius: var(--border-radius-md);
+  font-size: 14px;
+  font-weight: 500;
+  cursor: pointer;
+}
+.ok-btn:hover {
+  background: #154f2f;
+}
+@keyframes popIn {
+  0% { transform: scale(0.5); opacity: 0; }
+  80% { transform: scale(1.1); }
+  100% { transform: scale(1); opacity: 1; }
+}
+
+/* Home screen */
+.home-screen {
+  padding: 16px;
+}
+.home-greeting {
+  font-size: 15px;
+  font-weight: 500;
+  color: var(--color-text-primary);
+  margin-bottom: 4px;
+}
+.home-sub {
+  font-size: 12px;
+  color: var(--color-text-secondary);
+  margin-bottom: 16px;
+}
+.home-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 10px;
+}
+.home-tile {
+  background: var(--color-background-secondary);
+  border: 1px solid var(--color-border-tertiary);
+  border-radius: var(--border-radius-md);
+  padding: 16px 12px;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 8px;
+  cursor: pointer;
+  transition: background 0.15s;
+}
+.home-tile:hover {
+  background: #e8f5e9;
+  border-color: #1a5c38;
+}
+.tile-icon {
+  width: 32px;
+  height: 32px;
+  border-radius: 8px;
+  background: #e8f5e9;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 16px;
+}
+.tile-label {
+  font-size: 13px;
+  font-weight: 500;
+  color: var(--color-text-primary);
+}
+.tile-sub {
+  font-size: 11px;
+  color: var(--color-text-secondary);
+}
+.new-order-btn {
+  margin-top: 12px;
+  width: 100%;
+  padding: 12px;
+  background: #1a5c38;
+  color: #fff;
+  border: none;
+  border-radius: var(--border-radius-md);
+  font-size: 14px;
+  font-weight: 500;
+  cursor: pointer;
+}
+.order-id {
+  font-size: 11px;
+  background: #f0f7f3;
+  border: 1px solid #1a5c38;
+  color: #1a5c38;
+  border-radius: 4px;
+  padding: 3px 10px;
+  display: inline-block;
+  margin-bottom: 16px;
+}
+</style>
+
+<div class="app">
+  <div class="header">
+    <span class="header-back" id="back-btn" style="display:none">←</span>
+    <span class="header-title" id="header-title">Home</span>
+  </div>
+
+  <!-- Home screen -->
+  <div class="screen active" id="screen-home">
+    <div class="home-screen">
+      <div class="home-greeting">Welcome, Arjun Agro</div>
+      <div class="home-sub">DWD Depot</div>
+      <div class="home-grid">
+        <div class="home-tile" onclick="goToOrder()">
+          <div class="tile-icon">🛒</div>
+          <div class="tile-label">New Order</div>
+          <div class="tile-sub">Place a product order</div>
+        </div>
+        <div class="home-tile">
+          <div class="tile-icon">⏰</div>
+          <div class="tile-label">Near Expiry</div>
+          <div class="tile-sub">Discounted batches</div>
+        </div>
+        <div class="home-tile">
+          <div class="tile-icon">📋</div>
+          <div class="tile-label">Order History</div>
+          <div class="tile-sub">View past orders</div>
+        </div>
+        <div class="home-tile">
+          <div class="tile-icon">📦</div>
+          <div class="tile-label">Products</div>
+          <div class="tile-sub">Browse catalogue</div>
+        </div>
+      </div>
+      <button class="new-order-btn" onclick="goToOrder()">+ Place New Order</button>
+    </div>
+  </div>
+
+  <!-- Order screen -->
+  <div class="screen" id="screen-order">
+    <div class="field-row">
+      <span class="field-label">Customer</span>
+      <span class="field-value">Arjun Agro</span>
+    </div>
+    <div class="field-row">
+      <span class="field-label">Depot</span>
+      <span class="field-value">DWD</span>
+    </div>
+    <div class="radio-group">
+      <div class="radio-label">Product type</div>
+      <div class="radio-options">
+        <div class="radio-btn selected" id="radio-regular" onclick="selectType('regular')">Regular Products</div>
+        <div class="radio-btn" id="radio-discounted" onclick="selectType('discounted')">Discounted Products</div>
+      </div>
+    </div>
+    <div class="product-section">
+      <div class="section-label">Product list</div>
+      <select class="product-select" id="product-select" onchange="updateProduct()">
+        <option value="">-- Select product --</option>
+        <option value="collsal">Collsal 100 G</option>
+        <option value="amoxin">Amoxin 500 MG</option>
+        <option value="vitac">Vita-C 250 MG</option>
+      </select>
+      <div class="qty-price-row">
+        <input class="input-box" type="number" placeholder="Qty" id="qty-input" value="9" min="1" onchange="calcTotal()" />
+        <input class="input-box" type="number" placeholder="Price" id="price-input" value="100" min="0" onchange="calcTotal()" />
+      </div>
+    </div>
+    <button class="near-expiry-btn" id="ne-btn" onclick="goToNearExpiry()" style="display:none">
+      <span style="font-size:16px">⏰</span> View near-expiry batches
+    </button>
+    <div class="totals-section">
+      <div class="total-row"><span>Price per unit</span><span id="t-price">₹100</span></div>
+      <div class="total-row"><span>Qty</span><span id="t-qty">9</span></div>
+      <div class="total-row" id="t-discount-row" style="display:none; color:#c0392b"><span>Discount</span><span id="t-discount">-₹0</span></div>
+      <div class="total-row final"><span>Total</span><span id="t-total">₹900</span></div>
+    </div>
+    <button class="submit-btn" onclick="placeOrder()">Place Order</button>
+  </div>
+
+  <!-- Near Expiry screen -->
+  <div class="screen" id="screen-ne">
+    <div class="ne-screen-header" id="ne-product-name">Near Expiry Batches</div>
+    <div id="batch-list"></div>
+    <button class="submit-btn" style="margin-top:4px" onclick="applyBatch()">Apply selected batch</button>
+  </div>
+
+  <!-- Success screen -->
+  <div class="screen" id="screen-success">
+    <div class="success-screen">
+      <div class="success-circle">
+        <svg class="success-check" viewBox="0 0 40 40" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <circle cx="20" cy="20" r="20" fill="#1a5c38"/>
+          <polyline points="10,21 17,28 30,13" stroke="#fff" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+      </div>
+      <div class="order-id" id="order-id-label">Order #ORD-0001</div>
+      <div class="success-title">Order placed successfully!</div>
+      <div class="success-sub">Your order has been confirmed and<br>will be processed shortly.</div>
+      <button class="ok-btn" onclick="goHome()">OK</button>
+    </div>
+  </div>
+</div>
+
+<script>
+const batches = {
+  collsal: [{ id: 'A', days: 30, discount: 50 }, { id: 'B', days: 90, discount: 30 }],
+  amoxin: [{ id: 'X', days: 15, discount: 60 }, { id: 'Y', days: 45, discount: 25 }],
+  vitac: [{ id: 'M', days: 60, discount: 20 }]
+};
+const products = { collsal: 'Collsal 100 G', amoxin: 'Amoxin 500 MG', vitac: 'Vita-C 250 MG' };
+
+let selectedBatch = null, currentProduct = '', productType = 'regular', appliedDiscount = 0;
+let orderCounter = 1;
+
+function showScreen(id, title, showBack) {
+  document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
+  document.getElementById(id).classList.add('active');
+  document.getElementById('header-title').textContent = title;
+  document.getElementById('back-btn').style.display = showBack ? 'inline' : 'none';
+}
+
+function goHome() { showScreen('screen-home', 'Home', false); }
+function goToOrder() {
+  selectedBatch = null; appliedDiscount = 0;
+  document.getElementById('product-select').value = '';
+  document.getElementById('radio-regular').classList.add('selected');
+  document.getElementById('radio-discounted').classList.remove('selected');
+  productType = 'regular'; currentProduct = '';
+  document.getElementById('ne-btn').style.display = 'none';
+  document.getElementById('t-discount-row').style.display = 'none';
+  calcTotal();
+  showScreen('screen-order', 'New Order', true);
+}
+
+function selectType(type) {
+  productType = type;
+  document.getElementById('radio-regular').classList.toggle('selected', type === 'regular');
+  document.getElementById('radio-discounted').classList.toggle('selected', type === 'discounted');
+  updateProduct();
+}
+
+function updateProduct() {
+  currentProduct = document.getElementById('product-select').value;
+  selectedBatch = null; appliedDiscount = 0;
+  document.getElementById('ne-btn').style.display = (currentProduct && productType === 'discounted') ? 'flex' : 'none';
+  document.getElementById('t-discount-row').style.display = 'none';
+  calcTotal();
+}
+
+function calcTotal() {
+  const qty = parseInt(document.getElementById('qty-input').value) || 0;
+  const price = parseFloat(document.getElementById('price-input').value) || 0;
+  document.getElementById('t-qty').textContent = qty;
+  document.getElementById('t-price').textContent = '₹' + price;
+  const discountAmt = price * qty * (appliedDiscount / 100);
+  const total = price * qty - discountAmt;
+  document.getElementById('t-total').textContent = '₹' + total.toFixed(0);
+  if (appliedDiscount > 0) {
+    document.getElementById('t-discount-row').style.display = 'flex';
+    document.getElementById('t-discount').textContent = '-₹' + discountAmt.toFixed(0) + ' (' + appliedDiscount + '%)';
+  } else {
+    document.getElementById('t-discount-row').style.display = 'none';
+  }
+}
+
+function placeOrder() {
+  const orderId = 'ORD-' + String(orderCounter++).padStart(4, '0');
+  document.getElementById('order-id-label').textContent = 'Order #' + orderId;
+  showScreen('screen-success', 'Order Confirmation', false);
+}
+
+function goToNearExpiry() {
+  if (!currentProduct) return;
+  document.getElementById('ne-product-name').textContent = (products[currentProduct] || '') + ' — Near Expiry Batches';
+  renderBatches();
+  showScreen('screen-ne', 'Near Expiry Batches', true);
+}
+
+function renderBatches() {
+  const list = document.getElementById('batch-list');
+  list.innerHTML = '';
+  (batches[currentProduct] || []).forEach(b => {
+    const card = document.createElement('div');
+    card.className = 'batch-card';
+    card.innerHTML = `<div class="batch-header">Batch ${b.id}</div>
+      <div class="batch-row"><span class="batch-key">Expiry remaining</span><span class="batch-val">${b.days} days</span></div>
+      <div class="batch-row"><span class="batch-key">Discount offered</span><span class="batch-val discount">${b.discount}%</span></div>`;
+    const btn = document.createElement('button');
+    btn.className = 'select-batch-btn' + (selectedBatch && selectedBatch.id === b.id ? ' selected' : '');
+    btn.textContent = selectedBatch && selectedBatch.id === b.id ? '✓ Selected' : 'Select batch ' + b.id;
+    btn.onclick = () => { selectedBatch = b; renderBatches(); };
+    list.appendChild(card);
+    list.appendChild(btn);
+  });
+  if ((batches[currentProduct] || []).length === 0) {
+    list.innerHTML = '<div style="padding:20px;text-align:center;color:#6c757d;">No near-expiry batches available for this product.</div>';
+  }
+}
+
+function applyBatch() {
+  if (!selectedBatch) { alert('Please select a batch first.'); return; }
+  appliedDiscount = selectedBatch.discount;
+  calcTotal();
+  showScreen('screen-order', 'New Order', true);
+}
+
+document.getElementById('back-btn').onclick = () => {
+  const active = document.querySelector('.screen.active');
+  if (active.id === 'screen-order') goHome();
+  else if (active.id === 'screen-ne') showScreen('screen-order', 'New Order', true);
+  else if (active.id === 'screen-success') goHome();
+};
+
+calcTotal();
+</script>
+</body>
+</html>

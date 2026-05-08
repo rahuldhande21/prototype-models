@@ -1,0 +1,1071 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Scheme Management — Cash Discount Portal</title>
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@300;400;500;600&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet" />
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  :root {
+    --green:  #1a7a4a;
+    --green-l:#e6f5ed;
+    --green-m:#52b07a;
+    --amber:  #b45309;
+    --amber-l:#fef3c7;
+    --amber-m:#f59e0b;
+    --blue:   #1d4ed8;
+    --blue-l: #eff6ff;
+    --blue-m: #60a5fa;
+    --red:    #b91c1c;
+    --red-l:  #fee2e2;
+    --slate:  #1e293b;
+    --slate-m:#64748b;
+    --slate-l:#f1f5f9;
+    --border: #e2e8f0;
+    --white:  #ffffff;
+    --bg:     #f8fafc;
+    --radius: 10px;
+    --shadow: 0 1px 3px rgba(0,0,0,.08), 0 1px 2px rgba(0,0,0,.05);
+    --shadow-lg: 0 10px 24px rgba(0,0,0,.1);
+  }
+
+  body {
+    font-family: 'DM Sans', sans-serif;
+    background: var(--bg);
+    color: var(--slate);
+    min-height: 100vh;
+  }
+
+  /* ── SIDEBAR ── */
+  .layout { display: flex; min-height: 100vh; }
+
+  .sidebar {
+    width: 240px;
+    background: var(--slate);
+    color: #cbd5e1;
+    flex-shrink: 0;
+    display: flex;
+    flex-direction: column;
+    position: fixed;
+    top: 0; left: 0; bottom: 0;
+    z-index: 10;
+  }
+
+  .sidebar-brand {
+    padding: 24px 20px 20px;
+    border-bottom: 1px solid rgba(255,255,255,.08);
+  }
+
+  .brand-icon {
+    width: 36px; height: 36px;
+    background: var(--green-m);
+    border-radius: 8px;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 18px;
+    margin-bottom: 10px;
+  }
+
+  .brand-name { font-size: 15px; font-weight: 600; color: #fff; line-height: 1.2; }
+  .brand-sub  { font-size: 11px; color: #94a3b8; margin-top: 2px; }
+
+  .sidebar-nav { padding: 12px 10px; flex: 1; }
+
+  .nav-section-label {
+    font-size: 10px;
+    font-weight: 600;
+    letter-spacing: .08em;
+    text-transform: uppercase;
+    color: #64748b;
+    padding: 8px 10px 4px;
+  }
+
+  .nav-item {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 9px 12px;
+    border-radius: 8px;
+    cursor: pointer;
+    font-size: 13.5px;
+    color: #94a3b8;
+    transition: background .15s, color .15s;
+    margin-bottom: 2px;
+    border: none;
+    background: none;
+    width: 100%;
+    text-align: left;
+  }
+
+  .nav-item:hover { background: rgba(255,255,255,.07); color: #e2e8f0; }
+  .nav-item.active { background: rgba(82,176,122,.18); color: #86efac; font-weight: 500; }
+
+  .nav-icon { font-size: 16px; flex-shrink: 0; width: 18px; text-align: center; }
+
+  .sidebar-footer {
+    padding: 14px 20px;
+    border-top: 1px solid rgba(255,255,255,.08);
+    font-size: 11px;
+    color: #475569;
+  }
+
+  /* ── MAIN ── */
+  .main {
+    margin-left: 240px;
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+  }
+
+  .topbar {
+    background: var(--white);
+    border-bottom: 1px solid var(--border);
+    padding: 0 32px;
+    height: 60px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    position: sticky;
+    top: 0;
+    z-index: 5;
+  }
+
+  .topbar-title { font-size: 15px; font-weight: 600; color: var(--slate); }
+  .topbar-sub   { font-size: 12px; color: var(--slate-m); margin-top: 1px; }
+
+  .topbar-right { display: flex; align-items: center; gap: 10px; }
+
+  .avatar {
+    width: 32px; height: 32px;
+    background: var(--green-l);
+    border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 12px; font-weight: 600; color: var(--green);
+  }
+
+  .content { padding: 28px 32px; }
+
+  /* ── SCREENS ── */
+  .screen { display: none; }
+  .screen.active { display: block; }
+
+  /* ── CARDS ── */
+  .card {
+    background: var(--white);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    box-shadow: var(--shadow);
+  }
+
+  .card-header {
+    padding: 18px 22px;
+    border-bottom: 1px solid var(--border);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+
+  .card-title  { font-size: 14px; font-weight: 600; color: var(--slate); }
+  .card-sub    { font-size: 12px; color: var(--slate-m); margin-top: 2px; }
+  .card-body   { padding: 20px 22px; }
+
+  /* ── BADGES ── */
+  .badge {
+    display: inline-flex; align-items: center; gap: 5px;
+    padding: 3px 10px;
+    border-radius: 20px;
+    font-size: 11px;
+    font-weight: 500;
+    font-family: 'DM Mono', monospace;
+  }
+  .badge::before { content: ''; width: 6px; height: 6px; border-radius: 50%; flex-shrink: 0; }
+  .badge-green { background: var(--green-l); color: var(--green); }
+  .badge-green::before { background: var(--green-m); }
+  .badge-amber { background: var(--amber-l); color: var(--amber); }
+  .badge-amber::before { background: var(--amber-m); }
+  .badge-blue  { background: var(--blue-l); color: var(--blue); }
+  .badge-blue::before  { background: var(--blue-m); }
+
+  /* ── GRID ── */
+  .grid-3 { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; }
+  .grid-2 { display: grid; grid-template-columns: repeat(2, 1fr); gap: 16px; }
+
+  /* ── METRIC ── */
+  .metric-card {
+    background: var(--white);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    padding: 18px 20px;
+    box-shadow: var(--shadow);
+  }
+  .metric-label { font-size: 11px; font-weight: 500; text-transform: uppercase; letter-spacing: .06em; color: var(--slate-m); margin-bottom: 8px; }
+  .metric-val   { font-size: 28px; font-weight: 600; color: var(--slate); line-height: 1; }
+  .metric-foot  { font-size: 12px; color: var(--slate-m); margin-top: 6px; }
+  .metric-accent{ color: var(--green); }
+
+  /* ── SCHEME OVERVIEW CARD ── */
+  .scheme-card {
+    background: var(--white);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    padding: 20px 22px;
+    box-shadow: var(--shadow);
+    cursor: pointer;
+    transition: box-shadow .2s, transform .15s;
+  }
+  .scheme-card:hover { box-shadow: var(--shadow-lg); transform: translateY(-2px); }
+
+  .scheme-icon {
+    width: 42px; height: 42px;
+    border-radius: 10px;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 20px;
+    margin-bottom: 14px;
+  }
+
+  .scheme-name { font-size: 14px; font-weight: 600; color: var(--slate); margin-bottom: 4px; }
+  .scheme-alias { font-size: 12px; color: var(--slate-m); margin-bottom: 12px; }
+
+  .scheme-meta { font-size: 12px; color: var(--slate-m); display: flex; flex-direction: column; gap: 4px; }
+  .scheme-meta span { display: flex; align-items: center; gap: 6px; }
+
+  /* ── FIELD TABLE ── */
+  .field-table { width: 100%; }
+  .field-table tr td { padding: 9px 0; font-size: 13px; border-bottom: 1px solid var(--border); vertical-align: top; }
+  .field-table tr:last-child td { border-bottom: none; }
+  .field-table .fl { color: var(--slate-m); width: 40%; }
+  .field-table .fv { color: var(--slate); font-weight: 500; text-align: right; }
+
+  /* ── DATA TABLE ── */
+  .data-table { width: 100%; border-collapse: collapse; font-size: 13px; }
+  .data-table th { text-align: left; padding: 10px 14px; color: var(--slate-m); font-weight: 500; font-size: 11.5px; text-transform: uppercase; letter-spacing: .05em; border-bottom: 1px solid var(--border); background: var(--slate-l); }
+  .data-table th:first-child { border-radius: 8px 0 0 0; }
+  .data-table th:last-child  { border-radius: 0 8px 0 0; }
+  .data-table td { padding: 10px 14px; border-bottom: 1px solid var(--border); color: var(--slate); }
+  .data-table tr:last-child td { border-bottom: none; }
+  .data-table tr:hover td { background: var(--slate-l); }
+  .data-table .num { font-family: 'DM Mono', monospace; font-size: 12.5px; }
+  .data-table .pct-green { color: var(--green); font-weight: 600; font-family: 'DM Mono', monospace; }
+
+  /* ── FLOW ── */
+  .flow { display: flex; align-items: center; gap: 0; flex-wrap: wrap; margin: 16px 0; }
+  .flow-step {
+    background: var(--slate-l);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 10px 16px;
+    font-size: 12.5px;
+    font-weight: 500;
+    color: var(--slate);
+    text-align: center;
+  }
+  .flow-arrow { color: var(--slate-m); padding: 0 10px; font-size: 18px; }
+
+  .flow-v { display: flex; flex-direction: column; gap: 0; }
+  .flow-v .flow-step { text-align: left; }
+  .flow-v .flow-arrow { padding: 4px 0 4px 16px; }
+
+  /* ── SECTION HEADING ── */
+  .section-h {
+    font-size: 11px;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: .07em;
+    color: var(--slate-m);
+    margin: 24px 0 12px;
+  }
+
+  /* ── CALCULATOR ── */
+  .calc-wrap { display: flex; flex-direction: column; gap: 20px; }
+
+  .deposit-header {
+    display: grid;
+    grid-template-columns: 170px 130px 70px 90px 32px;
+    gap: 8px;
+    padding: 0 0 6px;
+    border-bottom: 1px solid var(--border);
+    font-size: 11px;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: .06em;
+    color: var(--slate-m);
+  }
+
+  .deposit-row-grid {
+    display: grid;
+    grid-template-columns: 170px 130px 70px 90px 32px;
+    gap: 8px;
+    align-items: center;
+    margin-bottom: 8px;
+  }
+
+  .dep-input {
+    border: 1px solid var(--border);
+    border-radius: 7px;
+    padding: 7px 10px;
+    font-size: 13px;
+    font-family: 'DM Sans', sans-serif;
+    color: var(--slate);
+    background: var(--white);
+    width: 100%;
+    transition: border-color .15s;
+    outline: none;
+  }
+  .dep-input:focus { border-color: var(--green); }
+
+  .dep-pct {
+    font-size: 13px;
+    font-family: 'DM Mono', monospace;
+    color: var(--green);
+    font-weight: 500;
+    padding: 7px 4px;
+  }
+
+  .dep-disc {
+    font-size: 13px;
+    font-family: 'DM Mono', monospace;
+    font-weight: 600;
+    color: var(--slate);
+    padding: 7px 4px;
+  }
+
+  .del-btn {
+    width: 28px; height: 28px;
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    background: none;
+    cursor: pointer;
+    color: var(--slate-m);
+    font-size: 16px;
+    display: flex; align-items: center; justify-content: center;
+    transition: background .15s, color .15s;
+  }
+  .del-btn:hover { background: var(--red-l); color: var(--red); border-color: #fca5a5; }
+
+  .add-row-btn {
+    display: inline-flex; align-items: center; gap: 6px;
+    padding: 8px 16px;
+    border: 1px dashed var(--border);
+    border-radius: 8px;
+    background: none;
+    cursor: pointer;
+    font-size: 13px;
+    font-family: 'DM Sans', sans-serif;
+    color: var(--slate-m);
+    transition: border-color .15s, color .15s, background .15s;
+  }
+  .add-row-btn:hover { border-color: var(--green-m); color: var(--green); background: var(--green-l); }
+
+  .result-panel {
+    background: var(--slate);
+    border-radius: 10px;
+    padding: 20px 24px;
+    color: #e2e8f0;
+  }
+
+  .result-row { display: flex; justify-content: space-between; align-items: center; padding: 7px 0; font-size: 13px; border-bottom: 1px solid rgba(255,255,255,.08); }
+  .result-row:last-child { border-bottom: none; }
+  .result-row .rl { color: #94a3b8; }
+  .result-row .rv { font-family: 'DM Mono', monospace; font-weight: 500; }
+  .result-total { display: flex; justify-content: space-between; align-items: center; padding: 12px 0 0; font-size: 16px; font-weight: 600; color: #fff; }
+  .result-total .rv { font-family: 'DM Mono', monospace; color: var(--green-m); }
+
+  /* ── SLAB PILLS ── */
+  .slab-pills { display: flex; flex-wrap: wrap; gap: 8px; margin: 12px 0; }
+  .slab-pill {
+    padding: 5px 14px;
+    background: var(--blue-l);
+    border: 1px solid #bfdbfe;
+    border-radius: 20px;
+    font-size: 12px;
+    font-family: 'DM Mono', monospace;
+    color: var(--blue);
+  }
+
+  /* ── ALERT ── */
+  .alert {
+    border-radius: 8px;
+    padding: 12px 16px;
+    font-size: 13px;
+    display: flex;
+    gap: 10px;
+    align-items: flex-start;
+  }
+  .alert-amber { background: var(--amber-l); color: var(--amber); border: 1px solid #fcd34d; }
+  .alert-icon { font-size: 16px; flex-shrink: 0; margin-top: 1px; }
+
+  /* ── DIVIDER ── */
+  .divider { border: none; border-top: 1px solid var(--border); margin: 20px 0; }
+
+  /* ── BUTTONS ── */
+  .btn-primary {
+    display: inline-flex; align-items: center; gap: 6px;
+    padding: 9px 20px;
+    background: var(--green);
+    color: #fff;
+    border: none;
+    border-radius: 8px;
+    font-size: 13px;
+    font-weight: 500;
+    font-family: 'DM Sans', sans-serif;
+    cursor: pointer;
+    transition: background .15s;
+  }
+  .btn-primary:hover { background: #155d37; }
+
+  .btn-ghost {
+    display: inline-flex; align-items: center; gap: 6px;
+    padding: 8px 16px;
+    background: none;
+    color: var(--slate-m);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    font-size: 13px;
+    font-family: 'DM Sans', sans-serif;
+    cursor: pointer;
+    transition: background .15s, color .15s;
+  }
+  .btn-ghost:hover { background: var(--slate-l); color: var(--slate); }
+
+  /* ── EXAMPLE BOX ── */
+  .example-box {
+    background: linear-gradient(135deg, #f0fdf4, #ecfdf5);
+    border: 1px solid #a7f3d0;
+    border-radius: 10px;
+    padding: 18px 20px;
+  }
+
+  .example-title { font-size: 12px; font-weight: 600; text-transform: uppercase; letter-spacing: .07em; color: var(--green); margin-bottom: 12px; }
+
+  /* ── PROGRESS BAR ── */
+  .progress-wrap { background: var(--border); border-radius: 4px; height: 6px; width: 100%; margin-top: 6px; overflow: hidden; }
+  .progress-bar  { height: 100%; border-radius: 4px; background: var(--green-m); }
+
+  /* ── ANIMATIONS ── */
+  @keyframes fadeUp {
+    from { opacity: 0; transform: translateY(12px); }
+    to   { opacity: 1; transform: translateY(0); }
+  }
+  .screen.active { animation: fadeUp .25s ease; }
+
+  /* ── PAGE HEADER ── */
+  .page-header { margin-bottom: 24px; }
+  .page-header h1 { font-size: 22px; font-weight: 600; color: var(--slate); }
+  .page-header p  { font-size: 13px; color: var(--slate-m); margin-top: 4px; }
+
+  .mb-16 { margin-bottom: 16px; }
+  .mb-24 { margin-bottom: 24px; }
+  .gap-16 { gap: 16px; }
+  .mt-16 { margin-top: 16px; }
+
+  /* ── RESPONSIVE ── */
+  @media (max-width: 900px) {
+    .sidebar { width: 200px; }
+    .main { margin-left: 200px; }
+    .grid-3 { grid-template-columns: 1fr; }
+  }
+</style>
+</head>
+<body>
+
+<div class="layout">
+
+  <!-- SIDEBAR -->
+  <aside class="sidebar">
+    <div class="sidebar-brand">
+      <div class="brand-icon">💹</div>
+      <div class="brand-name">Scheme Portal</div>
+      <div class="brand-sub">Discount Management</div>
+    </div>
+
+    <nav class="sidebar-nav">
+      <div class="nav-section-label">Schemes</div>
+      <button class="nav-item active" onclick="showScreen('overview', this)">
+        <span class="nav-icon">🏠</span> Overview
+      </button>
+      <button class="nav-item" onclick="showScreen('abs', this)">
+        <span class="nav-icon">📋</span> Advance Booking
+      </button>
+      <button class="nav-item" onclick="showScreen('cd', this)">
+        <span class="nav-icon">💵</span> Cash Discount
+      </button>
+      <button class="nav-item" onclick="showScreen('qty', this)">
+        <span class="nav-icon">📦</span> Quantity Discount
+      </button>
+
+      <div class="nav-section-label" style="margin-top:12px;">Tools</div>
+      <button class="nav-item" onclick="showScreen('calc', this)">
+        <span class="nav-icon">🧮</span> CD Calculator
+      </button>
+      <button class="nav-item" onclick="showScreen('workflow', this)">
+        <span class="nav-icon">🔄</span> Workflow
+      </button>
+    </nav>
+
+    <div class="sidebar-footer">
+      SAP · Glass Run · Mahyco App
+    </div>
+  </aside>
+
+  <!-- MAIN CONTENT -->
+  <div class="main">
+    <header class="topbar">
+      <div>
+        <div class="topbar-title" id="topbar-title">Overview</div>
+        <div class="topbar-sub" id="topbar-sub">All active discount schemes</div>
+      </div>
+      <div class="topbar-right">
+        <span class="badge badge-green">Season 2026</span>
+        <div class="avatar">SM</div>
+      </div>
+    </header>
+
+    <div class="content">
+
+      <!-- ── OVERVIEW ── -->
+      <div class="screen active" id="screen-overview">
+        <div class="page-header">
+          <h1>Scheme Management</h1>
+          <p>Monitor and manage all active discount schemes across companies</p>
+        </div>
+
+        <div class="grid-3 mb-24">
+          <div class="metric-card">
+            <div class="metric-label">Active Schemes</div>
+            <div class="metric-val">3</div>
+            <div class="metric-foot">Advance Booking, Cash Discount, Qty Discount</div>
+          </div>
+          <div class="metric-card">
+            <div class="metric-label">SAP Integrated</div>
+            <div class="metric-val">2 <span style="font-size:14px; color:var(--slate-m);">/ 3</span></div>
+            <div class="metric-foot"><span class="metric-accent">Cash Discount</span> is manual only</div>
+          </div>
+          <div class="metric-card">
+            <div class="metric-label">Companies Using</div>
+            <div class="metric-val">3+</div>
+            <div class="metric-foot">Mahyco · Leadbeter · Grow Indigo</div>
+          </div>
+        </div>
+
+        <div class="section-h">Scheme Types</div>
+        <div class="grid-3">
+
+          <div class="scheme-card" onclick="navTo('abs')">
+            <div class="scheme-icon" style="background:#e6f5ed;">📋</div>
+            <div class="scheme-name">Advance Booking Scheme</div>
+            <div class="scheme-alias">Alias: A Token Booking</div>
+            <span class="badge badge-green" style="margin-bottom:14px;">In Use</span>
+            <div class="scheme-meta">
+              <span>🖥 SAP</span>
+              <span>🔗 Glass Run</span>
+              <span>📅 Pre-season</span>
+            </div>
+          </div>
+
+          <div class="scheme-card" onclick="navTo('cd')">
+            <div class="scheme-icon" style="background:#fef3c7;">💵</div>
+            <div class="scheme-name">Cash Discount</div>
+            <div class="scheme-alias">Alias: During Season Scheme</div>
+            <span class="badge badge-amber" style="margin-bottom:14px;">Manual Work</span>
+            <div class="scheme-meta">
+              <span>📊 Manual Excel</span>
+              <span>⚠️ No integration</span>
+              <span>📅 During season</span>
+            </div>
+          </div>
+
+          <div class="scheme-card" onclick="navTo('qty')">
+            <div class="scheme-icon" style="background:#eff6ff;">📦</div>
+            <div class="scheme-name">Quantity Discount</div>
+            <div class="scheme-alias">Alias: After Season Scheme</div>
+            <span class="badge badge-green" style="margin-bottom:14px;">In Use</span>
+            <div class="scheme-meta">
+              <span>🖥 SAP</span>
+              <span>🔗 Mahyco Scheme App</span>
+              <span>📅 Post-season</span>
+            </div>
+          </div>
+
+        </div>
+
+        <div class="section-h" style="margin-top:28px;">Integration Gaps</div>
+        <div class="alert alert-amber">
+          <span class="alert-icon">⚠️</span>
+          <span><strong>Cash Discount</strong> scheme is managed via Manual Excel with no system integration — high risk for errors and delays. Recommend migrating to SAP or an integrated platform.</span>
+        </div>
+      </div>
+
+      <!-- ── ADVANCE BOOKING ── -->
+      <div class="screen" id="screen-abs">
+        <div class="page-header">
+          <h1>Advance Booking Scheme</h1>
+          <p>Alias: A Token Booking · Pre-season customer advance</p>
+        </div>
+
+        <div class="grid-2 mb-24" style="align-items:start;">
+          <div class="card">
+            <div class="card-header">
+              <div><div class="card-title">Scheme Details</div><div class="card-sub">Configuration & integration info</div></div>
+              <span class="badge badge-green">In Use</span>
+            </div>
+            <div class="card-body">
+              <table class="field-table">
+                <tr><td class="fl">Name of Scheme</td><td class="fv">Advance Booking Scheme</td></tr>
+                <tr><td class="fl">Alias</td><td class="fv">A Token Booking</td></tr>
+                <tr><td class="fl">System</td><td class="fv">SAP</td></tr>
+                <tr><td class="fl">Integration with</td><td class="fv">Glass Run & other systems</td></tr>
+                <tr><td class="fl">Companies</td><td class="fv">Mahyco, Leadbeter</td></tr>
+                <tr><td class="fl">Purpose</td><td class="fv">Booking product in advance to get discount during delivery</td></tr>
+              </table>
+            </div>
+          </div>
+
+          <div>
+            <div class="section-h" style="margin-top:0;">How it works</div>
+            <div class="card card-body" style="margin-bottom:16px; font-size:13px; line-height:1.7; color:var(--slate-m);">
+              Customers book product quantity in form of SKU by giving a <strong>token amount</strong> per packet/unit/etc.
+              They receive a rebate as a <strong>credit note</strong> when the product is delivered during the season.
+            </div>
+
+            <div class="section-h">Process flow</div>
+            <div class="flow-v">
+              <div class="flow-step">1 · Customer pays token amount (per SKU)</div>
+              <div class="flow-arrow">↓</div>
+              <div class="flow-step">2 · Product booked in advance via SAP/Glass Run</div>
+              <div class="flow-arrow">↓</div>
+              <div class="flow-step">3 · Product delivered during season</div>
+              <div class="flow-arrow">↓</div>
+              <div class="flow-step" style="background:var(--green-l); border-color:var(--green-m); color:var(--green);">4 · Rebate issued as Credit Note to customer</div>
+            </div>
+          </div>
+        </div>
+
+        <div class="section-h">Example Calculation</div>
+        <div class="example-box">
+          <div class="example-title">📋 Sample — Arjun Agro · Cotton ABC · Jan 2026</div>
+          <table class="field-table">
+            <tr><td class="fl">Customer</td><td class="fv">Arjun Agro</td></tr>
+            <tr><td class="fl">Product</td><td class="fv">Cotton ABC</td></tr>
+            <tr><td class="fl">Rate per packet</td><td class="fv" style="font-family:'DM Mono',monospace;">₹900</td></tr>
+            <tr><td class="fl">Token advance paid</td><td class="fv" style="font-family:'DM Mono',monospace;">₹200</td></tr>
+            <tr><td class="fl">Booking time</td><td class="fv">January 2026</td></tr>
+            <tr><td class="fl">Rebate (credit note)</td><td class="fv" style="color:var(--green); font-family:'DM Mono',monospace;">₹50</td></tr>
+            <tr><td class="fl" style="font-weight:600; color:var(--slate);">Balance due at delivery</td><td class="fv" style="font-family:'DM Mono',monospace; font-size:16px;">₹650</td></tr>
+          </table>
+          <div style="margin-top:12px; font-size:12px; color:var(--green); font-family:'DM Mono',monospace;">
+            Formula: 900 − 200 (token) − 50 (rebate) = ₹650
+          </div>
+        </div>
+      </div>
+
+      <!-- ── CASH DISCOUNT ── -->
+      <div class="screen" id="screen-cd">
+        <div class="page-header">
+          <h1>Cash Discount</h1>
+          <p>Alias: During Season Scheme · Time-slab based payment incentive</p>
+        </div>
+
+        <div class="alert alert-amber mb-24">
+          <span class="alert-icon">⚠️</span>
+          <span>This scheme is currently managed via <strong>Manual Excel</strong> with no system integration. High risk for calculation errors.</span>
+        </div>
+
+        <div class="grid-2 mb-24" style="align-items:start;">
+          <div class="card">
+            <div class="card-header">
+              <div><div class="card-title">Scheme Details</div></div>
+              <span class="badge badge-amber">Manual Work</span>
+            </div>
+            <div class="card-body">
+              <table class="field-table">
+                <tr><td class="fl">Name</td><td class="fv">Cash Discount</td></tr>
+                <tr><td class="fl">Alias</td><td class="fv">During Season Scheme</td></tr>
+                <tr><td class="fl">System</td><td class="fv">Manual Excel</td></tr>
+                <tr><td class="fl">Integration</td><td class="fv">None</td></tr>
+                <tr><td class="fl">Companies</td><td class="fv">Mahyco, Leadbeter, Grow Indigo</td></tr>
+                <tr><td class="fl">Purpose</td><td class="fv">Fast collection; customers earn discount when depositing in specific time frames</td></tr>
+              </table>
+            </div>
+          </div>
+
+          <div>
+            <div class="section-h" style="margin-top:0;">Process flow</div>
+            <div class="flow-v">
+              <div class="flow-step">1 · Master scheme defined in Cash Discount type</div>
+              <div class="flow-arrow">↓</div>
+              <div class="flow-step">2 · Time-period slabs configured for the season</div>
+              <div class="flow-arrow">↓</div>
+              <div class="flow-step">3 · Customer deposits within a slab window</div>
+              <div class="flow-arrow">↓</div>
+              <div class="flow-step">4 · Discount % applied to deposit amount</div>
+              <div class="flow-arrow">↓</div>
+              <div class="flow-step" style="background:var(--green-l); border-color:var(--green-m); color:var(--green);">5 · Credit Note issued to customer</div>
+            </div>
+          </div>
+        </div>
+
+        <div class="section-h">Discount Slabs — Season 2026</div>
+        <div class="card mb-24">
+          <table class="data-table">
+            <thead>
+              <tr><th>#</th><th>From</th><th>To</th><th>Cash Discount %</th><th>Window</th></tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td class="num">1</td>
+                <td>01 May 2026</td><td>15 May 2026</td>
+                <td><span class="pct-green">5%</span></td>
+                <td>
+                  <div style="font-size:11px; color:var(--slate-m);">15 days</div>
+                  <div class="progress-wrap"><div class="progress-bar" style="width:100%; background:#22c55e;"></div></div>
+                </td>
+              </tr>
+              <tr>
+                <td class="num">2</td>
+                <td>16 May 2026</td><td>31 May 2026</td>
+                <td><span class="pct-green">4%</span></td>
+                <td>
+                  <div style="font-size:11px; color:var(--slate-m);">16 days</div>
+                  <div class="progress-wrap"><div class="progress-bar" style="width:80%; background:#86efac;"></div></div>
+                </td>
+              </tr>
+              <tr>
+                <td class="num">3</td>
+                <td>01 Jun 2026</td><td>30 Jun 2026</td>
+                <td><span class="pct-green">3%</span></td>
+                <td>
+                  <div style="font-size:11px; color:var(--slate-m);">30 days</div>
+                  <div class="progress-wrap"><div class="progress-bar" style="width:60%; background:#bbf7d0;"></div></div>
+                </td>
+              </tr>
+              <tr>
+                <td class="num">4</td>
+                <td>01 Jul 2026</td><td>31 Jul 2026</td>
+                <td><span class="pct-green">1%</span></td>
+                <td>
+                  <div style="font-size:11px; color:var(--slate-m);">31 days</div>
+                  <div class="progress-wrap"><div class="progress-bar" style="width:20%; background:#dcfce7;"></div></div>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <div class="section-h">Example Deposits</div>
+        <div class="example-box">
+          <div class="example-title">💵 Sample customer deposits & discounts</div>
+          <table class="data-table" style="margin-top:8px;">
+            <thead><tr><th>Deposit Date</th><th>Amount</th><th>CD %</th><th>Discount</th></tr></thead>
+            <tbody>
+              <tr><td>05-05-2026</td><td class="num">₹400</td><td class="pct-green">5%</td><td class="num" style="font-weight:600;">₹20</td></tr>
+              <tr><td>20-05-2026</td><td class="num">₹200</td><td class="pct-green">4%</td><td class="num" style="font-weight:600;">₹8</td></tr>
+              <tr><td>15-06-2026</td><td class="num">₹100</td><td class="pct-green">3%</td><td class="num" style="font-weight:600;">₹1</td></tr>
+            </tbody>
+          </table>
+          <div style="margin-top:12px; display:flex; justify-content:space-between; font-size:13px; font-weight:600; color:var(--green); font-family:'DM Mono',monospace; padding-top:10px; border-top:1px solid #a7f3d0;">
+            <span>Total Cash Discount</span><span>₹29</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- ── QUANTITY DISCOUNT ── -->
+      <div class="screen" id="screen-qty">
+        <div class="page-header">
+          <h1>Quantity Discount</h1>
+          <p>Alias: After Season Scheme · Volume-based rebate for customers</p>
+        </div>
+
+        <div class="grid-2 mb-24" style="align-items:start;">
+          <div class="card">
+            <div class="card-header">
+              <div><div class="card-title">Scheme Details</div></div>
+              <span class="badge badge-green">In Use</span>
+            </div>
+            <div class="card-body">
+              <table class="field-table">
+                <tr><td class="fl">Name</td><td class="fv">Quantity Discount</td></tr>
+                <tr><td class="fl">Alias</td><td class="fv">After Season Scheme</td></tr>
+                <tr><td class="fl">System</td><td class="fv">SAP</td></tr>
+                <tr><td class="fl">Integration</td><td class="fv">Mahyco Scheme Application</td></tr>
+                <tr><td class="fl">Companies</td><td class="fv">Mahyco, Leadbeter</td></tr>
+                <tr><td class="fl">Purpose</td><td class="fv">Increase product sales; discount % per quantity sold (state/region-wise)</td></tr>
+              </table>
+            </div>
+          </div>
+
+          <div>
+            <div class="section-h" style="margin-top:0;">How it works</div>
+            <div class="card card-body mb-16" style="font-size:13px; line-height:1.7; color:var(--slate-m);">
+              A different scheme type defined to increase product sales. Discount percentages are defined according to <strong>quantity sold by the customer</strong>. It includes state-wise and region-wise definitions.
+            </div>
+
+            <div class="section-h">Process flow</div>
+            <div class="flow-v">
+              <div class="flow-step">1 · Qty slab discount % defined (state/region-wise)</div>
+              <div class="flow-arrow">↓</div>
+              <div class="flow-step">2 · Discounts calculated in Mahyco Scheme Application</div>
+              <div class="flow-arrow">↓</div>
+              <div class="flow-step">3 · Credit Note posted after calculation</div>
+              <div class="flow-arrow">↓</div>
+              <div class="flow-step" style="background:var(--green-l); border-color:var(--green-m); color:var(--green);">4 · Customer-wise posting in SAP via standard TCode</div>
+            </div>
+          </div>
+        </div>
+
+        <div class="alert alert-amber">
+          <span class="alert-icon">ℹ️</span>
+          <span>Discount slabs vary by <strong>state and region</strong>. Final calculation is performed in the external Mahyco Scheme Application and then posted back into SAP. Monitor integration reliability regularly.</span>
+        </div>
+      </div>
+
+      <!-- ── CD CALCULATOR ── -->
+      <div class="screen" id="screen-calc">
+        <div class="page-header">
+          <h1>Cash Discount Calculator</h1>
+          <p>Add customer deposits to compute discounts based on Season 2026 slabs</p>
+        </div>
+
+        <div class="card mb-24">
+          <div class="card-header">
+            <div><div class="card-title">Slab Reference — Season 2026</div></div>
+          </div>
+          <div class="card-body">
+            <div class="slab-pills">
+              <span class="slab-pill">01–15 May → 5%</span>
+              <span class="slab-pill">16–31 May → 4%</span>
+              <span class="slab-pill">01–30 Jun → 3%</span>
+              <span class="slab-pill">01–31 Jul → 1%</span>
+              <span class="slab-pill" style="background:#fee2e2; border-color:#fca5a5; color:var(--red);">Outside slabs → 0%</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="card">
+          <div class="card-header">
+            <div><div class="card-title">Deposit Entries</div><div class="card-sub">Enter dates and amounts to auto-compute discounts</div></div>
+            <button class="btn-primary" onclick="addRow()">+ Add Deposit</button>
+          </div>
+          <div class="card-body">
+            <div class="calc-wrap">
+              <div>
+                <div class="deposit-header">
+                  <span>Deposit Date</span>
+                  <span>Amount (₹)</span>
+                  <span>CD %</span>
+                  <span>Discount</span>
+                  <span></span>
+                </div>
+                <div id="rows-container"></div>
+                <button class="add-row-btn mt-16" onclick="addRow()">+ Add another deposit</button>
+              </div>
+
+              <hr class="divider" />
+
+              <div class="result-panel">
+                <div class="result-row"><span class="rl">Total deposits</span><span class="rv" id="r-dep">₹0</span></div>
+                <div class="result-row"><span class="rl">Total cash discount earned</span><span class="rv" id="r-cd" style="color:#86efac;">₹0</span></div>
+                <div class="result-total"><span>Net payable amount</span><span class="rv" id="r-net">₹0</span></div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ── WORKFLOW ── -->
+      <div class="screen" id="screen-workflow">
+        <div class="page-header">
+          <h1>End-to-End Workflow</h1>
+          <p>Complete process flow across all three scheme types</p>
+        </div>
+
+        <div class="card mb-24">
+          <div class="card-header"><div class="card-title">System Integration Map</div></div>
+          <div class="card-body">
+            <table class="data-table">
+              <thead>
+                <tr><th>Scheme</th><th>System</th><th>Integration</th><th>Automation</th><th>Status</th></tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td><strong>Advance Booking</strong></td>
+                  <td>SAP</td>
+                  <td>Glass Run & others</td>
+                  <td>
+                    <div class="progress-wrap"><div class="progress-bar" style="width:90%;"></div></div>
+                    <div style="font-size:11px; color:var(--slate-m); margin-top:3px;">High</div>
+                  </td>
+                  <td><span class="badge badge-green">In Use</span></td>
+                </tr>
+                <tr>
+                  <td><strong>Cash Discount</strong></td>
+                  <td>Manual Excel</td>
+                  <td>None</td>
+                  <td>
+                    <div class="progress-wrap"><div class="progress-bar" style="width:10%; background:#fbbf24;"></div></div>
+                    <div style="font-size:11px; color:var(--slate-m); margin-top:3px;">Very Low</div>
+                  </td>
+                  <td><span class="badge badge-amber">Manual</span></td>
+                </tr>
+                <tr>
+                  <td><strong>Quantity Discount</strong></td>
+                  <td>SAP</td>
+                  <td>Mahyco Scheme App</td>
+                  <td>
+                    <div class="progress-wrap"><div class="progress-bar" style="width:65%;"></div></div>
+                    <div style="font-size:11px; color:var(--slate-m); margin-top:3px;">Medium</div>
+                  </td>
+                  <td><span class="badge badge-green">In Use</span></td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+
+        <div class="section-h">Combined Flow</div>
+        <div class="card card-body">
+          <div style="display:flex; gap:16px; align-items:flex-start; flex-wrap:wrap;">
+
+            <div style="flex:1; min-width:180px;">
+              <div style="font-size:12px; font-weight:600; text-transform:uppercase; letter-spacing:.06em; color:var(--slate-m); margin-bottom:10px; padding:6px 12px; background:var(--green-l); border-radius:6px; color:var(--green);">Pre-Season</div>
+              <div class="flow-v">
+                <div class="flow-step">Customer pays token</div>
+                <div class="flow-arrow">↓</div>
+                <div class="flow-step">Booked via SAP</div>
+                <div class="flow-arrow">↓</div>
+                <div class="flow-step" style="background:var(--green-l); color:var(--green);">Credit Note issued</div>
+              </div>
+            </div>
+
+            <div style="flex:1; min-width:180px;">
+              <div style="font-size:12px; font-weight:600; text-transform:uppercase; letter-spacing:.06em; color:var(--amber); margin-bottom:10px; padding:6px 12px; background:var(--amber-l); border-radius:6px;">During Season</div>
+              <div class="flow-v">
+                <div class="flow-step">Time slabs configured</div>
+                <div class="flow-arrow">↓</div>
+                <div class="flow-step">Customer deposits</div>
+                <div class="flow-arrow">↓</div>
+                <div class="flow-step">CD% applied manually</div>
+                <div class="flow-arrow">↓</div>
+                <div class="flow-step" style="background:var(--amber-l); color:var(--amber);">Excel credit note</div>
+              </div>
+            </div>
+
+            <div style="flex:1; min-width:180px;">
+              <div style="font-size:12px; font-weight:600; text-transform:uppercase; letter-spacing:.06em; color:var(--blue); margin-bottom:10px; padding:6px 12px; background:var(--blue-l); border-radius:6px;">Post-Season</div>
+              <div class="flow-v">
+                <div class="flow-step">Qty sold tallied</div>
+                <div class="flow-arrow">↓</div>
+                <div class="flow-step">Mahyco App calculates</div>
+                <div class="flow-arrow">↓</div>
+                <div class="flow-step">SAP posting (TCode)</div>
+                <div class="flow-arrow">↓</div>
+                <div class="flow-step" style="background:var(--blue-l); color:var(--blue);">Credit Note posted</div>
+              </div>
+            </div>
+
+          </div>
+
+          <div style="margin-top:20px; padding:14px 16px; background:var(--slate-l); border-radius:8px; font-size:12px; color:var(--slate-m); text-align:center;">
+            All three schemes ultimately post a <strong>Credit Note to customer ledger</strong> — via SAP or manually.
+          </div>
+        </div>
+      </div>
+
+    </div><!-- /content -->
+  </div><!-- /main -->
+</div><!-- /layout -->
+
+<script>
+  // ── NAVIGATION ──
+  const titles = {
+    overview: ['Overview', 'All active discount schemes'],
+    abs:      ['Advance Booking Scheme', 'A Token Booking · Pre-season'],
+    cd:       ['Cash Discount', 'During Season Scheme · Slab-based'],
+    qty:      ['Quantity Discount', 'After Season Scheme · Volume-based'],
+    calc:     ['CD Calculator', 'Live cash discount calculator'],
+    workflow: ['End-to-End Workflow', 'System integration & process map'],
+  };
+
+  function showScreen(id, btn) {
+    document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
+    document.querySelectorAll('.nav-item').forEach(b => b.classList.remove('active'));
+    document.getElementById('screen-' + id).classList.add('active');
+    if (btn) btn.classList.add('active');
+    document.getElementById('topbar-title').textContent = titles[id][0];
+    document.getElementById('topbar-sub').textContent   = titles[id][1];
+  }
+
+  function navTo(id) {
+    const btn = [...document.querySelectorAll('.nav-item')].find(b => b.getAttribute('onclick')?.includes("'" + id + "'"));
+    showScreen(id, btn);
+  }
+
+  // ── CALCULATOR ──
+  const SLABS = [
+    { from: '2026-05-01', to: '2026-05-15', pct: 5 },
+    { from: '2026-05-16', to: '2026-05-31', pct: 4 },
+    { from: '2026-06-01', to: '2026-06-30', pct: 3 },
+    { from: '2026-07-01', to: '2026-07-31', pct: 1 },
+  ];
+
+  function getCDPct(dateStr) {
+    if (!dateStr) return 0;
+    for (const s of SLABS) if (dateStr >= s.from && dateStr <= s.to) return s.pct;
+    return 0;
+  }
+
+  let rowId = 0;
+  const rows = new Set();
+
+  function addRow(date='', amt='') {
+    rowId++;
+    const id = rowId;
+    rows.add(id);
+    const div = document.createElement('div');
+    div.className = 'deposit-row-grid';
+    div.id = 'row-' + id;
+    div.innerHTML = `
+      <input type="date" class="dep-input" id="d${id}" value="${date}" onchange="recalc()" />
+      <input type="number" class="dep-input" id="a${id}" value="${amt}" placeholder="0" min="0" oninput="recalc()" />
+      <span class="dep-pct" id="p${id}">—</span>
+      <span class="dep-disc" id="c${id}">₹0</span>
+      <button class="del-btn" onclick="removeRow(${id})" title="Remove">✕</button>
+    `;
+    document.getElementById('rows-container').appendChild(div);
+    recalc();
+  }
+
+  function removeRow(id) {
+    const el = document.getElementById('row-' + id);
+    if (el) { el.remove(); rows.delete(id); recalc(); }
+  }
+
+  function fmt(n) { return '₹' + Math.round(n).toLocaleString('en-IN'); }
+
+  function recalc() {
+    let totalDep = 0, totalCD = 0;
+    rows.forEach(id => {
+      const dEl = document.getElementById('d' + id);
+      const aEl = document.getElementById('a' + id);
+      if (!dEl || !aEl) { rows.delete(id); return; }
+      const pct  = getCDPct(dEl.value);
+      const amt  = parseFloat(aEl.value) || 0;
+      const disc = Math.round(amt * pct / 100);
+      document.getElementById('p' + id).textContent = pct ? pct + '%' : '—';
+      document.getElementById('c' + id).textContent = fmt(disc);
+      totalDep += amt;
+      totalCD  += disc;
+    });
+    document.getElementById('r-dep').textContent = fmt(totalDep);
+    document.getElementById('r-cd').textContent  = fmt(totalCD);
+    document.getElementById('r-net').textContent = fmt(totalDep - totalCD);
+  }
+
+  // Seed with example data
+  addRow('2026-05-05', 400);
+  addRow('2026-05-20', 200);
+  addRow('2026-06-15', 100);
+</script>
+
+</body>
+</html>

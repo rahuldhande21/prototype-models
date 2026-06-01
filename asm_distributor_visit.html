@@ -1,0 +1,644 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+<title>Distributor Review App</title>
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:opsz,wght@9..40,400;9..40,500;9..40,600;9..40,700&family=DM+Mono:wght@500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@latest/tabler-icons.min.css">
+<style>
+:root{
+  --teal:#00897B;--teal-d:#00695C;--teal-l:#E0F2F1;--teal-ll:#F0FAF9;
+  --blue:#1565C0;--blue-l:#E3F2FD;
+  --amber:#E65100;--amber-l:#FFF3E0;
+  --red:#C62828;--red-l:#FFEBEE;
+  --green:#2E7D32;--green-l:#E8F5E9;
+  --gray:#F5F5F5;--gray2:#EEEEEE;--gray3:#DDDDD8;
+  --text:#111;--t2:#555;--t3:#999;
+  --white:#fff;--font:'DM Sans',sans-serif;
+}
+*{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent;}
+body{font-family:var(--font);background:#CFD8DC;display:flex;justify-content:center;padding:24px 16px;min-height:100vh;}
+
+/* Phone */
+.phone{width:370px;background:#0D0D0D;border-radius:48px;padding:10px;box-shadow:0 32px 80px rgba(0,0,0,0.5),inset 0 0 0 1px rgba(255,255,255,0.07);}
+.screen{background:#F0F2F5;border-radius:40px;overflow:hidden;display:flex;flex-direction:column;height:780px;}
+
+/* Status */
+.sbar{background:var(--teal);padding:8px 20px 4px;display:flex;justify-content:space-between;align-items:center;flex-shrink:0;}
+.sbar span{color:#fff;font-size:12px;font-weight:600;}
+.sbar-r{display:flex;gap:5px;align-items:center;color:#fff;font-size:13px;}
+
+/* Appbar */
+.appbar{background:var(--teal);padding:8px 16px 12px;flex-shrink:0;}
+.appbar-row{display:flex;align-items:center;gap:10px;}
+.back-btn{color:#fff;font-size:22px;display:flex;align-items:center;cursor:pointer;opacity:.9;}
+.appbar-title{color:#fff;font-size:17px;font-weight:600;flex:1;}
+.appbar-sub{color:rgba(255,255,255,.7);font-size:11px;padding-left:32px;margin-top:1px;}
+
+/* Step tabs */
+.tabs{background:var(--teal-d);display:flex;flex-shrink:0;overflow-x:auto;scrollbar-width:none;}
+.tabs::-webkit-scrollbar{display:none;}
+.tab{flex:0 0 auto;padding:8px 14px;font-size:11px;font-weight:600;color:rgba(255,255,255,.55);cursor:pointer;border-bottom:3px solid transparent;white-space:nowrap;transition:.15s;font-family:var(--font);}
+.tab.active{color:#fff;border-bottom-color:#80CBC4;}
+
+/* Content */
+.content{flex:1;overflow-y:auto;scrollbar-width:thin;scrollbar-color:#ccc transparent;}
+.content::-webkit-scrollbar{width:3px;}
+.content::-webkit-scrollbar-thumb{background:#ccc;border-radius:3px;}
+
+/* Sections */
+.page{display:none;padding:12px;}
+.page.active{display:block;}
+
+/* Nav footer */
+.footer{background:#fff;border-top:1px solid var(--gray3);padding:10px 14px 14px;display:flex;gap:8px;flex-shrink:0;}
+.btn-prev{flex:0 0 auto;padding:12px 16px;background:#fff;border:1px solid var(--gray3);border-radius:10px;font-size:14px;font-family:var(--font);color:var(--t2);cursor:pointer;display:flex;align-items:center;gap:6px;}
+.btn-next{flex:1;padding:12px;background:var(--teal);border:none;border-radius:10px;font-size:14px;font-weight:600;font-family:var(--font);color:#fff;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:6px;transition:.15s;}
+.btn-next:hover{background:var(--teal-d);}
+.btn-submit{flex:1;padding:12px;background:var(--teal);border:none;border-radius:10px;font-size:14px;font-weight:600;font-family:var(--font);color:#fff;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:6px;}
+
+/* Cards */
+.card{background:#fff;border-radius:12px;padding:14px;margin-bottom:10px;border:1px solid var(--gray3);}
+.card-t{font-size:10px;font-weight:700;color:var(--t3);text-transform:uppercase;letter-spacing:.08em;margin-bottom:10px;}
+
+/* Header card */
+.hcard{background:#fff;border-radius:12px;margin-bottom:10px;overflow:hidden;border:1px solid var(--gray3);}
+.hcard-top{background:var(--teal-l);padding:12px 14px;display:flex;justify-content:space-between;align-items:flex-start;}
+.hcard-name{font-size:15px;font-weight:700;color:var(--teal-d);}
+.hcard-code{font-size:11px;color:var(--teal);margin-top:2px;}
+.hcard-body{padding:12px 14px;}
+
+/* Balance table */
+.bal{width:100%;border-collapse:collapse;}
+.bal tr td{padding:7px 8px;font-size:12px;border-bottom:1px solid var(--gray2);color:var(--t2);}
+.bal tr td:last-child{text-align:right;font-weight:500;color:var(--text);}
+.bal tr:nth-child(even) td{background:#FAFAFA;}
+.bal tr:last-child td{border-bottom:none;}
+.bal .tot td{font-size:13px;font-weight:700;color:var(--red);border-top:2px solid var(--gray3);}
+.bal .tot td:first-child{font-weight:700;}
+.red{color:var(--red)!important;}
+.green{color:var(--green)!important;}
+.amber{color:var(--amber)!important;}
+
+/* Collection perf */
+.coll-list{border-radius:12px;overflow:hidden;border:1px solid var(--gray3);}
+.coll-item{background:#fff;padding:12px 14px;border-bottom:1px solid var(--gray2);display:flex;justify-content:space-between;align-items:center;}
+.coll-item:last-child{border-bottom:none;}
+.coll-item-lbl{font-size:13px;color:var(--t2);}
+.coll-item-val{font-size:14px;font-weight:700;color:var(--text);}
+.coll-item-val.blue{color:var(--blue);}
+.coll-item-val.green{color:var(--green);}
+.coll-highlight{background:var(--teal-ll);padding:12px 14px;display:flex;justify-content:space-between;align-items:center;border-radius:0 0 12px 12px;}
+.coll-h-lbl{font-size:14px;font-weight:700;color:var(--text);}
+.coll-h-val{font-size:20px;font-weight:700;color:var(--blue);}
+
+/* Stats */
+.stat-row{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:10px;}
+.stat{background:var(--teal-l);border-radius:10px;padding:10px 12px;}
+.stat-n{font-size:16px;font-weight:700;color:var(--teal-d);}
+.stat-l{font-size:11px;color:var(--teal);margin-top:2px;}
+
+/* Charts */
+.chart-wrap{display:flex;align-items:flex-end;gap:3px;height:72px;}
+.cbar{flex:1;border-radius:3px 3px 0 0;}
+.clabels{display:flex;gap:3px;margin-top:4px;}
+.clabels span{flex:1;font-size:9px;color:var(--t3);text-align:center;}
+
+/* Aging */
+.aging-row{display:flex;justify-content:space-between;align-items:center;padding:8px 0;border-bottom:1px solid var(--gray2);}
+.aging-row:last-child{border-bottom:none;}
+.aging-l{font-size:12px;color:var(--t2);}
+.aging-r{display:flex;gap:6px;align-items:center;}
+.aging-v{font-size:12px;font-weight:600;color:var(--text);}
+.bdg{font-size:9px;padding:2px 7px;border-radius:20px;font-weight:600;}
+.b-ok{background:var(--green-l);color:var(--green);}
+.b-warn{background:var(--amber-l);color:var(--amber);}
+.b-red{background:var(--red-l);color:var(--red);}
+
+/* MDO pills */
+.pills{display:flex;gap:8px;}
+.pill{flex:1;border:1px solid var(--gray3);border-radius:8px;padding:9px;text-align:center;font-size:13px;font-weight:500;color:var(--t2);cursor:pointer;background:#fff;font-family:var(--font);transition:.15s;}
+.pill.on{background:var(--teal-l);border-color:var(--teal);color:var(--teal-d);font-weight:700;}
+
+/* Sale cards */
+.sale-card{background:#fff;border-radius:12px;margin-bottom:10px;overflow:hidden;border:1px solid var(--gray3);}
+.sale-hdr{background:#E3F4F3;padding:10px 12px;display:flex;gap:10px;align-items:flex-start;}
+.sale-idx{background:var(--teal);color:#fff;border-radius:6px;padding:3px 8px;font-size:11px;font-weight:700;flex-shrink:0;margin-top:2px;}
+.sale-dist{font-size:12px;font-weight:600;color:var(--teal-d);line-height:1.4;}
+.sale-body{padding:10px 12px;}
+.sale-meta{display:flex;justify-content:space-between;margin-bottom:4px;}
+.sm-l{font-size:11px;color:var(--t3);}
+.sm-v{font-size:11px;font-weight:500;color:var(--text);}
+.sale-status-bar{background:var(--green-l);text-align:center;padding:4px;border-radius:6px;font-size:11px;font-weight:600;color:var(--green);margin:6px 0 8px;}
+.stbl{width:100%;border-collapse:collapse;}
+.stbl th{font-size:9px;font-weight:700;color:var(--t3);padding:4px 3px;border-bottom:1px solid var(--gray2);text-align:left;letter-spacing:.03em;}
+.stbl th:not(:first-child){text-align:right;}
+.stbl td{font-size:11px;padding:5px 3px;border-bottom:1px solid var(--gray2);color:var(--text);}
+.stbl td:not(:first-child){text-align:right;}
+.stbl tr:last-child td{border-bottom:none;}
+.sale-tot{text-align:right;font-size:12px;font-weight:700;color:var(--red);padding-top:6px;border-top:1px solid var(--gray2);margin-top:4px;}
+
+/* Form */
+.field{margin-bottom:10px;}
+.field:last-child{margin-bottom:0;}
+.flabel{font-size:11px;font-weight:600;color:var(--t3);margin-bottom:5px;text-transform:uppercase;letter-spacing:.04em;}
+select,input[type=text],input[type=date],textarea{
+  width:100%;padding:10px 12px;border:1px solid var(--gray3);border-radius:8px;
+  font-size:13px;font-family:var(--font);color:var(--text);background:#fff;outline:none;transition:border .15s;
+}
+select{appearance:none;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 24 24' fill='none' stroke='%23888' stroke-width='2.5'%3E%3Cpath d='M6 9l6 6 6-6'/%3E%3C/svg%3E");background-repeat:no-repeat;background-position:right 12px center;}
+select:focus,input:focus,textarea:focus{border-color:var(--teal);box-shadow:0 0 0 3px rgba(0,137,123,.12);}
+textarea{min-height:70px;resize:none;line-height:1.5;}
+.row2{display:grid;grid-template-columns:1fr 1fr;gap:8px;}
+.ri{position:relative;}
+.ri i{position:absolute;left:10px;top:50%;transform:translateY(-50%);font-size:15px;color:var(--t3);}
+.ri input,.ri select{padding-left:30px;}
+
+/* Section label */
+.sec{font-size:10px;font-weight:700;color:var(--t3);text-transform:uppercase;letter-spacing:.09em;margin:12px 0 6px;}
+.sec:first-child{margin-top:2px;}
+
+/* Dialog */
+.dlg-ov{position:absolute;inset:0;background:rgba(0,0,0,.5);display:none;align-items:center;justify-content:center;z-index:200;padding:20px;border-radius:40px;}
+.dlg-ov.show{display:flex;}
+.dlg{background:#fff;border-radius:16px;padding:22px;width:100%;}
+.dlg-icon{text-align:center;font-size:52px;color:var(--teal);margin-bottom:8px;}
+.dlg-title{font-size:16px;font-weight:700;color:var(--text);margin-bottom:6px;}
+.dlg-body{font-size:13px;color:var(--t2);line-height:1.55;margin-bottom:18px;}
+.dlg-btns{display:flex;gap:8px;}
+.dlg-cancel{flex:1;padding:11px;border:1px solid var(--gray3);border-radius:8px;background:#fff;font-size:14px;font-family:var(--font);cursor:pointer;color:var(--t2);}
+.dlg-ok{flex:1;padding:11px;border:none;border-radius:8px;background:var(--teal);font-size:14px;font-family:var(--font);cursor:pointer;color:#fff;font-weight:700;}
+
+/* Distributor select on home */
+.dist-box{background:#fff;border-radius:12px;padding:14px;margin-bottom:10px;border:1px solid var(--gray3);}
+.dist-box .flabel{margin-bottom:8px;}
+
+/* Step indicator */
+.step-indicator{display:flex;align-items:center;justify-content:center;gap:4px;padding:8px 0 4px;}
+.step-dot{width:6px;height:6px;border-radius:50%;background:var(--gray3);transition:.2s;}
+.step-dot.done{background:var(--teal);opacity:.5;}
+.step-dot.cur{background:var(--teal);width:18px;border-radius:3px;}
+</style>
+</head>
+<body>
+
+<div class="phone">
+<div class="screen" style="position:relative;">
+
+<!-- Status bar -->
+<div class="sbar">
+  <span>11:42</span>
+  <div class="sbar-r"><i class="ti ti-wifi"></i><i class="ti ti-signal-4g"></i><i class="ti ti-battery-3"></i></div>
+</div>
+
+<!-- Appbar -->
+<div class="appbar" id="appbar">
+  <div class="appbar-row">
+    <div class="back-btn" id="backBtn" onclick="goBack()" style="display:none;"><i class="ti ti-arrow-left"></i></div>
+    <div>
+      <div class="appbar-title" id="appbarTitle">Distributor Review</div>
+      <div class="appbar-sub" id="appbarSub" style="display:none;"></div>
+    </div>
+    <div style="margin-left:auto;color:#fff;font-size:20px;"><i class="ti ti-bell"></i></div>
+  </div>
+</div>
+
+<!-- Tabs -->
+<div class="tabs" id="tabsBar" style="display:none;">
+  <div class="tab active" data-tab="0" onclick="goTab(0)">Overview</div>
+  <div class="tab" data-tab="1" onclick="goTab(1)">Balance</div>
+  <div class="tab" data-tab="2" onclick="goTab(2)">Collections</div>
+  <div class="tab" data-tab="3" onclick="goTab(3)">Sales</div>
+  <div class="tab" data-tab="4" onclick="goTab(4)">Ageing</div>
+  <div class="tab" data-tab="5" onclick="goTab(5)">Plans</div>
+  <div class="tab" data-tab="6" onclick="goTab(6)">Remarks</div>
+</div>
+
+<!-- Step dots -->
+<div class="step-indicator" id="stepDots" style="display:none;"></div>
+
+<!-- Content -->
+<div class="content">
+
+  <!-- PAGE 0: Select Distributor -->
+  <div class="page active" id="pg0">
+    <div class="dist-box">
+      <div class="flabel">Select distributor</div>
+      <div class="ri">
+        <i class="ti ti-building-store"></i>
+        <select id="distSel" onchange="onDistChange(this.value)">
+          <option value="">— Choose distributor —</option>
+          <option value="Bansal Trading Company|0050008508|Lunkaransar">BANSAL TRADING COMPANY | 0050008508 | LUNKARANSAR</option>
+          <option value="Kisan Agri Mart|0050005669|Dhamnod">KISAN AGRI MART | 0050005669 | DHAMNOD</option>
+          <option value="Prerak Agencies|0050007712|Bhopal">PRERAK AGENCIES | 0050007712 | BHOPAL</option>
+          <option value="Sunrise Distributors|0050009001|Indore">SUNRISE DISTRIBUTORS | 0050009001 | INDORE</option>
+        </select>
+      </div>
+    </div>
+
+    <div id="pg0-empty" style="text-align:center;padding:50px 20px;">
+      <i class="ti ti-map-search" style="font-size:52px;color:#ccc;"></i>
+      <p style="font-size:13px;color:var(--t3);margin-top:10px;line-height:1.6;">Select a distributor from the dropdown<br>to load their complete review data</p>
+    </div>
+
+    <div id="pg0-preview" style="display:none;">
+      <div class="hcard">
+        <div class="hcard-top">
+          <div>
+            <div class="hcard-name" id="prev-name">—</div>
+            <div class="hcard-code" id="prev-code">—</div>
+          </div>
+          <div style="background:var(--teal);color:#fff;border-radius:8px;padding:4px 10px;font-size:11px;font-weight:700;">Active</div>
+        </div>
+        <div class="hcard-body">
+          <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;">
+            <div class="stat"><div class="stat-n">₹5,89,600</div><div class="stat-l">Sales with GST</div></div>
+            <div class="stat"><div class="stat-n">₹59,598</div><div class="stat-l">Total receivable</div></div>
+            <div class="stat"><div class="stat-n">27 May</div><div class="stat-l">Last order</div></div>
+            <div class="stat"><div class="stat-n">20 May</div><div class="stat-l">Last collection</div></div>
+          </div>
+        </div>
+      </div>
+      <div style="text-align:center;padding:4px 0 8px;">
+        <p style="font-size:12px;color:var(--t3);">Use tabs above or <strong style="color:var(--teal);">Next</strong> to navigate through all sections</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- PAGE 1: Customer Balance -->
+  <div class="page" id="pg1">
+    <div class="sec">Customer information</div>
+    <div class="hcard">
+      <div class="hcard-top">
+        <div>
+          <div class="hcard-name">Pankaj Patidar</div>
+          <div class="hcard-code">Customer ID: 15008253</div>
+        </div>
+        <i class="ti ti-pencil" style="color:var(--teal);font-size:18px;"></i>
+      </div>
+      <div class="hcard-body" style="padding-top:8px;padding-bottom:8px;">
+        <div style="font-size:11px;color:var(--t3);margin-bottom:3px;">SELECT CUSTOMER</div>
+        <div style="font-size:13px;font-weight:600;color:var(--text);" id="bal-cust">KISAN AGRI MART | 0050005669 | DHAMNOD</div>
+      </div>
+    </div>
+
+    <div class="sec">Customer balance information</div>
+    <div class="card" style="padding:0;overflow:hidden;">
+      <table class="bal">
+        <tr><td>Credit limit</td><td>4,00,000.00</td></tr>
+        <tr><td>Balance</td><td>59,598.38</td></tr>
+        <tr><td style="padding-left:16px;color:var(--t3);">0 – 30 days</td><td class="green">1,50,000.00</td></tr>
+        <tr><td style="padding-left:16px;color:var(--t3);">30 – 60 days</td><td>0.00</td></tr>
+        <tr><td style="padding-left:16px;color:var(--t3);">60 – 75 days</td><td>0.00</td></tr>
+        <tr><td style="padding-left:16px;color:var(--t3);">75 – 90 days</td><td>0.00</td></tr>
+        <tr><td style="padding-left:16px;color:var(--t3);">90 – 120 days</td><td class="amber">30,386.00</td></tr>
+        <tr><td style="padding-left:16px;color:var(--t3);">120 – 150 days</td><td class="amber">1,04,982.50</td></tr>
+        <tr><td style="padding-left:16px;color:var(--t3);">150 – 180 days</td><td class="red">74,229.88</td></tr>
+        <tr><td style="padding-left:16px;color:var(--t3);">180 – 360 days</td><td>0.00</td></tr>
+        <tr><td style="padding-left:16px;color:var(--t3);">360 and above</td><td>0.00</td></tr>
+        <tr class="tot"><td>Total Receivable</td><td>59,598.38</td></tr>
+      </table>
+    </div>
+  </div>
+
+  <!-- PAGE 2: Collection Performance -->
+  <div class="page" id="pg2">
+    <div class="sec">Collection performance</div>
+    <div class="coll-list">
+      <div class="coll-item">
+        <span class="coll-item-lbl">Collection (2025–26)</span>
+        <span class="coll-item-val">33,23,563.80</span>
+      </div>
+      <div class="coll-item">
+        <span class="coll-item-lbl">YTD Collection till month (2025–26)</span>
+        <span class="coll-item-val">3,34,58,475.76</span>
+      </div>
+      <div class="coll-item">
+        <span class="coll-item-lbl">YTD Collection (2026–27)</span>
+        <span class="coll-item-val green">0</span>
+      </div>
+      <div class="coll-highlight">
+        <span class="coll-h-lbl">Sales with GST</span>
+        <span class="coll-h-val">5,89,600</span>
+      </div>
+    </div>
+
+    <div class="sec" style="margin-top:14px;">Collection trend (last 7 months)</div>
+    <div class="card">
+      <div class="chart-wrap" id="collChart"></div>
+      <div class="clabels" id="collLabels"></div>
+    </div>
+
+    <div class="sec">Sales trend (last 7 months)</div>
+    <div class="card">
+      <div class="chart-wrap" id="salesChart"></div>
+      <div class="clabels" id="salesLabels"></div>
+    </div>
+  </div>
+
+  <!-- PAGE 3: Sale Report -->
+  <div class="page" id="pg3">
+    <div class="sec">Sale report details</div>
+
+    <div class="sale-card">
+      <div class="sale-hdr">
+        <div class="sale-idx">1</div>
+        <div class="sale-dist">BANSAL TRADING COMPANY | 0050008508 | LUNKARANSAR</div>
+      </div>
+      <div class="sale-body">
+        <div class="sale-meta"><span class="sm-l">SAP Order No</span><span class="sm-v">0020680026</span></div>
+        <div class="sale-meta"><span class="sm-l">Order Date</span><span class="sm-v">2026-05-27</span></div>
+        <div class="sale-status-bar">Approved</div>
+        <table class="stbl">
+          <thead><tr><th>Product Name</th><th>TBM</th><th>RBM</th><th>Del.</th><th>Unit</th><th>Price</th></tr></thead>
+          <tbody>
+            <tr><td>Prerak 240ml (bottle)</td><td>40</td><td>40</td><td>40</td><td>PAK</td><td>12,600</td></tr>
+            <tr><td>Prerak 480ml (bottle)</td><td>100</td><td>100</td><td>100</td><td>PAK</td><td>60,500</td></tr>
+          </tbody>
+        </table>
+        <div class="sale-tot">Total order value — ₹73,100.00</div>
+      </div>
+    </div>
+
+    <div class="sale-card">
+      <div class="sale-hdr">
+        <div class="sale-idx">2</div>
+        <div class="sale-dist">BANSAL TRADING COMPANY | 0050008508 | LUNKARANSAR</div>
+      </div>
+      <div class="sale-body">
+        <div class="sale-meta"><span class="sm-l">SAP Order No</span><span class="sm-v">0020676299</span></div>
+        <div class="sale-meta"><span class="sm-l">Order Date</span><span class="sm-v">2026-05-18</span></div>
+        <div class="sale-status-bar">Approved</div>
+        <table class="stbl">
+          <thead><tr><th>Product Name</th><th>TBM</th><th>RBM</th><th>Del.</th><th>Unit</th><th>Price</th></tr></thead>
+          <tbody>
+            <tr><td>Prerak 480ml (bottle)</td><td>100</td><td>100</td><td>100</td><td>PAK</td><td>60,500</td></tr>
+          </tbody>
+        </table>
+        <div class="sale-tot">Total order value — ₹60,500.00</div>
+      </div>
+    </div>
+
+    <div class="sale-card">
+      <div class="sale-hdr">
+        <div class="sale-idx">3</div>
+        <div class="sale-dist">BANSAL TRADING COMPANY | 0050008508 | LUNKARANSAR</div>
+      </div>
+      <div class="sale-body">
+        <div class="sale-meta"><span class="sm-l">SAP Order No</span><span class="sm-v">0020675331</span></div>
+        <div class="sale-meta"><span class="sm-l">Order Date</span><span class="sm-v">2026-05-15</span></div>
+        <div class="sale-status-bar">Approved</div>
+        <table class="stbl">
+          <thead><tr><th>Product Name</th><th>TBM</th><th>RBM</th><th>Del.</th><th>Unit</th><th>Price</th></tr></thead>
+          <tbody>
+            <tr><td>Prerak 240ml (bottle)</td><td>60</td><td>60</td><td>60</td><td>PAK</td><td>18,900</td></tr>
+            <tr><td>Prerak 480ml (bottle)</td><td>80</td><td>80</td><td>80</td><td>PAK</td><td>48,400</td></tr>
+          </tbody>
+        </table>
+        <div class="sale-tot">Total order value — ₹67,300.00</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- PAGE 4: Ageing + MDO -->
+  <div class="page" id="pg4">
+    <div class="sec">Payment ageing / receivables</div>
+    <div class="card">
+      <div class="card-t">Last collection date: 20 May 2026</div>
+      <div class="aging-row"><span class="aging-l">Current (0–30 days)</span><div class="aging-r"><span class="aging-v">₹1,50,000</span><span class="bdg b-ok">Good</span></div></div>
+      <div class="aging-row"><span class="aging-l">31–60 days</span><div class="aging-r"><span class="aging-v">₹0</span><span class="bdg b-ok">Good</span></div></div>
+      <div class="aging-row"><span class="aging-l">61–75 days</span><div class="aging-r"><span class="aging-v">₹0</span><span class="bdg b-ok">Good</span></div></div>
+      <div class="aging-row"><span class="aging-l">76–90 days</span><div class="aging-r"><span class="aging-v">₹0</span><span class="bdg b-ok">Good</span></div></div>
+      <div class="aging-row"><span class="aging-l">91–120 days</span><div class="aging-r"><span class="aging-v">₹30,386</span><span class="bdg b-warn">Watch</span></div></div>
+      <div class="aging-row"><span class="aging-l">121–150 days</span><div class="aging-r"><span class="aging-v">₹1,04,982</span><span class="bdg b-warn">Watch</span></div></div>
+      <div class="aging-row"><span class="aging-l">151–180 days</span><div class="aging-r"><span class="aging-v">₹74,229</span><span class="bdg b-red">Overdue</span></div></div>
+      <div class="aging-row"><span class="aging-l">181–360 days</span><div class="aging-r"><span class="aging-v">₹0</span><span class="bdg b-ok">Good</span></div></div>
+      <div class="aging-row"><span class="aging-l">360+ days</span><div class="aging-r"><span class="aging-v">₹0</span><span class="bdg b-ok">Good</span></div></div>
+      <div style="display:flex;justify-content:space-between;padding:10px 0 0;border-top:2px solid var(--gray3);margin-top:4px;">
+        <span style="font-size:13px;font-weight:700;color:var(--red);">Total Receivable</span>
+        <span style="font-size:14px;font-weight:700;color:var(--red);">₹59,598.38</span>
+      </div>
+    </div>
+
+    <div class="sec">MDO</div>
+    <div class="card">
+      <div class="card-t">Market development objectives met?</div>
+      <div class="pills">
+        <button class="pill on" onclick="setPill(this)">Yes</button>
+        <button class="pill" onclick="setPill(this)">No</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- PAGE 5: Plans -->
+  <div class="page" id="pg5">
+    <div class="sec">Status of liquidation</div>
+    <div class="card">
+      <div class="field">
+        <div class="flabel">Liquidation status</div>
+        <select>
+          <option value="">— Select status —</option>
+          <option>Done</option>
+          <option>Not done</option>
+          <option>Partial</option>
+          <option>In progress</option>
+        </select>
+      </div>
+    </div>
+
+    <div class="sec">Next order plan</div>
+    <div class="card">
+      <div class="field">
+        <div class="flabel">Order amount (tentative)</div>
+        <div class="ri"><i class="ti ti-currency-rupee"></i><input type="text" placeholder="e.g. 2,50,000"></div>
+      </div>
+      <div class="field">
+        <div class="flabel">Tentative order date</div>
+        <div class="ri"><i class="ti ti-calendar"></i><input type="date"></div>
+      </div>
+    </div>
+
+    <div class="sec">Collection plan</div>
+    <div class="card">
+      <div class="field">
+        <div class="flabel">Collection amount (tentative)</div>
+        <div class="ri"><i class="ti ti-currency-rupee"></i><input type="text" placeholder="e.g. 1,20,000"></div>
+      </div>
+      <div class="field">
+        <div class="flabel">Tentative collection date</div>
+        <div class="ri"><i class="ti ti-calendar"></i><input type="date"></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- PAGE 6: Remarks -->
+  <div class="page" id="pg6">
+    <div class="sec">Team &amp; support</div>
+    <div class="card">
+      <div class="field">
+        <div class="flabel">How is team functioning?</div>
+        <textarea placeholder="Describe team performance, coordination, issues, highlights…"></textarea>
+      </div>
+    </div>
+    <div class="card">
+      <div class="field">
+        <div class="flabel">Remarks</div>
+        <textarea placeholder="Any additional remarks or observations…"></textarea>
+      </div>
+    </div>
+    <div class="card">
+      <div class="field">
+        <div class="flabel">Support needed / any query</div>
+        <textarea placeholder="List support requests, resource needs, or open queries…"></textarea>
+      </div>
+    </div>
+  </div>
+
+</div><!-- /content -->
+
+<!-- Footer -->
+<div class="footer" id="footerBar">
+  <button class="btn-prev" id="prevBtn" onclick="navigate(-1)" style="display:none;"><i class="ti ti-arrow-left"></i> Back</button>
+  <button class="btn-next" id="nextBtn" onclick="navigate(1)">Next <i class="ti ti-arrow-right"></i></button>
+</div>
+
+<!-- Dialog overlay -->
+<div class="dlg-ov" id="dlgOv">
+  <div class="dlg">
+    <div id="dlg-confirm">
+      <div class="dlg-icon"><i class="ti ti-file-check"></i></div>
+      <div class="dlg-title">Submit review?</div>
+      <div class="dlg-body">Are you sure you want to submit the distributor review for <strong id="dlg-dist-name">this distributor</strong>? This action cannot be undone.</div>
+      <div class="dlg-btns">
+        <button class="dlg-cancel" onclick="hideDlg()">Cancel</button>
+        <button class="dlg-ok" onclick="confirmSubmit()">Submit</button>
+      </div>
+    </div>
+    <div id="dlg-success" style="display:none;text-align:center;">
+      <div class="dlg-icon"><i class="ti ti-circle-check" style="color:var(--teal);"></i></div>
+      <div class="dlg-title">Review submitted!</div>
+      <div class="dlg-body">Your distributor review has been successfully recorded and saved.</div>
+      <button class="dlg-ok" style="width:100%;" onclick="hideDlg()">Done</button>
+    </div>
+  </div>
+</div>
+
+</div><!-- /screen -->
+</div><!-- /phone -->
+
+<script>
+const TOTAL=7;
+let cur=0;
+let distSelected=false;
+
+const months=["Nov","Dec","Jan","Feb","Mar","Apr","May"];
+const salesData=[42,65,38,72,55,88,73];
+const collData=[35,50,55,42,62,70,65];
+
+function renderChart(id,data,color){
+  const max=Math.max(...data);
+  document.getElementById(id).innerHTML=data.map(v=>`<div class="cbar" style="background:${color};height:${Math.round(v/max*100)}%;opacity:.85;"></div>`).join("");
+}
+function renderLabels(id){
+  document.getElementById(id).innerHTML=months.map(m=>`<span>${m}</span>`).join("");
+}
+renderChart("salesChart",salesData,"#00897B");
+renderChart("collChart",collData,"#1565C0");
+renderLabels("salesLabels");
+renderLabels("collLabels");
+
+function buildDots(){
+  const el=document.getElementById("stepDots");
+  el.innerHTML="";
+  for(let i=0;i<TOTAL;i++){
+    const d=document.createElement("div");
+    d.className="step-dot"+(i<cur?" done":i===cur?" cur":"");
+    el.appendChild(d);
+  }
+}
+
+function updateUI(){
+  document.querySelectorAll(".page").forEach((p,i)=>p.classList.toggle("active",i===cur));
+  document.querySelectorAll(".tab").forEach((t,i)=>t.classList.toggle("active",i===cur));
+  const titles=["Overview","Customer Balance","Collection Performance","Sale Report","Ageing & MDO","Order Plans","Remarks"];
+  document.getElementById("appbarTitle").textContent=titles[cur];
+  document.getElementById("backBtn").style.display=cur>0?"flex":"none";
+  if(cur===0){
+    document.getElementById("appbarSub").style.display="none";
+    document.getElementById("tabsBar").style.display="none";
+    document.getElementById("stepDots").style.display="none";
+  } else {
+    document.getElementById("tabsBar").style.display="flex";
+    document.getElementById("stepDots").style.display="flex";
+    document.getElementById("appbarSub").style.display="block";
+    buildDots();
+  }
+  const prevBtn=document.getElementById("prevBtn");
+  const nextBtn=document.getElementById("nextBtn");
+  prevBtn.style.display=cur>0?"flex":"none";
+  if(cur===TOTAL-1){
+    nextBtn.innerHTML='<i class="ti ti-circle-check"></i> Submit review';
+    nextBtn.onclick=showDlg;
+  } else {
+    nextBtn.innerHTML='Next <i class="ti ti-arrow-right"></i>';
+    nextBtn.onclick=()=>navigate(1);
+  }
+  // scroll tabs
+  const activeTab=document.querySelector(".tab.active");
+  if(activeTab) activeTab.scrollIntoView({behavior:"smooth",block:"nearest",inline:"center"});
+  // scroll content to top
+  document.querySelector(".content").scrollTo(0,0);
+}
+
+function navigate(dir){
+  if(dir===1&&cur===0&&!distSelected){
+    document.getElementById("distSel").focus();
+    return;
+  }
+  cur=Math.max(0,Math.min(TOTAL-1,cur+dir));
+  updateUI();
+}
+
+function goTab(i){
+  if(!distSelected&&i>0) return;
+  cur=i;updateUI();
+}
+
+function goBack(){navigate(-1);}
+
+function onDistChange(val){
+  distSelected=!!val;
+  const empty=document.getElementById("pg0-empty");
+  const prev=document.getElementById("pg0-preview");
+  if(!val){empty.style.display="";prev.style.display="none";return;}
+  empty.style.display="none";prev.style.display="";
+  const parts=val.split("|");
+  document.getElementById("prev-name").textContent=parts[0].trim();
+  document.getElementById("prev-code").textContent="Code: "+parts[1].trim()+" · "+parts[2].trim();
+  document.getElementById("bal-cust").textContent=parts[0].trim().toUpperCase()+" | "+parts[1].trim()+" | "+parts[2].trim().toUpperCase();
+  document.getElementById("appbarSub").textContent=parts[0].trim();
+  document.getElementById("dlg-dist-name").textContent=parts[0].trim();
+}
+
+function setPill(el){
+  el.closest(".pills").querySelectorAll(".pill").forEach(p=>p.classList.remove("on"));
+  el.classList.add("on");
+}
+
+function showDlg(){
+  document.getElementById("dlg-confirm").style.display="";
+  document.getElementById("dlg-success").style.display="none";
+  document.getElementById("dlgOv").classList.add("show");
+}
+function hideDlg(){document.getElementById("dlgOv").classList.remove("show");}
+function confirmSubmit(){
+  document.getElementById("dlg-confirm").style.display="none";
+  document.getElementById("dlg-success").style.display="";
+}
+document.getElementById("dlgOv").addEventListener("click",function(e){if(e.target===this)hideDlg();});
+
+updateUI();
+</script>
+</body>
+</html>

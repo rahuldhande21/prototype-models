@@ -8,213 +8,168 @@
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@latest/tabler-icons.min.css">
 <style>
 *{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent;}
-body{font-family:'Roboto',sans-serif;background:#B0BEC5;display:flex;justify-content:center;padding:20px;min-height:100vh;gap:24px;flex-wrap:wrap;align-items:flex-start;}
-
-/* ── PHONE SHELL ── */
-.phone-wrap{display:flex;flex-direction:column;align-items:center;gap:8px;}
-.phone-lbl{font-size:11px;color:#546E7A;letter-spacing:.1em;font-weight:700;text-transform:uppercase;}
-.phone{width:355px;background:#1a1a1a;border-radius:44px;padding:9px;box-shadow:0 30px 80px rgba(0,0,0,.55),inset 0 0 0 1px rgba(255,255,255,.07);}
-.screen{background:#fff;border-radius:36px;overflow:hidden;height:750px;display:flex;flex-direction:column;position:relative;}
-
-/* ── STATUS BAR (matches screenshot exactly) ── */
-.sbar{background:#fff;padding:8px 16px 4px;display:flex;justify-content:space-between;align-items:center;flex-shrink:0;}
-.sbar-time{font-size:13px;font-weight:700;color:#111;}
-.sbar-r{display:flex;gap:4px;align-items:center;color:#111;font-size:14px;}
-
-/* ── FIELD CONNECT HEADER ── */
-.fc-hdr{background:#fff;padding:10px 16px 8px;display:flex;justify-content:space-between;align-items:center;flex-shrink:0;border-bottom:1px solid #F0F0F0;}
-.fc-logo{font-size:20px;font-weight:700;color:#222;}
-.fc-logo .orange{color:#E55A2B;}
-.sync-txt{font-size:11px;color:#999;text-align:right;line-height:1.4;}
-.sync-bold{font-weight:500;color:#666;}
-
-/* ── MY ACTIVITIES CARD ── */
-.act-card{background:#fff;margin:10px 12px 6px;border-radius:14px;padding:14px 16px;box-shadow:0 2px 12px rgba(0,0,0,.08);}
+body{font-family:'Roboto',sans-serif;background:#90A4AE;display:flex;justify-content:center;align-items:flex-start;padding:24px;min-height:100vh;}
+/* PHONE */
+.phone{width:360px;background:#1a1a1a;border-radius:46px;padding:9px;box-shadow:0 32px 80px rgba(0,0,0,.55),inset 0 0 0 1px rgba(255,255,255,.07);}
+.screen{background:#fff;border-radius:38px;overflow:hidden;height:760px;display:flex;flex-direction:column;position:relative;}
+/* STATUS BAR */
+.sb{background:#fff;padding:8px 18px 4px;display:flex;justify-content:space-between;flex-shrink:0;}
+.sb-t{font-size:13px;font-weight:700;color:#111;}
+.sb-r{display:flex;gap:4px;align-items:center;font-size:14px;color:#111;}
+/* SHARED COLOURS */
+.teal{color:#1AADA4;} .bg-teal{background:#1AADA4;} .bg-teal-l{background:#E0F2F1;}
+/* ══════════════════════════════
+   SCREEN: HOME
+══════════════════════════════ */
+#sc-home{display:flex;flex-direction:column;flex:1;min-height:0;}
+.fc-hdr{background:#fff;padding:10px 16px 8px;display:flex;justify-content:space-between;align-items:center;border-bottom:1px solid #F0F0F0;flex-shrink:0;}
+.fc-logo{font-size:20px;font-weight:700;color:#222;}.fc-logo span{color:#E55A2B;}
+.sync-txt{font-size:11px;color:#999;text-align:right;line-height:1.4;}.sync-b{font-weight:500;color:#666;}
+.home-scroll{flex:1;overflow-y:auto;scrollbar-width:none;background:#F5F5F5;}
+.home-scroll::-webkit-scrollbar{display:none;}
+.act-card{background:#fff;margin:10px 12px 6px;border-radius:14px;padding:14px 16px;box-shadow:0 2px 10px rgba(0,0,0,.08);}
 .act-ttl{font-size:16px;font-weight:700;color:#222;margin-bottom:12px;}
 .act-btns{display:flex;gap:10px;}
 .btn-add{flex:1;background:#1AADA4;color:#fff;border:none;border-radius:10px;padding:13px;font-size:14px;font-weight:700;font-family:'Roboto',sans-serif;cursor:pointer;}
 .btn-end{flex:1;background:#E55A2B;color:#fff;border:none;border-radius:10px;padding:13px;font-size:14px;font-weight:700;font-family:'Roboto',sans-serif;cursor:pointer;}
-
-/* ── CATEGORIES ── */
 .cat-lbl{font-size:15px;font-weight:700;color:#222;padding:8px 16px 4px;}
-.cat-grid{display:grid;grid-template-columns:repeat(3,1fr);margin:0 12px;border-radius:14px;overflow:hidden;box-shadow:0 2px 8px rgba(0,0,0,.06);background:#E8E8E8;gap:1px;}
-.cat-item{background:#fff;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:14px 6px 10px;gap:6px;cursor:pointer;}
-.cat-item:active{background:#F0FAF9;}
-.cat-icon{font-size:30px;line-height:1;}
-.cat-name{font-size:11px;font-weight:500;color:#333;text-align:center;line-height:1.3;}
-.cat-item.new-feat .cat-name{color:#00796B;font-weight:700;}
-.cat-item.new-feat{background:#F0FAF9;}
+.cat-grid{display:grid;grid-template-columns:repeat(3,1fr);margin:0 12px 12px;border-radius:12px;overflow:hidden;background:#E0E0E0;gap:1px;box-shadow:0 1px 6px rgba(0,0,0,.07);}
+.ci{background:#fff;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:13px 6px 10px;gap:5px;cursor:pointer;transition:background .12s;}
+.ci:active{background:#F0FAF9;}
+.ci-icon{font-size:28px;line-height:1;}
+.ci-name{font-size:11px;font-weight:500;color:#333;text-align:center;line-height:1.3;}
+.ci.new{background:#E8F5E9;}.ci.new .ci-name{color:#1AADA4;font-weight:700;}
+.ci.ka-new{background:#E0F2F1;}.ci.ka-new .ci-name{color:#00796B;font-weight:700;}
+.home-nav{background:#fff;border-top:1px solid #E8E8E8;display:flex;flex-shrink:0;}
+.hn{flex:1;display:flex;flex-direction:column;align-items:center;gap:2px;padding:8px 2px 10px;border:none;background:none;cursor:pointer;border-top:2px solid transparent;}
+.hn i{font-size:21px;color:#aaa;}.hn span{font-size:10px;color:#aaa;font-weight:500;}
+.hn.on{border-top-color:#1AADA4;}.hn.on i,.hn.on span{color:#1AADA4;}
 
-/* ── HOME BOTTOM NAV ── */
-.home-nav{background:#fff;border-top:1px solid #E8E8E8;display:flex;margin-top:auto;flex-shrink:0;}
-.hn{flex:1;display:flex;flex-direction:column;align-items:center;gap:2px;padding:8px 2px 10px;border:none;background:none;cursor:pointer;}
-.hn i{font-size:22px;color:#aaa;}
-.hn span{font-size:10px;color:#aaa;font-weight:500;}
-.hn.on i,.hn.on span{color:#1AADA4;}
-.hn.on{border-top:2px solid #1AADA4;}
-
-/* ── ACTIVITY SCREEN HEADER ── */
+/* ══════════════════════════════
+   SCREEN: MY ACTIVITIES
+══════════════════════════════ */
+#sc-activity{display:none;flex-direction:column;flex:1;min-height:0;}
 .act-nav{background:#fff;padding:10px 14px;display:flex;align-items:center;justify-content:space-between;flex-shrink:0;border-bottom:1px solid #F0F0F0;}
-.back-row{display:flex;align-items:center;gap:4px;cursor:pointer;}
-.back-row i{font-size:20px;color:#444;}
-.back-row span{font-size:16px;color:#333;font-weight:400;}
-.end-btn{background:#E55A2B;color:#fff;border:none;border-radius:20px;padding:7px 16px;font-size:13px;font-weight:700;font-family:'Roboto',sans-serif;cursor:pointer;}
-
-/* ── GREETING BANNER ── */
+.back-row{display:flex;align-items:center;gap:3px;cursor:pointer;}
+.back-row i{font-size:21px;color:#444;}.back-row span{font-size:16px;color:#333;}
+.end-btn{background:#E55A2B;color:#fff;border:none;border-radius:20px;padding:7px 16px;font-size:12px;font-weight:700;font-family:'Roboto',sans-serif;cursor:pointer;}
 .greet{background:#1AADA4;padding:14px 14px 36px;position:relative;flex-shrink:0;}
 .greet-name{font-size:16px;font-weight:700;color:#fff;}
 .greet-mode{font-size:13px;color:#80CBC4;margin-top:4px;font-weight:500;}
 .greet-av{position:absolute;top:12px;right:14px;width:40px;height:40px;background:rgba(255,255,255,.22);border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:17px;font-weight:700;color:#fff;}
-
-/* ── STAT PILLS ── */
 .stat-pills{display:flex;gap:8px;padding:0 12px;margin-top:-22px;margin-bottom:10px;flex-shrink:0;}
-.spill{flex:1;background:#fff;border-radius:40px;padding:8px 6px;text-align:center;box-shadow:0 2px 8px rgba(0,0,0,.12);}
-.spill-l{font-size:10px;color:#888;}
-.spill-v{font-size:13px;font-weight:700;color:#222;margin-top:1px;}
-
-/* ── LOCATION CARD ── */
-.loc-card{background:#fff;border-radius:12px;padding:12px 14px;margin:0 12px 10px;border:1px solid #E8E8E8;display:flex;justify-content:space-between;align-items:center;box-shadow:0 1px 4px rgba(0,0,0,.06);}
-.loc-title{font-size:13px;font-weight:700;color:#222;margin-bottom:3px;}
-.loc-addr{font-size:11px;color:#666;max-width:180px;line-height:1.4;}
-.tag-btn{border:2px solid #1AADA4;background:#fff;color:#1AADA4;border-radius:8px;padding:8px 12px;font-size:11px;font-weight:700;font-family:'Roboto',sans-serif;cursor:pointer;white-space:nowrap;}
-
-/* ── VISIT DETAILS SECTION ── */
-.visit-wrap{padding:0 12px 12px;}
-.visit-title{font-size:15px;font-weight:700;color:#222;margin-bottom:10px;}
-.visit-box{background:#fff;border-radius:12px;border:1px solid #E0E0E0;overflow:hidden;box-shadow:0 1px 4px rgba(0,0,0,.06);}
+.spill{flex:1;background:#fff;border-radius:40px;padding:8px 4px;text-align:center;box-shadow:0 2px 8px rgba(0,0,0,.12);}
+.sp-l{font-size:10px;color:#888;}.sp-v{font-size:12px;font-weight:700;color:#222;margin-top:1px;}
+.loc-card{background:#fff;border-radius:12px;padding:12px 14px;margin:0 12px 10px;border:1px solid #E8E8E8;display:flex;justify-content:space-between;align-items:center;flex-shrink:0;}
+.loc-t{font-size:13px;font-weight:700;color:#222;margin-bottom:3px;}
+.loc-a{font-size:11px;color:#666;max-width:180px;line-height:1.4;}
+.tag-btn{border:2px solid #1AADA4;background:#fff;color:#1AADA4;border-radius:8px;padding:8px 10px;font-size:11px;font-weight:700;font-family:'Roboto',sans-serif;cursor:pointer;white-space:nowrap;}
+.visit-wrap{padding:0 12px 12px;overflow-y:auto;flex:1;scrollbar-width:none;}
+.visit-wrap::-webkit-scrollbar{display:none;}
+.visit-ttl{font-size:15px;font-weight:700;color:#222;margin-bottom:10px;}
+.visit-box{background:#fff;border-radius:12px;border:1px solid #E0E0E0;overflow:hidden;}
 .vbox-lbl{font-size:10px;font-weight:700;color:#999;padding:8px 12px 4px;letter-spacing:.06em;text-transform:uppercase;}
 .vopt{display:flex;align-items:center;gap:14px;padding:12px 14px;cursor:pointer;border-top:1px solid #F2F2F2;transition:background .12s;}
 .vopt:first-of-type{border-top:none;}
-.vopt:active{background:#F0FAF9;}
+.vopt:hover{background:#FAFAFA;}
+.vopt:active{background:#E0F2F1;}
 .vopt.selected{background:#E0F2F1;}
-.vopt-icon{font-size:26px;width:36px;text-align:center;}
-.vopt-name{font-size:15px;color:#222;font-weight:400;}
-.vopt-check{margin-left:auto;color:#1AADA4;font-size:18px;display:none;}
-.vopt.selected .vopt-check{display:block;}
-/* NEW KA row highlight */
-.vopt.ka-opt{border-top:1px solid #E0F2F1;}
-.vopt.ka-opt .vopt-name{color:#00796B;font-weight:500;}
-
-/* ── PURPOSE DROPDOWN ── */
-.purpose-box{padding:10px 12px 12px;border-top:1px solid #F0F0F0;background:#FAFAFA;}
+.vo-icon{font-size:26px;width:34px;text-align:center;}
+.vo-name{font-size:15px;color:#222;}
+.vo-check{margin-left:auto;color:#1AADA4;font-size:18px;display:none;}
+.vopt.selected .vo-check{display:block;}
+.vopt.ka-row{background:#F0FAF9;}
+.vopt.ka-row .vo-name{color:#00796B;font-weight:500;}
+.purpose-box{padding:10px 12px 12px;border-top:1px solid #EEEEEE;background:#FAFAFA;}
 .purpose-lbl{font-size:10px;font-weight:700;color:#999;letter-spacing:.06em;text-transform:uppercase;margin-bottom:6px;}
 .purpose-sel{width:100%;padding:10px 12px;border:1px solid #DDD;border-radius:8px;font-size:13px;font-family:'Roboto',sans-serif;color:#333;background:#fff;appearance:none;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 24 24' fill='none' stroke='%23888' stroke-width='2.5'%3E%3Cpath d='M6 9l6 6 6-6'/%3E%3C/svg%3E");background-repeat:no-repeat;background-position:right 12px center;outline:none;}
-.purpose-sel:focus{border-color:#1AADA4;}
 
-/* ── JOINT WORKING SCREEN ── */
-.jw-ab{background:#fff;padding:10px 14px;display:flex;align-items:center;justify-content:space-between;flex-shrink:0;border-bottom:1px solid #F0F0F0;}
+/* ══════════════════════════════
+   SCREEN: JOINT WORKING
+══════════════════════════════ */
+#sc-jw{display:none;flex-direction:column;flex:1;min-height:0;}
 .jw-content{flex:1;overflow-y:auto;background:#F5F5F5;scrollbar-width:none;}
 .jw-content::-webkit-scrollbar{display:none;}
-.jw-section-lbl{font-size:10px;font-weight:700;color:#999;letter-spacing:.07em;text-transform:uppercase;padding:12px 14px 6px;}
+.jw-sec{font-size:10px;font-weight:700;color:#999;letter-spacing:.07em;text-transform:uppercase;padding:12px 14px 6px;}
 .jw-card{background:#fff;margin:0 12px 10px;border-radius:12px;padding:14px;border:1px solid #E8E8E8;}
-.jw-field-lbl{font-size:12px;font-weight:700;color:#555;margin-bottom:8px;text-transform:uppercase;letter-spacing:.04em;}
-.jw-select{width:100%;padding:11px 12px;border:1px solid #DDD;border-radius:8px;font-size:14px;font-family:'Roboto',sans-serif;color:#333;background:#fff;appearance:none;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 24 24' fill='none' stroke='%23888' stroke-width='2.5'%3E%3Cpath d='M6 9l6 6 6-6'/%3E%3C/svg%3E");background-repeat:no-repeat;background-position:right 12px center;outline:none;}
-.jw-select:focus{border-color:#1AADA4;box-shadow:0 0 0 3px rgba(26,173,164,.1);}
-.jw-textarea{width:100%;padding:11px 12px;border:1px solid #DDD;border-radius:8px;font-size:14px;font-family:'Roboto',sans-serif;color:#333;min-height:90px;resize:none;outline:none;line-height:1.5;}
-.jw-textarea:focus{border-color:#1AADA4;box-shadow:0 0 0 3px rgba(26,173,164,.1);}
-.jw-submit{display:block;width:calc(100% - 24px);margin:4px 12px 12px;padding:14px;background:#1AADA4;color:#fff;border:none;border-radius:10px;font-size:15px;font-weight:700;font-family:'Roboto',sans-serif;cursor:pointer;text-align:center;}
+.jw-flbl{font-size:12px;font-weight:700;color:#555;margin-bottom:8px;text-transform:uppercase;letter-spacing:.04em;}
+.jw-sel{width:100%;padding:11px 12px;border:1px solid #DDD;border-radius:8px;font-size:14px;font-family:'Roboto',sans-serif;color:#333;background:#fff;appearance:none;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 24 24' fill='none' stroke='%23888' stroke-width='2.5'%3E%3Cpath d='M6 9l6 6 6-6'/%3E%3C/svg%3E");background-repeat:no-repeat;background-position:right 12px center;outline:none;}
+.jw-sel:focus{border-color:#1AADA4;box-shadow:0 0 0 3px rgba(26,173,164,.1);}
+.jw-ta{width:100%;padding:11px 12px;border:1px solid #DDD;border-radius:8px;font-size:14px;font-family:'Roboto',sans-serif;color:#333;min-height:90px;resize:none;outline:none;line-height:1.5;}
+.jw-ta:focus{border-color:#1AADA4;box-shadow:0 0 0 3px rgba(26,173,164,.1);}
+.jw-sub{display:block;width:calc(100% - 24px);margin:4px 12px 14px;padding:14px;background:#1AADA4;color:#fff;border:none;border-radius:10px;font-size:15px;font-weight:700;font-family:'Roboto',sans-serif;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:8px;}
 
-/* ── DIALOG ── */
-.dlg-ov{position:absolute;inset:0;background:rgba(0,0,0,.48);display:none;align-items:center;justify-content:center;z-index:200;padding:20px;border-radius:36px;}
-.dlg-ov.on{display:flex;}
-.dlg{background:#fff;border-radius:16px;padding:22px;width:100%;}
-.dlg-ico{text-align:center;font-size:48px;margin-bottom:10px;}
-.dlg-ttl{font-size:17px;font-weight:700;color:#222;margin-bottom:6px;}
-.dlg-bd{font-size:13px;color:#666;line-height:1.6;margin-bottom:18px;}
-.dlg-btns{display:flex;gap:8px;}
-.dlg-cancel{flex:1;padding:12px;border:1px solid #DDD;border-radius:8px;background:#fff;font-size:14px;font-family:'Roboto',sans-serif;cursor:pointer;color:#666;}
-.dlg-ok{flex:1;padding:12px;border:none;border-radius:8px;background:#1AADA4;font-size:14px;font-family:'Roboto',sans-serif;cursor:pointer;color:#fff;font-weight:700;}
-
-/* ── DR APPBAR ── */
+/* ══════════════════════════════
+   SCREEN: DISTRIBUTOR REVIEW
+══════════════════════════════ */
+#sc-dr{display:none;flex-direction:column;flex:1;min-height:0;}
 .dr-ab{background:#1AADA4;padding:8px 14px 12px;flex-shrink:0;}
 .dr-ab-row{display:flex;align-items:center;gap:8px;}
-.dr-ab-back{color:#fff;font-size:22px;display:flex;cursor:pointer;}
-.dr-ab-title{color:#fff;font-size:17px;font-weight:500;flex:1;}
-.dr-ab-sub{color:rgba(255,255,255,.75);font-size:11px;padding-left:30px;margin-top:1px;}
-
-/* ── DR TABS ── */
+.dr-bk{color:#fff;font-size:22px;display:flex;cursor:pointer;}
+.dr-ttl{color:#fff;font-size:17px;font-weight:500;flex:1;}
+.dr-sub{color:rgba(255,255,255,.75);font-size:11px;padding-left:30px;margin-top:1px;}
 .dr-tabs{background:#00897B;display:flex;overflow-x:auto;flex-shrink:0;scrollbar-width:none;}
 .dr-tabs::-webkit-scrollbar{display:none;}
 .dr-tab{flex:0 0 auto;padding:8px 12px;font-size:11px;font-weight:700;color:rgba(255,255,255,.5);cursor:pointer;border-bottom:3px solid transparent;white-space:nowrap;font-family:'Roboto',sans-serif;}
 .dr-tab.on{color:#fff;border-bottom-color:#80CBC4;}
-
-/* ── DR DOTS ── */
-.dr-dots{display:flex;align-items:center;justify-content:center;gap:4px;padding:7px 0 2px;background:#fff;flex-shrink:0;}
+.dr-dots{display:flex;align-items:center;justify-content:center;gap:4px;padding:6px 0 2px;background:#fff;flex-shrink:0;}
 .dot{width:6px;height:6px;border-radius:50%;background:#DDD;transition:.2s;}
-.dot.done{background:#1AADA4;opacity:.5;}
-.dot.cur{background:#1AADA4;width:18px;border-radius:3px;}
-
-/* ── DR CONTENT ── */
+.dot.done{background:#1AADA4;opacity:.5;}.dot.cur{background:#1AADA4;width:18px;border-radius:3px;}
 .dr-content{flex:1;overflow-y:auto;background:#F5F5F5;scrollbar-width:none;}
 .dr-content::-webkit-scrollbar{display:none;}
-.dpg{display:none;padding:12px;}
-.dpg.on{display:block;}
+.dpg{display:none;padding:12px;}.dpg.on{display:block;}
 .sec{font-size:10px;font-weight:700;color:#999;letter-spacing:.08em;text-transform:uppercase;margin:10px 0 6px;}
 .sec:first-child{margin-top:2px;}
-.dcard{background:#fff;border-radius:12px;padding:14px;margin-bottom:10px;border:1px solid #E8E8E8;}
-.dcard-t{font-size:10px;font-weight:700;color:#999;text-transform:uppercase;letter-spacing:.07em;margin-bottom:10px;}
+.dc{background:#fff;border-radius:12px;padding:14px;margin-bottom:10px;border:1px solid #E8E8E8;}
+.dc-t{font-size:10px;font-weight:700;color:#999;text-transform:uppercase;letter-spacing:.07em;margin-bottom:10px;}
 .flbl{font-size:11px;font-weight:700;color:#888;text-transform:uppercase;letter-spacing:.05em;margin-bottom:5px;}
-.field{margin-bottom:10px;}
-.field:last-child{margin-bottom:0;}
+.fld{margin-bottom:10px;}.fld:last-child{margin-bottom:0;}
 .finp{width:100%;padding:10px 12px;border:1px solid #DDD;border-radius:8px;font-size:13px;font-family:'Roboto',sans-serif;color:#333;background:#fff;outline:none;}
 .finp:focus{border-color:#1AADA4;}
 select.finp{appearance:none;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 24 24' fill='none' stroke='%23888' stroke-width='2.5'%3E%3Cpath d='M6 9l6 6 6-6'/%3E%3C/svg%3E");background-repeat:no-repeat;background-position:right 12px center;}
 textarea.finp{min-height:68px;resize:none;line-height:1.5;}
-
-/* hcard */
 .hcard{background:#fff;border-radius:12px;margin-bottom:10px;overflow:hidden;border:1px solid #E8E8E8;}
-.hcard-top{background:#E0F2F1;padding:12px 14px;display:flex;justify-content:space-between;align-items:flex-start;}
-.hcard-name{font-size:15px;font-weight:700;color:#00695C;}
-.hcard-code{font-size:11px;color:#1AADA4;margin-top:2px;}
-.hcard-body{padding:10px 14px;}
+.hc-top{background:#E0F2F1;padding:12px 14px;display:flex;justify-content:space-between;align-items:flex-start;}
+.hc-name{font-size:15px;font-weight:700;color:#00695C;}
+.hc-code{font-size:11px;color:#1AADA4;margin-top:2px;}
+.hc-body{padding:10px 14px;}
 .sg{display:grid;grid-template-columns:1fr 1fr;gap:8px;}
-.sc{background:#E0F2F1;border-radius:10px;padding:10px 12px;}
-.sc-n{font-size:16px;font-weight:700;color:#00695C;}
-.sc-l{font-size:11px;color:#1AADA4;margin-top:2px;}
-/* bal */
+.sc2{background:#E0F2F1;border-radius:10px;padding:10px 12px;}
+.sc2-n{font-size:15px;font-weight:700;color:#00695C;}
+.sc2-l{font-size:11px;color:#1AADA4;margin-top:2px;}
 .bal{width:100%;border-collapse:collapse;}
 .bal tr td{padding:7px 10px;font-size:12px;border-bottom:1px solid #F0F0F0;color:#666;}
 .bal tr td:last-child{text-align:right;font-weight:500;color:#333;}
 .bal tr:nth-child(even) td{background:#FAFAFA;}
 .bal tr:last-child td{border-bottom:none;}
 .bal .tot td{font-size:13px;font-weight:700;color:#C62828;border-top:2px solid #E0E0E0;}
-/* coll */
 .coll-list{border-radius:12px;overflow:hidden;border:1px solid #E8E8E8;margin-bottom:10px;background:#fff;}
-.coll-item{padding:12px 14px;border-bottom:1px solid #F0F0F0;display:flex;justify-content:space-between;align-items:center;}
-.coll-item:last-child{border-bottom:none;}
-.ci-l{font-size:12px;color:#666;}
-.ci-v{font-size:14px;font-weight:700;color:#222;}
+.ci2{padding:12px 14px;border-bottom:1px solid #F0F0F0;display:flex;justify-content:space-between;align-items:center;}
+.ci2:last-child{border-bottom:none;}
+.ci2-l{font-size:12px;color:#666;}.ci2-v{font-size:14px;font-weight:700;color:#222;}
 .coll-hl{background:#E0F2F1;padding:13px 14px;display:flex;justify-content:space-between;align-items:center;}
-.hl-l{font-size:14px;font-weight:700;color:#222;}
-.hl-v{font-size:20px;font-weight:700;color:#1565C0;}
-/* chart */
-.chart{display:flex;align-items:flex-end;gap:3px;height:70px;}
+.hl-l{font-size:14px;font-weight:700;color:#222;}.hl-v{font-size:20px;font-weight:700;color:#1565C0;}
+.chart{display:flex;align-items:flex-end;gap:3px;height:68px;}
 .cbar{flex:1;border-radius:3px 3px 0 0;}
 .clbls{display:flex;gap:3px;margin-top:4px;}
 .clbls span{flex:1;font-size:9px;color:#aaa;text-align:center;}
-/* aging */
 .ar{display:flex;justify-content:space-between;align-items:center;padding:8px 0;border-bottom:1px solid #F0F0F0;}
 .ar:last-child{border-bottom:none;}
 .al{font-size:12px;color:#666;}
 .ar-r{display:flex;gap:6px;align-items:center;}
 .av{font-size:12px;font-weight:600;color:#333;}
 .bdg{font-size:9px;padding:2px 7px;border-radius:20px;font-weight:700;}
-.b-ok{background:#E8F5E9;color:#2E7D32;}
-.b-warn{background:#FFF8E1;color:#F57C00;}
-.b-red{background:#FFEBEE;color:#C62828;}
-/* pills */
+.b-ok{background:#E8F5E9;color:#2E7D32;}.b-warn{background:#FFF8E1;color:#F57C00;}.b-red{background:#FFEBEE;color:#C62828;}
 .pills{display:flex;gap:8px;}
 .pill{flex:1;border:1.5px solid #DDD;border-radius:8px;padding:10px;text-align:center;font-size:14px;font-weight:500;color:#888;cursor:pointer;background:#fff;font-family:'Roboto',sans-serif;}
 .pill.on{background:#E0F2F1;border-color:#1AADA4;color:#00695C;font-weight:700;}
-/* sale */
 .sale{background:#fff;border-radius:12px;margin-bottom:10px;overflow:hidden;border:1px solid #E8E8E8;}
 .sale-hdr{background:#E3F4F3;padding:10px 12px;display:flex;gap:10px;}
 .sale-idx{background:#1AADA4;color:#fff;border-radius:6px;padding:3px 8px;font-size:11px;font-weight:700;flex-shrink:0;margin-top:2px;}
 .sale-dist{font-size:12px;font-weight:600;color:#00695C;}
 .sale-body{padding:10px 12px;}
-.sm-l{font-size:11px;color:#999;}
-.sm-v{font-size:11px;font-weight:500;color:#333;}
-.sale-meta{display:flex;justify-content:space-between;margin-bottom:4px;}
+.sm-l{font-size:11px;color:#999;}.sm-v{font-size:11px;font-weight:500;color:#333;}
+.sm{display:flex;justify-content:space-between;margin-bottom:4px;}
 .sale-sbar{background:#E8F5E9;text-align:center;padding:5px;border-radius:6px;font-size:11px;font-weight:700;color:#2E7D32;margin:6px 0 8px;}
 .stbl{width:100%;border-collapse:collapse;}
 .stbl th{font-size:9px;font-weight:700;color:#aaa;padding:4px 3px;border-bottom:1px solid #F0F0F0;text-align:left;}
@@ -223,381 +178,321 @@ textarea.finp{min-height:68px;resize:none;line-height:1.5;}
 .stbl td:not(:first-child){text-align:right;}
 .stbl tr:last-child td{border-bottom:none;}
 .sale-tot{text-align:right;font-size:12px;font-weight:700;color:#C62828;padding-top:6px;border-top:1px solid #F0F0F0;margin-top:4px;}
-/* footer */
 .dr-footer{background:#fff;border-top:1px solid #E8E8E8;padding:10px 12px 14px;display:flex;gap:8px;flex-shrink:0;}
 .f-bk{flex:0 0 auto;padding:12px 14px;background:#fff;border:1px solid #DDD;border-radius:10px;font-size:13px;font-family:'Roboto',sans-serif;color:#666;cursor:pointer;display:flex;align-items:center;gap:5px;}
 .f-nx{flex:1;padding:12px;background:#1AADA4;border:none;border-radius:10px;font-size:14px;font-weight:700;font-family:'Roboto',sans-serif;color:#fff;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:6px;}
+/* DIALOG */
+.dlg-ov{position:absolute;inset:0;background:rgba(0,0,0,.48);display:none;align-items:center;justify-content:center;z-index:200;padding:20px;border-radius:38px;}
+.dlg-ov.on{display:flex;}
+.dlg{background:#fff;border-radius:16px;padding:22px;width:100%;}
+.dlg-ico{text-align:center;font-size:48px;margin-bottom:10px;}
+.dlg-ttl{font-size:17px;font-weight:700;color:#222;margin-bottom:6px;}
+.dlg-bd{font-size:13px;color:#666;line-height:1.6;margin-bottom:18px;}
+.dlg-btns{display:flex;gap:8px;}
+.dlg-cancel{flex:1;padding:12px;border:1px solid #DDD;border-radius:8px;background:#fff;font-size:14px;font-family:'Roboto',sans-serif;cursor:pointer;color:#666;}
+.dlg-ok{flex:1;padding:12px;border:none;border-radius:8px;background:#1AADA4;font-size:14px;font-family:'Roboto',sans-serif;cursor:pointer;color:#fff;font-weight:700;}
 </style>
 </head>
 <body>
+<div class="phone"><div class="screen" id="screen">
 
-<!-- ═══════ PHONE 1: HOME + DISTRIBUTOR REVIEW ═══════ -->
-<div class="phone-wrap">
-<div class="phone-lbl">HOME + DISTRIBUTOR REVIEW</div>
-<div class="phone"><div class="screen" id="s1">
-
-  <!-- HOME -->
-  <div id="home" style="display:flex;flex-direction:column;flex:1;min-height:0;">
-    <div class="sbar"><span class="sbar-time">11:42</span><div class="sbar-r"><i class="ti ti-wifi"></i><i class="ti ti-signal-4g"></i><i class="ti ti-battery-3"></i></div></div>
-    <div class="fc-hdr">
-      <div class="fc-logo">Field <span class="orange">Connect</span></div>
-      <div class="sync-txt"><span class="sync-bold">Data Sync :</span> Never synced</div>
-    </div>
-    <div style="flex:1;overflow-y:auto;scrollbar-width:none;">
-      <div class="act-card">
-        <div class="act-ttl">My Activities</div>
-        <div class="act-btns">
-          <button class="btn-add">+ Add Activity</button>
-          <button class="btn-end">End My Day</button>
-        </div>
+<!-- ════════ HOME ════════ -->
+<div id="sc-home" style="display:flex;flex-direction:column;flex:1;min-height:0;">
+  <div class="sb"><span class="sb-t">11:42</span><div class="sb-r"><i class="ti ti-wifi"></i><i class="ti ti-signal-4g"></i><i class="ti ti-battery-3"></i></div></div>
+  <div class="fc-hdr">
+    <div class="fc-logo">Field <span>Connect</span></div>
+    <div class="sync-txt"><span class="sync-b">Data Sync :</span> Never synced</div>
+  </div>
+  <div class="home-scroll">
+    <div class="act-card">
+      <div class="act-ttl">My Activities</div>
+      <div class="act-btns">
+        <button class="btn-add" onclick="show('sc-activity')">+ Add Activity</button>
+        <button class="btn-end">End My Day</button>
       </div>
-      <div class="cat-lbl">Categories</div>
-      <div class="cat-grid">
-        <div class="cat-item"><div class="cat-icon">📈</div><div class="cat-name">Sales</div></div>
-        <div class="cat-item"><div class="cat-icon">🔄</div><div class="cat-name">Sales Return</div></div>
-        <div class="cat-item"><div class="cat-icon">⚙️</div><div class="cat-name">My Activities</div></div>
-        <div class="cat-item"><div class="cat-icon">🤝</div><div class="cat-name">Distributor Onboarding</div></div>
-        <div class="cat-item"><div class="cat-icon">📦</div><div class="cat-name">Verify Stock</div></div>
-        <div class="cat-item"><div class="cat-icon">📋</div><div class="cat-name">Finance & Statements</div></div>
-        <div class="cat-item"><div class="cat-icon">🎧</div><div class="cat-name">Customer Complaint</div></div>
-        <div class="cat-item"><div class="cat-icon">🔍</div><div class="cat-name">Stock Requirement</div></div>
-        <div class="cat-item"><div class="cat-icon">🌿</div><div class="cat-name">Carbon Activity</div></div>
-        <div class="cat-item"><div class="cat-icon">🤲</div><div class="cat-name">KA Onboarding</div></div>
-        <div class="cat-item"><div class="cat-icon">📊</div><div class="cat-name">Performance Scorecard</div></div>
-        <div class="cat-item new-feat" onclick="openDR()"><div class="cat-icon">🏪</div><div class="cat-name">Distributor Review</div></div>
-      </div>
-      <div style="height:8px;"></div>
     </div>
-    <div class="home-nav">
-      <button class="hn on"><i class="ti ti-home"></i><span>Home</span></button>
-      <button class="hn"><i class="ti ti-chart-bar"></i><span>Sales</span></button>
-      <button class="hn"><i class="ti ti-report"></i><span>My Reports</span></button>
-      <button class="hn"><i class="ti ti-cloud-upload"></i><span>Sync</span></button>
-      <button class="hn"><i class="ti ti-user"></i><span>Profile</span></button>
+    <div class="cat-lbl">Categories</div>
+    <div class="cat-grid">
+      <div class="ci"><div class="ci-icon">📈</div><div class="ci-name">Sales</div></div>
+      <div class="ci"><div class="ci-icon">🔄</div><div class="ci-name">Sales Return</div></div>
+      <div class="ci"><div class="ci-icon">⚙️</div><div class="ci-name">My Activities</div></div>
+      <div class="ci"><div class="ci-icon">🤝</div><div class="ci-name">Distributor Onboarding</div></div>
+      <div class="ci"><div class="ci-icon">📦</div><div class="ci-name">Verify Stock</div></div>
+      <div class="ci"><div class="ci-icon">📋</div><div class="ci-name">Finance & Statements</div></div>
+      <div class="ci"><div class="ci-icon">🎧</div><div class="ci-name">Customer Complaint</div></div>
+      <div class="ci"><div class="ci-icon">🔍</div><div class="ci-name">Stock Requirement</div></div>
+      <div class="ci"><div class="ci-icon">🌿</div><div class="ci-name">Carbon Activity</div></div>
+      <div class="ci"><div class="ci-icon">🤲</div><div class="ci-name">KA Onboarding</div></div>
+      <div class="ci"><div class="ci-icon">📊</div><div class="ci-name">Performance Scorecard</div></div>
+      <div class="ci new" onclick="show('sc-dr')"><div class="ci-icon">🏪</div><div class="ci-name">Distributor Review</div></div>
     </div>
   </div>
-
-  <!-- DISTRIBUTOR REVIEW -->
-  <div id="dr" style="display:none;flex-direction:column;flex:1;min-height:0;">
-    <div class="sbar"><span class="sbar-time">11:42</span><div class="sbar-r"><i class="ti ti-wifi"></i><i class="ti ti-battery-3"></i></div></div>
-    <div class="dr-ab">
-      <div class="dr-ab-row">
-        <div class="dr-ab-back" onclick="goHome()"><i class="ti ti-arrow-left"></i></div>
-        <div style="flex:1;"><div class="dr-ab-title" id="dr-title">Distributor Review</div><div id="dr-sub" style="display:none;" class="dr-ab-sub"></div></div>
-        <i class="ti ti-bell" style="color:#fff;font-size:20px;"></i>
-      </div>
-    </div>
-    <div class="dr-tabs" id="dr-tabs" style="display:none;">
-      <div class="dr-tab on" onclick="gT(0)">Overview</div>
-      <div class="dr-tab" onclick="gT(1)">Balance</div>
-      <div class="dr-tab" onclick="gT(2)">Collections</div>
-      <div class="dr-tab" onclick="gT(3)">Sales</div>
-      <div class="dr-tab" onclick="gT(4)">Ageing & MDO</div>
-      <div class="dr-tab" onclick="gT(5)">Plans</div>
-      <div class="dr-tab" onclick="gT(6)">Remarks</div>
-    </div>
-    <div class="dr-dots" id="dr-dots" style="display:none;"></div>
-    <div class="dr-content" id="dr-content">
-
-      <!-- p0 overview -->
-      <div class="dpg on" id="dp0">
-        <div class="dcard">
-          <div class="flbl">Select Distributor</div>
-          <select class="finp" id="distSel" onchange="onDist(this.value)">
-            <option value="">— Choose distributor —</option>
-            <option value="Bansal Trading Company|0050008508|Lunkaransar">BANSAL TRADING COMPANY | 0050008508 | LUNKARANSAR</option>
-            <option value="Kisan Agri Mart|0050005669|Dhamnod">KISAN AGRI MART | 0050005669 | DHAMNOD</option>
-            <option value="Prerak Agencies|0050007712|Bhopal">PRERAK AGENCIES | 0050007712 | BHOPAL</option>
-            <option value="Sunrise Distributors|0050009001|Indore">SUNRISE DISTRIBUTORS | 0050009001 | INDORE</option>
-          </select>
-        </div>
-        <div id="p0e" style="text-align:center;padding:40px 16px;">
-          <i class="ti ti-building-store" style="font-size:52px;color:#CCC;"></i>
-          <p style="font-size:13px;color:#AAA;margin-top:10px;line-height:1.6;">Select a distributor above<br>to load their review data</p>
-        </div>
-        <div id="p0p" style="display:none;">
-          <div class="hcard">
-            <div class="hcard-top">
-              <div><div class="hcard-name" id="p0n">—</div><div class="hcard-code" id="p0c">—</div></div>
-              <div style="background:#1AADA4;color:#fff;border-radius:8px;padding:3px 10px;font-size:11px;font-weight:700;">Active</div>
-            </div>
-            <div class="hcard-body">
-              <div class="sg">
-                <div class="sc"><div class="sc-n">₹5,89,600</div><div class="sc-l">Sales with GST</div></div>
-                <div class="sc"><div class="sc-n">₹59,598</div><div class="sc-l">Total receivable</div></div>
-                <div class="sc"><div class="sc-n">27 May</div><div class="sc-l">Last order</div></div>
-                <div class="sc"><div class="sc-n">20 May</div><div class="sc-l">Last collection</div></div>
-              </div>
-            </div>
-          </div>
-          <p style="text-align:center;font-size:12px;color:#aaa;padding:2px 0 6px;">Use tabs or <strong style="color:#1AADA4;">Next</strong> to navigate all sections</p>
-        </div>
-      </div>
-
-      <!-- p1 balance -->
-      <div class="dpg" id="dp1">
-        <div class="sec">Customer information</div>
-        <div class="hcard">
-          <div class="hcard-top"><div><div class="hcard-name">Pankaj Patidar</div><div class="hcard-code" id="p1code">Customer ID: 15008253</div></div><i class="ti ti-pencil" style="color:#1AADA4;font-size:17px;"></i></div>
-          <div class="hcard-body" style="padding-top:8px;padding-bottom:8px;">
-            <div style="font-size:10px;color:#aaa;text-transform:uppercase;letter-spacing:.05em;margin-bottom:3px;">Select Customer</div>
-            <div style="font-size:13px;font-weight:600;color:#333;" id="p1cust">KISAN AGRI MART | 0050005669 | DHAMNOD</div>
-          </div>
-        </div>
-        <div class="sec">Customer balance information</div>
-        <div class="dcard" style="padding:0;overflow:hidden;">
-          <table class="bal">
-            <tr><td>Credit limit</td><td>4,00,000.00</td></tr>
-            <tr><td>Balance</td><td>59,598.38</td></tr>
-            <tr><td style="padding-left:18px;color:#aaa;">0 – 30 days</td><td style="color:#2E7D32;font-weight:600;">1,50,000.00</td></tr>
-            <tr><td style="padding-left:18px;color:#aaa;">30 – 60 days</td><td>0.00</td></tr>
-            <tr><td style="padding-left:18px;color:#aaa;">60 – 75 days</td><td>0.00</td></tr>
-            <tr><td style="padding-left:18px;color:#aaa;">75 – 90 days</td><td>0.00</td></tr>
-            <tr><td style="padding-left:18px;color:#aaa;">90 – 120 days</td><td style="color:#F57C00;font-weight:600;">30,386.00</td></tr>
-            <tr><td style="padding-left:18px;color:#aaa;">120 – 150 days</td><td style="color:#F57C00;font-weight:600;">1,04,982.50</td></tr>
-            <tr><td style="padding-left:18px;color:#aaa;">150 – 180 days</td><td style="color:#C62828;font-weight:600;">74,229.88</td></tr>
-            <tr><td style="padding-left:18px;color:#aaa;">180 – 360 days</td><td>0.00</td></tr>
-            <tr><td style="padding-left:18px;color:#aaa;">360 and above</td><td>0.00</td></tr>
-            <tr class="tot"><td>Total Receivable</td><td>59,598.38</td></tr>
-          </table>
-        </div>
-      </div>
-
-      <!-- p2 collections -->
-      <div class="dpg" id="dp2">
-        <div class="sec">Collection performance</div>
-        <div class="coll-list">
-          <div class="coll-item"><span class="ci-l">Collection (2025–26)</span><span class="ci-v">33,23,563.80</span></div>
-          <div class="coll-item"><span class="ci-l">YTD Collection till month (2025–26)</span><span class="ci-v">3,34,58,475.76</span></div>
-          <div class="coll-item"><span class="ci-l">YTD Collection (2026–27)</span><span class="ci-v" style="color:#2E7D32;">0</span></div>
-          <div class="coll-hl"><span class="hl-l">Sales with GST</span><span class="hl-v">5,89,600</span></div>
-        </div>
-        <div class="sec">Collection trend (7 months)</div>
-        <div class="dcard"><div class="chart" id="collC"></div><div class="clbls" id="collL"></div></div>
-        <div class="sec">Sales trend (7 months)</div>
-        <div class="dcard"><div class="chart" id="salesC"></div><div class="clbls" id="salesL"></div></div>
-      </div>
-
-      <!-- p3 sales -->
-      <div class="dpg" id="dp3">
-        <div class="sec">Sale report details</div>
-        <div class="sale"><div class="sale-hdr"><div class="sale-idx">1</div><div class="sale-dist">BANSAL TRADING COMPANY | 0050008508 | LUNKARANSAR</div></div>
-          <div class="sale-body">
-            <div class="sale-meta"><span class="sm-l">SAP Order No</span><span class="sm-v">0020680026</span></div>
-            <div class="sale-meta"><span class="sm-l">Order Date</span><span class="sm-v">2026-05-27</span></div>
-            <div class="sale-sbar">Approved</div>
-            <table class="stbl"><thead><tr><th>Product Name</th><th>TBM</th><th>RBM</th><th>Del.</th><th>Unit</th><th>Price</th></tr></thead>
-            <tbody><tr><td>Prerak 240ml</td><td>40</td><td>40</td><td>40</td><td>PAK</td><td>12,600</td></tr><tr><td>Prerak 480ml</td><td>100</td><td>100</td><td>100</td><td>PAK</td><td>60,500</td></tr></tbody></table>
-            <div class="sale-tot">Total order value — ₹73,100.00</div>
-          </div>
-        </div>
-        <div class="sale"><div class="sale-hdr"><div class="sale-idx">2</div><div class="sale-dist">BANSAL TRADING COMPANY | 0050008508 | LUNKARANSAR</div></div>
-          <div class="sale-body">
-            <div class="sale-meta"><span class="sm-l">SAP Order No</span><span class="sm-v">0020676299</span></div>
-            <div class="sale-meta"><span class="sm-l">Order Date</span><span class="sm-v">2026-05-18</span></div>
-            <div class="sale-sbar">Approved</div>
-            <table class="stbl"><thead><tr><th>Product Name</th><th>TBM</th><th>RBM</th><th>Del.</th><th>Unit</th><th>Price</th></tr></thead>
-            <tbody><tr><td>Prerak 480ml</td><td>100</td><td>100</td><td>100</td><td>PAK</td><td>60,500</td></tr></tbody></table>
-            <div class="sale-tot">Total order value — ₹60,500.00</div>
-          </div>
-        </div>
-        <div class="sale"><div class="sale-hdr"><div class="sale-idx">3</div><div class="sale-dist">BANSAL TRADING COMPANY | 0050008508 | LUNKARANSAR</div></div>
-          <div class="sale-body">
-            <div class="sale-meta"><span class="sm-l">SAP Order No</span><span class="sm-v">0020675331</span></div>
-            <div class="sale-meta"><span class="sm-l">Order Date</span><span class="sm-v">2026-05-15</span></div>
-            <div class="sale-sbar">Approved</div>
-            <table class="stbl"><thead><tr><th>Product Name</th><th>TBM</th><th>RBM</th><th>Del.</th><th>Unit</th><th>Price</th></tr></thead>
-            <tbody><tr><td>Prerak 240ml</td><td>60</td><td>60</td><td>60</td><td>PAK</td><td>18,900</td></tr><tr><td>Prerak 480ml</td><td>80</td><td>80</td><td>80</td><td>PAK</td><td>48,400</td></tr></tbody></table>
-            <div class="sale-tot">Total order value — ₹67,300.00</div>
-          </div>
-        </div>
-      </div>
-
-      <!-- p4 ageing -->
-      <div class="dpg" id="dp4">
-        <div class="sec">Payment ageing / receivables</div>
-        <div class="dcard">
-          <div class="dcard-t">Last collection date: 20 May 2026</div>
-          <div class="ar"><span class="al">Current (0–30 days)</span><div class="ar-r"><span class="av">₹1,50,000</span><span class="bdg b-ok">Good</span></div></div>
-          <div class="ar"><span class="al">31–60 days</span><div class="ar-r"><span class="av">₹0</span><span class="bdg b-ok">Good</span></div></div>
-          <div class="ar"><span class="al">61–90 days</span><div class="ar-r"><span class="av">₹0</span><span class="bdg b-ok">Good</span></div></div>
-          <div class="ar"><span class="al">91–120 days</span><div class="ar-r"><span class="av">₹30,386</span><span class="bdg b-warn">Watch</span></div></div>
-          <div class="ar"><span class="al">121–150 days</span><div class="ar-r"><span class="av">₹1,04,982</span><span class="bdg b-warn">Watch</span></div></div>
-          <div class="ar"><span class="al">151–180 days</span><div class="ar-r"><span class="av">₹74,229</span><span class="bdg b-red">Overdue</span></div></div>
-          <div class="ar"><span class="al">180–360 days</span><div class="ar-r"><span class="av">₹0</span><span class="bdg b-ok">Good</span></div></div>
-          <div class="ar"><span class="al">360+ days</span><div class="ar-r"><span class="av">₹0</span><span class="bdg b-ok">Good</span></div></div>
-          <div style="display:flex;justify-content:space-between;padding:10px 0 0;border-top:2px solid #E0E0E0;margin-top:4px;">
-            <span style="font-size:13px;font-weight:700;color:#C62828;">Total Receivable</span>
-            <span style="font-size:14px;font-weight:700;color:#C62828;">₹59,598.38</span>
-          </div>
-        </div>
-        <div class="sec">MDO</div>
-        <div class="dcard">
-          <div class="dcard-t">Market development objectives met?</div>
-          <div class="pills"><button class="pill on" onclick="sP(this)">Yes</button><button class="pill" onclick="sP(this)">No</button></div>
-        </div>
-      </div>
-
-      <!-- p5 plans -->
-      <div class="dpg" id="dp5">
-        <div class="sec">Liquidation status</div>
-        <div class="dcard">
-          <div class="field"><div class="flbl">Status of liquidation</div>
-            <select class="finp"><option value="">— Select status —</option><option>Done</option><option>Not done</option><option>Partial</option><option>In progress</option></select>
-          </div>
-        </div>
-        <div class="sec">Next order plan</div>
-        <div class="dcard">
-          <div class="field"><div class="flbl">Order amount (tentative)</div><input class="finp" type="text" placeholder="e.g. ₹ 2,50,000"></div>
-          <div class="field"><div class="flbl">Tentative order date</div><input class="finp" type="date"></div>
-        </div>
-        <div class="sec">Collection plan</div>
-        <div class="dcard">
-          <div class="field"><div class="flbl">Collection amount (tentative)</div><input class="finp" type="text" placeholder="e.g. ₹ 1,20,000"></div>
-          <div class="field"><div class="flbl">Tentative collection date</div><input class="finp" type="date"></div>
-        </div>
-      </div>
-
-      <!-- p6 remarks -->
-      <div class="dpg" id="dp6">
-        <div class="sec">Team & support</div>
-        <div class="dcard"><div class="field"><div class="flbl">How is team functioning?</div><textarea class="finp" placeholder="Describe team performance, coordination, issues…"></textarea></div></div>
-        <div class="dcard"><div class="field"><div class="flbl">Remarks</div><textarea class="finp" placeholder="Any additional remarks or observations…"></textarea></div></div>
-        <div class="dcard"><div class="field"><div class="flbl">Support needed / any query</div><textarea class="finp" placeholder="List support requests or open queries…"></textarea></div></div>
-      </div>
-
-    </div><!-- /dr-content -->
-    <div class="dr-footer">
-      <button class="f-bk" id="dr-bk" onclick="drN(-1)" style="display:none;"><i class="ti ti-arrow-left"></i> Back</button>
-      <button class="f-nx" id="dr-nx" onclick="drN(1)">Next <i class="ti ti-arrow-right"></i></button>
-    </div>
-    <!-- DR dialog -->
-    <div class="dlg-ov" id="dr-dlg">
-      <div class="dlg">
-        <div id="ddc"><div class="dlg-ico"><i class="ti ti-file-check" style="color:#1AADA4;"></i></div><div class="dlg-ttl">Submit review?</div><div class="dlg-bd">Submit distributor review for <strong id="ddn">this distributor</strong>? This cannot be undone.</div><div class="dlg-btns"><button class="dlg-cancel" onclick="hd('dr-dlg')">Cancel</button><button class="dlg-ok" onclick="drSub()">Submit</button></div></div>
-        <div id="dds" style="display:none;text-align:center;"><div class="dlg-ico"><i class="ti ti-circle-check" style="color:#1AADA4;"></i></div><div class="dlg-ttl">Review submitted!</div><div class="dlg-bd">Distributor review saved and queued for sync.</div><button class="dlg-ok" style="width:100%;" onclick="hd('dr-dlg');goHome()">Done</button></div>
-      </div>
-    </div>
+  <div class="home-nav">
+    <button class="hn on"><i class="ti ti-home"></i><span>Home</span></button>
+    <button class="hn"><i class="ti ti-chart-bar"></i><span>Sales</span></button>
+    <button class="hn"><i class="ti ti-report"></i><span>My Reports</span></button>
+    <button class="hn"><i class="ti ti-cloud-upload"></i><span>Sync</span></button>
+    <button class="hn"><i class="ti ti-user"></i><span>Profile</span></button>
   </div>
-
-</div></div>
 </div>
 
-<!-- ═══════ PHONE 2: MY ACTIVITIES + JOINT WORKING ═══════ -->
-<div class="phone-wrap">
-<div class="phone-lbl">MY ACTIVITIES + JOINT WORKING WITH KA</div>
-<div class="phone"><div class="screen" id="s2">
-
-  <!-- MY ACTIVITIES SCREEN -->
-  <div id="act" style="display:flex;flex-direction:column;flex:1;min-height:0;">
-    <div class="sbar"><span class="sbar-time">11:46</span><div class="sbar-r"><i class="ti ti-wifi"></i><i class="ti ti-signal-4g"></i><i class="ti ti-battery-2"></i><span style="font-size:11px;font-weight:700;background:#555;color:#fff;border-radius:4px;padding:1px 4px;margin-left:2px;">43</span></div></div>
-    <!-- header matching screenshot -->
-    <div class="act-nav">
-      <div class="back-row"><i class="ti ti-chevron-left"></i><span>My Activities</span></div>
-      <button class="end-btn">End My Day</button>
-    </div>
-    <div style="flex:1;overflow-y:auto;scrollbar-width:none;">
-      <!-- greeting banner -->
-      <div class="greet">
-        <div class="greet-name">Good Morning, Pankaj Chaudhary</div>
-        <div class="greet-mode">Travel Mode : No Travel</div>
-        <div class="greet-av">P</div>
-      </div>
-      <!-- stat pills overlapping banner -->
-      <div class="stat-pills">
-        <div class="spill"><div class="spill-l">Start Time</div><div class="spill-v">10:06 AM</div></div>
-        <div class="spill"><div class="spill-l">Total Duration</div><div class="spill-v">11 sec</div></div>
-        <div class="spill"><div class="spill-l">Allotted Km</div><div class="spill-v">0/2000</div></div>
-      </div>
-      <!-- location card -->
-      <div class="loc-card">
-        <div>
-          <div class="loc-title">My Location:</div>
-          <div class="loc-addr"><b>Address :</b> VQ9V+WCQ, Dawalwadi,<br>Maharashtra 431202, India</div>
-        </div>
-        <button class="tag-btn">TAG LOCATION</button>
-      </div>
-      <!-- visit details -->
-      <div class="visit-wrap">
-        <div class="visit-title">Visit Details</div>
-        <div class="visit-box">
-          <div class="vbox-lbl">Visit To</div>
-          <!-- options matching screenshot style — KA added as 5th -->
-          <div class="vopt" onclick="selV(this)"><div class="vopt-icon">🧑‍🌾</div><div class="vopt-name">Farmer</div><i class="ti ti-check vopt-check"></i></div>
-          <div class="vopt" onclick="selV(this)"><div class="vopt-icon">🚛</div><div class="vopt-name">Distributor</div><i class="ti ti-check vopt-check"></i></div>
-          <div class="vopt" onclick="selV(this)"><div class="vopt-icon">🏪</div><div class="vopt-name">Retailer</div><i class="ti ti-check vopt-check"></i></div>
-          <div class="vopt" onclick="selV(this)"><div class="vopt-icon">⚡</div><div class="vopt-name">Other</div><i class="ti ti-check vopt-check"></i></div>
-          <div class="vopt ka-opt" onclick="openJW()"><div class="vopt-icon">🤝</div><div class="vopt-name">Joint Working with KA</div><i class="ti ti-chevron-right" style="margin-left:auto;color:#1AADA4;font-size:16px;"></i></div>
-          <!-- purpose dropdown shown after selection -->
-          <div class="purpose-box" id="purpose-box" style="display:none;">
-            <div class="purpose-lbl">Select Visit Purpose</div>
-            <select class="purpose-sel">
-              <option value="">— Select visit purpose —</option>
-              <option>Regular Visit</option>
-              <option>Collection Follow-up</option>
-              <option>Order Taking</option>
-              <option>Complaint Resolution</option>
-              <option>Stock Verification</option>
-            </select>
-          </div>
+<!-- ════════ MY ACTIVITIES ════════ -->
+<div id="sc-activity" style="display:none;flex-direction:column;flex:1;min-height:0;">
+  <div class="sb"><span class="sb-t">11:46</span><div class="sb-r"><i class="ti ti-wifi"></i><i class="ti ti-signal-4g"></i><i class="ti ti-battery-2"></i></div></div>
+  <div class="act-nav">
+    <div class="back-row" onclick="show('sc-home')"><i class="ti ti-chevron-left"></i><span>My Activities</span></div>
+    <button class="end-btn">End My Day</button>
+  </div>
+  <div class="greet">
+    <div class="greet-name">Good Morning, Pankaj Chaudhary</div>
+    <div class="greet-mode">Travel Mode : No Travel</div>
+    <div class="greet-av">P</div>
+  </div>
+  <div class="stat-pills">
+    <div class="spill"><div class="sp-l">Start Time</div><div class="sp-v">10:06 AM</div></div>
+    <div class="spill"><div class="sp-l">Total Duration</div><div class="sp-v">11 sec</div></div>
+    <div class="spill"><div class="sp-l">Allotted Km</div><div class="sp-v">0/2000</div></div>
+  </div>
+  <div class="loc-card">
+    <div><div class="loc-t">My Location:</div><div class="loc-a"><b>Address :</b> VQ9V+WCQ, Dawalwadi,<br>Maharashtra 431202, India</div></div>
+    <button class="tag-btn">TAG LOCATION</button>
+  </div>
+  <div class="visit-wrap">
+    <div class="visit-ttl">Visit Details</div>
+    <div class="visit-box">
+      <div class="vbox-lbl">Visit To</div>
+      <div class="vopt" onclick="selV(this)"><div class="vo-icon">🧑‍🌾</div><div class="vo-name">Farmer</div><i class="ti ti-check vo-check"></i></div>
+      <div class="vopt" onclick="selV(this)"><div class="vo-icon">🚛</div><div class="vo-name">Distributor</div><i class="ti ti-check vo-check"></i></div>
+      <div class="vopt" onclick="selV(this)"><div class="vo-icon">🏪</div><div class="vo-name">Retailer</div><i class="ti ti-check vo-check"></i></div>
+      <div class="vopt" onclick="selV(this)"><div class="vo-icon">⚡</div><div class="vo-name">Other</div><i class="ti ti-check vo-check"></i></div>
+      <div class="vopt ka-row" onclick="show('sc-jw')"><div class="vo-icon">🤝</div><div class="vo-name">Joint Working with KA</div><i class="ti ti-chevron-right" style="margin-left:auto;color:#1AADA4;font-size:16px;"></i></div>
+      <div id="purpose-box" style="display:none;">
+        <div class="purpose-box">
+          <div class="purpose-lbl">Select Visit Purpose</div>
+          <select class="purpose-sel"><option value="">— Select visit purpose —</option><option>Regular Visit</option><option>Collection Follow-up</option><option>Order Taking</option><option>Complaint Resolution</option><option>Stock Verification</option></select>
         </div>
       </div>
     </div>
   </div>
+</div>
 
-  <!-- JOINT WORKING WITH KA SCREEN -->
-  <div id="jw" style="display:none;flex-direction:column;flex:1;min-height:0;">
-    <div class="sbar"><span class="sbar-time">11:46</span><div class="sbar-r"><i class="ti ti-wifi"></i><i class="ti ti-signal-4g"></i><i class="ti ti-battery-2"></i><span style="font-size:11px;font-weight:700;background:#555;color:#fff;border-radius:4px;padding:1px 4px;margin-left:2px;">43</span></div></div>
-    <div class="jw-ab">
-      <div class="back-row" onclick="goAct()"><i class="ti ti-chevron-left"></i><span>My Activities</span></div>
-      <button class="end-btn">End My Day</button>
+<!-- ════════ JOINT WORKING ════════ -->
+<div id="sc-jw" style="display:none;flex-direction:column;flex:1;min-height:0;">
+  <div class="sb"><span class="sb-t">11:46</span><div class="sb-r"><i class="ti ti-wifi"></i><i class="ti ti-signal-4g"></i><i class="ti ti-battery-2"></i></div></div>
+  <div class="act-nav">
+    <div class="back-row" onclick="show('sc-activity')"><i class="ti ti-chevron-left"></i><span>My Activities</span></div>
+    <button class="end-btn">End My Day</button>
+  </div>
+  <div class="greet" style="padding-bottom:36px;">
+    <div class="greet-name">Good Morning, Pankaj Chaudhary</div>
+    <div class="greet-mode">Travel Mode : No Travel</div>
+    <div class="greet-av">P</div>
+  </div>
+  <div class="stat-pills">
+    <div class="spill"><div class="sp-l">Start Time</div><div class="sp-v">10:06 AM</div></div>
+    <div class="spill"><div class="sp-l">Total Duration</div><div class="sp-v">11 sec</div></div>
+    <div class="spill"><div class="sp-l">Allotted Km</div><div class="sp-v">0/2000</div></div>
+  </div>
+  <div class="loc-card" style="flex-shrink:0;">
+    <div><div class="loc-t">My Location:</div><div class="loc-a"><b>Address :</b> VQ9V+WCQ, Dawalwadi,<br>Maharashtra 431202</div></div>
+    <button class="tag-btn">TAG LOCATION</button>
+  </div>
+  <div class="jw-content">
+    <div class="jw-sec">Joint Working with KA</div>
+    <div class="jw-card">
+      <div class="jw-flbl">Village <span style="color:#C62828;">*</span></div>
+      <select class="jw-sel" id="jw-v">
+        <option value="">— Select village —</option>
+        <option>Dawalwadi</option><option>Parbhani</option><option>Nanded</option>
+        <option>Latur</option><option>Osmanabad</option><option>Hingoli</option>
+        <option>Yavatmal</option><option>Buldhana</option><option>Washim</option>
+      </select>
     </div>
-    <!-- same teal banner as activity screen -->
-    <div class="greet" style="padding-bottom:36px;">
-      <div class="greet-name">Good Morning, Pankaj Chaudhary</div>
-      <div class="greet-mode">Travel Mode : No Travel</div>
-      <div class="greet-av">P</div>
+    <div class="jw-card">
+      <div class="jw-flbl">Remarks <span style="color:#C62828;">*</span></div>
+      <textarea class="jw-ta" id="jw-r" placeholder="Describe joint working activity, key observations, outcomes…"></textarea>
     </div>
-    <div class="stat-pills" style="margin-bottom:10px;">
-      <div class="spill"><div class="spill-l">Start Time</div><div class="spill-v">10:06 AM</div></div>
-      <div class="spill"><div class="spill-l">Total Duration</div><div class="spill-v">11 sec</div></div>
-      <div class="spill"><div class="spill-l">Allotted Km</div><div class="spill-v">0/2000</div></div>
+    <button class="jw-sub" onclick="sjw()"><i class="ti ti-circle-check"></i> Submit</button>
+  </div>
+  <div class="dlg-ov" id="jw-dlg">
+    <div class="dlg">
+      <div id="jw-c"><div class="dlg-ico"><i class="ti ti-map-check" style="color:#1AADA4;"></i></div><div class="dlg-ttl">Submit activity?</div><div class="dlg-bd">Submit joint working activity for village <strong id="jw-vn">—</strong>?</div><div class="dlg-btns"><button class="dlg-cancel" onclick="hd('jw-dlg')">Cancel</button><button class="dlg-ok" onclick="jwSub()">Submit</button></div></div>
+      <div id="jw-s" style="display:none;text-align:center;"><div class="dlg-ico"><i class="ti ti-circle-check" style="color:#1AADA4;"></i></div><div class="dlg-ttl">Activity submitted!</div><div class="dlg-bd">Logged and queued for sync.</div><button class="dlg-ok" style="width:100%;" onclick="hd('jw-dlg');show('sc-home')">Done</button></div>
     </div>
-    <div class="loc-card" style="margin:0 12px 0;flex-shrink:0;">
-      <div><div class="loc-title">My Location:</div><div class="loc-addr"><b>Address :</b> VQ9V+WCQ, Dawalwadi,<br>Maharashtra 431202, India</div></div>
-      <button class="tag-btn">TAG LOCATION</button>
+  </div>
+</div>
+
+<!-- ════════ DISTRIBUTOR REVIEW ════════ -->
+<div id="sc-dr" style="display:none;flex-direction:column;flex:1;min-height:0;">
+  <div class="sb"><span class="sb-t">11:42</span><div class="sb-r"><i class="ti ti-wifi"></i><i class="ti ti-battery-3"></i></div></div>
+  <div class="dr-ab">
+    <div class="dr-ab-row">
+      <div class="dr-bk" onclick="show('sc-home')"><i class="ti ti-arrow-left"></i></div>
+      <div style="flex:1;"><div class="dr-ttl" id="dr-title">Distributor Review</div><div id="dr-sub" style="display:none;" class="dr-sub"></div></div>
+      <i class="ti ti-bell" style="color:#fff;font-size:20px;"></i>
     </div>
-    <div class="jw-content">
-      <div class="jw-section-lbl">Joint Working with KA</div>
-      <div class="jw-card">
-        <div class="jw-field-lbl">Village <span style="color:#C62828;">*</span></div>
-        <select class="jw-select" id="jw-v">
-          <option value="">— Select village —</option>
-          <option>Dawalwadi</option><option>Parbhani</option><option>Nanded</option>
-          <option>Latur</option><option>Osmanabad</option><option>Hingoli</option>
-          <option>Yavatmal</option><option>Buldhana</option><option>Washim</option>
+  </div>
+  <div class="dr-tabs" id="dr-tabs" style="display:none;">
+    <div class="dr-tab on" onclick="gT(0)">Overview</div>
+    <div class="dr-tab" onclick="gT(1)">Balance</div>
+    <div class="dr-tab" onclick="gT(2)">Collections</div>
+    <div class="dr-tab" onclick="gT(3)">Sales</div>
+    <div class="dr-tab" onclick="gT(4)">Ageing & MDO</div>
+    <div class="dr-tab" onclick="gT(5)">Plans</div>
+    <div class="dr-tab" onclick="gT(6)">Remarks</div>
+  </div>
+  <div class="dr-dots" id="dr-dots" style="display:none;"></div>
+  <div class="dr-content" id="dr-content">
+
+    <div class="dpg on" id="dp0">
+      <div class="dc">
+        <div class="flbl">Select Distributor</div>
+        <select class="finp" id="dsel" onchange="onDist(this.value)">
+          <option value="">— Choose distributor —</option>
+          <option value="Bansal Trading Company|0050008508|Lunkaransar">BANSAL TRADING CO | 0050008508 | LUNKARANSAR</option>
+          <option value="Kisan Agri Mart|0050005669|Dhamnod">KISAN AGRI MART | 0050005669 | DHAMNOD</option>
+          <option value="Prerak Agencies|0050007712|Bhopal">PRERAK AGENCIES | 0050007712 | BHOPAL</option>
+          <option value="Sunrise Distributors|0050009001|Indore">SUNRISE DISTRIBUTORS | 0050009001 | INDORE</option>
         </select>
       </div>
-      <div class="jw-card">
-        <div class="jw-field-lbl">Remarks <span style="color:#C62828;">*</span></div>
-        <textarea class="jw-textarea" id="jw-r" placeholder="Describe joint working activity, key observations, outcomes…"></textarea>
+      <div id="p0e" style="text-align:center;padding:40px 16px;"><i class="ti ti-building-store" style="font-size:52px;color:#CCC;"></i><p style="font-size:13px;color:#AAA;margin-top:10px;line-height:1.6;">Select a distributor to load their review data</p></div>
+      <div id="p0p" style="display:none;">
+        <div class="hcard">
+          <div class="hc-top"><div><div class="hc-name" id="p0n">—</div><div class="hc-code" id="p0c">—</div></div><div style="background:#1AADA4;color:#fff;border-radius:8px;padding:3px 10px;font-size:11px;font-weight:700;">Active</div></div>
+          <div class="hc-body"><div class="sg">
+            <div class="sc2"><div class="sc2-n">₹5,89,600</div><div class="sc2-l">Sales with GST</div></div>
+            <div class="sc2"><div class="sc2-n">₹59,598</div><div class="sc2-l">Total receivable</div></div>
+            <div class="sc2"><div class="sc2-n">27 May</div><div class="sc2-l">Last order</div></div>
+            <div class="sc2"><div class="sc2-n">20 May</div><div class="sc2-l">Last collection</div></div>
+          </div></div>
+        </div>
+        <p style="text-align:center;font-size:12px;color:#aaa;padding:2px 0 6px;">Use tabs or <strong style="color:#1AADA4;">Next</strong> to navigate</p>
       </div>
-      <button class="jw-submit" onclick="sjw()">Submit</button>
     </div>
-    <!-- JW dialog -->
-    <div class="dlg-ov" id="jw-dlg">
-      <div class="dlg">
-        <div id="jwdc"><div class="dlg-ico"><i class="ti ti-map-check" style="color:#1AADA4;"></i></div><div class="dlg-ttl">Submit activity?</div><div class="dlg-bd">Submit joint working activity for village <strong id="jwvn">—</strong>? This will be synced to the backend.</div><div class="dlg-btns"><button class="dlg-cancel" onclick="hd('jw-dlg')">Cancel</button><button class="dlg-ok" onclick="jwSub()">Submit</button></div></div>
-        <div id="jwds" style="display:none;text-align:center;"><div class="dlg-ico"><i class="ti ti-circle-check" style="color:#1AADA4;"></i></div><div class="dlg-ttl">Activity submitted!</div><div class="dlg-bd">Joint working activity logged and queued for sync.</div><button class="dlg-ok" style="width:100%;" onclick="hd('jw-dlg');goAct()">Done</button></div>
+
+    <div class="dpg" id="dp1">
+      <div class="sec">Customer information</div>
+      <div class="hcard">
+        <div class="hc-top"><div><div class="hc-name">Pankaj Patidar</div><div class="hc-code" id="p1c">Customer ID: 15008253</div></div><i class="ti ti-pencil" style="color:#1AADA4;font-size:17px;"></i></div>
+        <div class="hc-body" style="padding-top:8px;padding-bottom:8px;"><div style="font-size:10px;color:#aaa;text-transform:uppercase;letter-spacing:.05em;margin-bottom:3px;">Select Customer</div><div style="font-size:13px;font-weight:600;color:#333;" id="p1cust">KISAN AGRI MART | 0050005669 | DHAMNOD</div></div>
       </div>
+      <div class="sec">Customer balance information</div>
+      <div class="dc" style="padding:0;overflow:hidden;">
+        <table class="bal">
+          <tr><td>Credit limit</td><td>4,00,000.00</td></tr>
+          <tr><td>Balance</td><td>59,598.38</td></tr>
+          <tr><td style="padding-left:18px;color:#aaa;">0 – 30 days</td><td style="color:#2E7D32;font-weight:600;">1,50,000.00</td></tr>
+          <tr><td style="padding-left:18px;color:#aaa;">30 – 60 days</td><td>0.00</td></tr>
+          <tr><td style="padding-left:18px;color:#aaa;">60 – 75 days</td><td>0.00</td></tr>
+          <tr><td style="padding-left:18px;color:#aaa;">75 – 90 days</td><td>0.00</td></tr>
+          <tr><td style="padding-left:18px;color:#aaa;">90 – 120 days</td><td style="color:#F57C00;font-weight:600;">30,386.00</td></tr>
+          <tr><td style="padding-left:18px;color:#aaa;">120 – 150 days</td><td style="color:#F57C00;font-weight:600;">1,04,982.50</td></tr>
+          <tr><td style="padding-left:18px;color:#aaa;">150 – 180 days</td><td style="color:#C62828;font-weight:600;">74,229.88</td></tr>
+          <tr><td style="padding-left:18px;color:#aaa;">180 – 360 days</td><td>0.00</td></tr>
+          <tr><td style="padding-left:18px;color:#aaa;">360 and above</td><td>0.00</td></tr>
+          <tr class="tot"><td>Total Receivable</td><td>59,598.38</td></tr>
+        </table>
+      </div>
+    </div>
+
+    <div class="dpg" id="dp2">
+      <div class="sec">Collection performance</div>
+      <div class="coll-list">
+        <div class="ci2"><span class="ci2-l">Collection (2025–26)</span><span class="ci2-v">33,23,563.80</span></div>
+        <div class="ci2"><span class="ci2-l">YTD Collection till month</span><span class="ci2-v">3,34,58,475.76</span></div>
+        <div class="ci2"><span class="ci2-l">YTD Collection (2026–27)</span><span class="ci2-v" style="color:#2E7D32;">0</span></div>
+        <div class="coll-hl"><span class="hl-l">Sales with GST</span><span class="hl-v">5,89,600</span></div>
+      </div>
+      <div class="sec">Collection trend (7 months)</div>
+      <div class="dc"><div class="chart" id="collC"></div><div class="clbls" id="collL"></div></div>
+      <div class="sec">Sales trend (7 months)</div>
+      <div class="dc"><div class="chart" id="salesC"></div><div class="clbls" id="salesL"></div></div>
+    </div>
+
+    <div class="dpg" id="dp3">
+      <div class="sec">Sale report details</div>
+      <div class="sale"><div class="sale-hdr"><div class="sale-idx">1</div><div class="sale-dist">BANSAL TRADING COMPANY | 0050008508 | LUNKARANSAR</div></div>
+        <div class="sale-body"><div class="sm"><span class="sm-l">SAP Order No</span><span class="sm-v">0020680026</span></div><div class="sm"><span class="sm-l">Order Date</span><span class="sm-v">2026-05-27</span></div>
+          <div class="sale-sbar">Approved</div>
+          <table class="stbl"><thead><tr><th>Product Name</th><th>TBM</th><th>RBM</th><th>Del.</th><th>Unit</th><th>Price</th></tr></thead><tbody><tr><td>Prerak 240ml</td><td>40</td><td>40</td><td>40</td><td>PAK</td><td>12,600</td></tr><tr><td>Prerak 480ml</td><td>100</td><td>100</td><td>100</td><td>PAK</td><td>60,500</td></tr></tbody></table>
+          <div class="sale-tot">Total order value — ₹73,100.00</div>
+        </div>
+      </div>
+      <div class="sale"><div class="sale-hdr"><div class="sale-idx">2</div><div class="sale-dist">BANSAL TRADING COMPANY | 0050008508 | LUNKARANSAR</div></div>
+        <div class="sale-body"><div class="sm"><span class="sm-l">SAP Order No</span><span class="sm-v">0020676299</span></div><div class="sm"><span class="sm-l">Order Date</span><span class="sm-v">2026-05-18</span></div>
+          <div class="sale-sbar">Approved</div>
+          <table class="stbl"><thead><tr><th>Product Name</th><th>TBM</th><th>RBM</th><th>Del.</th><th>Unit</th><th>Price</th></tr></thead><tbody><tr><td>Prerak 480ml</td><td>100</td><td>100</td><td>100</td><td>PAK</td><td>60,500</td></tr></tbody></table>
+          <div class="sale-tot">Total order value — ₹60,500.00</div>
+        </div>
+      </div>
+      <div class="sale"><div class="sale-hdr"><div class="sale-idx">3</div><div class="sale-dist">BANSAL TRADING COMPANY | 0050008508 | LUNKARANSAR</div></div>
+        <div class="sale-body"><div class="sm"><span class="sm-l">SAP Order No</span><span class="sm-v">0020675331</span></div><div class="sm"><span class="sm-l">Order Date</span><span class="sm-v">2026-05-15</span></div>
+          <div class="sale-sbar">Approved</div>
+          <table class="stbl"><thead><tr><th>Product Name</th><th>TBM</th><th>RBM</th><th>Del.</th><th>Unit</th><th>Price</th></tr></thead><tbody><tr><td>Prerak 240ml</td><td>60</td><td>60</td><td>60</td><td>PAK</td><td>18,900</td></tr><tr><td>Prerak 480ml</td><td>80</td><td>80</td><td>80</td><td>PAK</td><td>48,400</td></tr></tbody></table>
+          <div class="sale-tot">Total order value — ₹67,300.00</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="dpg" id="dp4">
+      <div class="sec">Payment ageing / receivables</div>
+      <div class="dc"><div class="dc-t">Last collection date: 20 May 2026</div>
+        <div class="ar"><span class="al">Current (0–30 days)</span><div class="ar-r"><span class="av">₹1,50,000</span><span class="bdg b-ok">Good</span></div></div>
+        <div class="ar"><span class="al">31–60 days</span><div class="ar-r"><span class="av">₹0</span><span class="bdg b-ok">Good</span></div></div>
+        <div class="ar"><span class="al">61–90 days</span><div class="ar-r"><span class="av">₹0</span><span class="bdg b-ok">Good</span></div></div>
+        <div class="ar"><span class="al">91–120 days</span><div class="ar-r"><span class="av">₹30,386</span><span class="bdg b-warn">Watch</span></div></div>
+        <div class="ar"><span class="al">121–150 days</span><div class="ar-r"><span class="av">₹1,04,982</span><span class="bdg b-warn">Watch</span></div></div>
+        <div class="ar"><span class="al">151–180 days</span><div class="ar-r"><span class="av">₹74,229</span><span class="bdg b-red">Overdue</span></div></div>
+        <div class="ar"><span class="al">180–360 days</span><div class="ar-r"><span class="av">₹0</span><span class="bdg b-ok">Good</span></div></div>
+        <div class="ar"><span class="al">360+ days</span><div class="ar-r"><span class="av">₹0</span><span class="bdg b-ok">Good</span></div></div>
+        <div style="display:flex;justify-content:space-between;padding:10px 0 0;border-top:2px solid #E0E0E0;margin-top:4px;"><span style="font-size:13px;font-weight:700;color:#C62828;">Total Receivable</span><span style="font-size:14px;font-weight:700;color:#C62828;">₹59,598.38</span></div>
+      </div>
+      <div class="sec">MDO</div>
+      <div class="dc"><div class="dc-t">Market development objectives met?</div><div class="pills"><button class="pill on" onclick="sP(this)">Yes</button><button class="pill" onclick="sP(this)">No</button></div></div>
+    </div>
+
+    <div class="dpg" id="dp5">
+      <div class="sec">Liquidation status</div>
+      <div class="dc"><div class="fld"><div class="flbl">Status of liquidation</div><select class="finp"><option value="">— Select status —</option><option>Done</option><option>Not done</option><option>Partial</option><option>In progress</option></select></div></div>
+      <div class="sec">Next order plan</div>
+      <div class="dc"><div class="fld"><div class="flbl">Order amount (tentative)</div><input class="finp" type="text" placeholder="e.g. ₹ 2,50,000"></div><div class="fld"><div class="flbl">Tentative order date</div><input class="finp" type="date"></div></div>
+      <div class="sec">Collection plan</div>
+      <div class="dc"><div class="fld"><div class="flbl">Collection amount (tentative)</div><input class="finp" type="text" placeholder="e.g. ₹ 1,20,000"></div><div class="fld"><div class="flbl">Tentative collection date</div><input class="finp" type="date"></div></div>
+    </div>
+
+    <div class="dpg" id="dp6">
+      <div class="sec">Team & support</div>
+      <div class="dc"><div class="fld"><div class="flbl">How is team functioning?</div><textarea class="finp" placeholder="Describe team performance, coordination, issues…"></textarea></div></div>
+      <div class="dc"><div class="fld"><div class="flbl">Remarks</div><textarea class="finp" placeholder="Any additional remarks or observations…"></textarea></div></div>
+      <div class="dc"><div class="fld"><div class="flbl">Support needed / any query</div><textarea class="finp" placeholder="List support requests or open queries…"></textarea></div></div>
+    </div>
+
+  </div>
+  <div class="dr-footer">
+    <button class="f-bk" id="dr-bk" onclick="drN(-1)" style="display:none;"><i class="ti ti-arrow-left"></i> Back</button>
+    <button class="f-nx" id="dr-nx" onclick="drN(1)">Next <i class="ti ti-arrow-right"></i></button>
+  </div>
+  <div class="dlg-ov" id="dr-dlg">
+    <div class="dlg">
+      <div id="dr-c"><div class="dlg-ico"><i class="ti ti-file-check" style="color:#1AADA4;"></i></div><div class="dlg-ttl">Submit review?</div><div class="dlg-bd">Submit distributor review for <strong id="dr-dn">this distributor</strong>?</div><div class="dlg-btns"><button class="dlg-cancel" onclick="hd('dr-dlg')">Cancel</button><button class="dlg-ok" onclick="drSub()">Submit</button></div></div>
+      <div id="dr-s" style="display:none;text-align:center;"><div class="dlg-ico"><i class="ti ti-circle-check" style="color:#1AADA4;"></i></div><div class="dlg-ttl">Review submitted!</div><div class="dlg-bd">Saved and queued for sync.</div><button class="dlg-ok" style="width:100%;" onclick="hd('dr-dlg');show('sc-home')">Done</button></div>
     </div>
   </div>
-
-</div></div>
 </div>
 
+</div></div><!-- /screen /phone -->
+
 <script>
-// charts
+// ── SCREEN SWITCHER ──
+const screens=['sc-home','sc-activity','sc-jw','sc-dr'];
+function show(id){
+  screens.forEach(s=>{
+    const el=document.getElementById(s);
+    el.style.display=s===id?'flex':'none';
+  });
+}
+
+// ── CHARTS ──
 const M=["Nov","Dec","Jan","Feb","Mar","Apr","May"];
 function rc(id,d,col){const mx=Math.max(...d);document.getElementById(id).innerHTML=d.map(v=>`<div class="cbar" style="background:${col};height:${Math.round(v/mx*100)}%;opacity:.85;"></div>`).join("");}
 function rl(id){document.getElementById(id).innerHTML=M.map(m=>`<span>${m}</span>`).join("");}
@@ -605,62 +500,59 @@ rc("salesC",[42,65,38,72,55,88,73],"#1AADA4");
 rc("collC",[35,50,55,42,62,70,65],"#1565C0");
 rl("salesL");rl("collL");
 
-// DR flow
-let cur=0;const TOT=7;
-function openDR(){document.getElementById("home").style.display="none";document.getElementById("dr").style.display="flex";cur=0;upd();}
-function goHome(){document.getElementById("dr").style.display="none";document.getElementById("home").style.display="flex";document.getElementById("distSel").value="";onDist("");}
-function upd(){
-  for(let i=0;i<TOT;i++){document.getElementById("dp"+i).classList.toggle("on",i===cur);}
-  document.querySelectorAll(".dr-tab").forEach((t,i)=>t.classList.toggle("on",i===cur));
-  const titles=["Distributor Review","Customer Balance","Collection Performance","Sale Report","Ageing & MDO","Order Plans","Remarks"];
-  document.getElementById("dr-title").textContent=titles[cur];
-  document.getElementById("dr-bk").style.display=cur>0?"flex":"none";
-  document.getElementById("dr-tabs").style.display=cur>0?"flex":"none";
-  document.getElementById("dr-dots").style.display=cur>0?"flex":"none";
-  if(cur>0)bDots();
-  const nx=document.getElementById("dr-nx");
-  if(cur===TOT-1){nx.innerHTML='<i class="ti ti-circle-check"></i> Submit Review';nx.onclick=()=>{document.getElementById("ddc").style.display="";document.getElementById("dds").style.display="none";document.getElementById("dr-dlg").classList.add("on");};}
-  else{nx.innerHTML='Next <i class="ti ti-arrow-right"></i>';nx.onclick=()=>drN(1);}
-  const at=document.querySelector(".dr-tab.on");if(at)at.scrollIntoView({behavior:"smooth",block:"nearest",inline:"center"});
-  document.getElementById("dr-content").scrollTo(0,0);
-}
-function bDots(){const el=document.getElementById("dr-dots");el.innerHTML="";for(let i=0;i<TOT;i++){const d=document.createElement("div");d.className="dot"+(i<cur?" done":i===cur?" cur":"");el.appendChild(d);}}
-function drN(d){if(d===1&&cur===0&&!document.getElementById("distSel").value){document.getElementById("distSel").focus();return;}cur=Math.max(0,Math.min(TOT-1,cur+d));upd();}
-function gT(i){if(!document.getElementById("distSel").value&&i>0)return;cur=i;upd();}
-function onDist(v){
-  const e=document.getElementById("p0e"),p=document.getElementById("p0p");
-  if(!v){e.style.display="";p.style.display="none";document.getElementById("dr-sub").style.display="none";return;}
-  e.style.display="none";p.style.display="";
-  const pts=v.split("|");
-  document.getElementById("p0n").textContent=pts[0].trim();
-  document.getElementById("p0c").textContent="Code: "+pts[1].trim()+" · "+pts[2].trim();
-  document.getElementById("p1cust").textContent=pts[0].trim().toUpperCase()+" | "+pts[1].trim()+" | "+pts[2].trim().toUpperCase();
-  document.getElementById("dr-sub").style.display="block";
-  document.getElementById("dr-sub").textContent=pts[0].trim();
-  document.getElementById("ddn").textContent=pts[0].trim();
-}
-function sP(el){el.closest(".pills").querySelectorAll(".pill").forEach(p=>p.classList.remove("on"));el.classList.add("on");}
-function hd(id){document.getElementById(id).classList.remove("on");}
-function drSub(){document.getElementById("ddc").style.display="none";document.getElementById("dds").style.display="";}
-
-// Activity / JW flow
+// ── ACTIVITY ──
 function selV(el){
-  document.querySelectorAll(".vopt").forEach(v=>v.classList.remove("selected"));
-  el.classList.add("selected");
-  document.getElementById("purpose-box").style.display="block";
+  document.querySelectorAll('.vopt').forEach(v=>v.classList.remove('selected'));
+  el.classList.add('selected');
+  document.getElementById('purpose-box').style.display='block';
 }
-function openJW(){document.getElementById("act").style.display="none";document.getElementById("jw").style.display="flex";}
-function goAct(){document.getElementById("jw").style.display="none";document.getElementById("act").style.display="flex";}
+
+// ── JW ──
 function sjw(){
-  const v=document.getElementById("jw-v").value;
-  if(!v){alert("Please select a village.");return;}
-  const r=document.getElementById("jw-r").value.trim();
-  if(r.length<10){alert("Please add remarks (min 10 characters).");return;}
-  document.getElementById("jwvn").textContent=v;
-  document.getElementById("jwdc").style.display="";document.getElementById("jwds").style.display="none";
-  document.getElementById("jw-dlg").classList.add("on");
+  const v=document.getElementById('jw-v').value;
+  if(!v){alert('Please select a village.');return;}
+  const r=document.getElementById('jw-r').value.trim();
+  if(r.length<10){alert('Please add remarks (min 10 characters).');return;}
+  document.getElementById('jw-vn').textContent=v;
+  document.getElementById('jw-c').style.display='';document.getElementById('jw-s').style.display='none';
+  document.getElementById('jw-dlg').classList.add('on');
 }
-function jwSub(){document.getElementById("jwdc").style.display="none";document.getElementById("jwds").style.display="";}
+function jwSub(){document.getElementById('jw-c').style.display='none';document.getElementById('jw-s').style.display='';}
+
+// ── DR ──
+let cur=0;const TOT=7;
+function upd(){
+  for(let i=0;i<TOT;i++) document.getElementById('dp'+i).classList.toggle('on',i===cur);
+  document.querySelectorAll('.dr-tab').forEach((t,i)=>t.classList.toggle('on',i===cur));
+  const titles=["Distributor Review","Customer Balance","Collection Performance","Sale Report","Ageing & MDO","Order Plans","Remarks"];
+  document.getElementById('dr-title').textContent=titles[cur];
+  document.getElementById('dr-bk').style.display=cur>0?'flex':'none';
+  document.getElementById('dr-tabs').style.display=cur>0?'flex':'none';
+  document.getElementById('dr-dots').style.display=cur>0?'flex':'none';
+  if(cur>0){const el=document.getElementById('dr-dots');el.innerHTML='';for(let i=0;i<TOT;i++){const d=document.createElement('div');d.className='dot'+(i<cur?' done':i===cur?' cur':'');el.appendChild(d);}}
+  const nx=document.getElementById('dr-nx');
+  if(cur===TOT-1){nx.innerHTML='<i class="ti ti-circle-check"></i> Submit Review';nx.onclick=()=>{document.getElementById('dr-c').style.display='';document.getElementById('dr-s').style.display='none';document.getElementById('dr-dlg').classList.add('on');};}
+  else{nx.innerHTML='Next <i class="ti ti-arrow-right"></i>';nx.onclick=()=>drN(1);}
+  const at=document.querySelector('.dr-tab.on');if(at)at.scrollIntoView({behavior:'smooth',block:'nearest',inline:'center'});
+  document.getElementById('dr-content').scrollTo(0,0);
+}
+function drN(d){if(d===1&&cur===0&&!document.getElementById('dsel').value){document.getElementById('dsel').focus();return;}cur=Math.max(0,Math.min(TOT-1,cur+d));upd();}
+function gT(i){if(!document.getElementById('dsel').value&&i>0)return;cur=i;upd();}
+function onDist(v){
+  const e=document.getElementById('p0e'),p=document.getElementById('p0p');
+  if(!v){e.style.display='';p.style.display='none';document.getElementById('dr-sub').style.display='none';return;}
+  e.style.display='none';p.style.display='';
+  const pts=v.split('|');
+  document.getElementById('p0n').textContent=pts[0].trim();
+  document.getElementById('p0c').textContent='Code: '+pts[1].trim()+' · '+pts[2].trim();
+  document.getElementById('p1cust').textContent=pts[0].trim().toUpperCase()+' | '+pts[1].trim()+' | '+pts[2].trim().toUpperCase();
+  document.getElementById('dr-sub').style.display='block';
+  document.getElementById('dr-sub').textContent=pts[0].trim();
+  document.getElementById('dr-dn').textContent=pts[0].trim();
+}
+function sP(el){el.closest('.pills').querySelectorAll('.pill').forEach(p=>p.classList.remove('on'));el.classList.add('on');}
+function hd(id){document.getElementById(id).classList.remove('on');}
+function drSub(){document.getElementById('dr-c').style.display='none';document.getElementById('dr-s').style.display='';}
 </script>
 </body>
 </html>
